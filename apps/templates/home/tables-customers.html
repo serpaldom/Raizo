@@ -1,0 +1,201 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Customers {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+	<div class="content">
+		<div class="page-inner">
+			<div class="page-header">
+				<h4 class="page-title">Customers</h4>
+				<ul class="breadcrumbs">
+					<li class="nav-home">
+						<a href="#">
+							<i class="flaticon-home"></i>
+						</a>
+					</li>
+					<li class="separator">
+						<i class="flaticon-right-arrow"></i>
+					</li>
+					<li class="nav-item">
+						<a href="#">Tables</a>
+					</li>
+					<li class="separator">
+						<i class="flaticon-right-arrow"></i>
+					</li>
+					<li class="nav-item">
+						<a href="#">Datatables</a>
+					</li>
+				</ul>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="card">
+						<div class="card-header">
+							<h4 class="card-title">Customers List</h4>
+							<div class="d-flex justify-content-end">
+								<button id="export-btn" href="#" class="btn btn-info btn-border btn-round btn-sm mr-2">
+									<span class="btn-label">
+										<i class="fa fa-pencil"></i>
+									</span>
+									Export
+								</button>
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="table-responsive">
+								<table id="multi-filter-search" class="display table table-striped table-hover" >
+									<thead>
+										<tr>
+											<th>ID</th>
+											<th>Name</th>
+											<th>Initials</th>
+											<th>Detection Systems</th>
+											<th>Created At</th>
+											{% if user.is_superuser %}
+											<th>Action</th>
+											{% endif %}
+										</tr>
+									</thead>
+									<tfoot>
+										<tr>
+											<th>ID</th>
+											<th>Name</th>
+											<th>Initials</th>
+											<th>Detection Systems</th>
+											<th>Created At</th>
+										</tr>
+									</tfoot>
+									<tbody>
+										{% for customer in customers %}
+										<tr>
+											<td>{{ customer.id }}</td>
+											<td>{{ customer.name }}</td>
+											<td>{{ customer.initials }}</td>
+											<td>{% if customer.detection_systems.exists %}{% for system in customer.detection_systems.all %}{{ system.name }}{% if not forloop.last %}, {% endif %}{% endfor %}{% else %}None{% endif %}</td>
+											<td>{{customer.created_at}}</td>
+											{% if user.is_superuser %}
+											<td>
+												<div class="form-button-action">
+													<a type="button" data-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit" href="/admin/home/customer/{{customer.id}}/change/">
+														<i class="fa fa-edit"></i>
+													</a>
+													<a type="button" data-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove" href="/admin/home/customer/{{customer.id}}/change/">
+														<i class="fa fa-times"></i>
+													</a>
+												</div>
+											</td>
+											{% endif %}
+										</tr>
+										{% endfor %}
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+	<!-- Atlantis DEMO methods, don't include it in your project! -->
+	<script src="/static/assets/js/setting-demo2.js"></script>
+	<script >
+		$(document).ready(function() {
+			$('#basic-datatables').DataTable({
+			});
+			
+			// Setup - add a text input to each footer cell
+			$('#multi-filter-search tfoot th').each(function () {
+				var title = $(this).text();
+				$(this).html('<input type="text" class="form-control" placeholder="Search ' + title + '" />');
+			});
+
+			// DataTable
+			var table = $('#multi-filter-search').DataTable({
+				
+				initComplete: function (){
+					var r = $('#multi-filter-search tfoot tr');
+					r.find('th').each(function(){
+						$(this).css('padding', 8);
+					});
+					$('#multi-filter-search thead').append(r);
+					$('#search_0').css('text-align', 'center');
+				},
+				"aLengthMenu": [
+					[5, 10, 25, 50, 100, 200, -1],
+					[5, 10, 25, 50, 100, 200, "All"]
+				],
+				"iDisplayLength": 5
+			});
+
+			// Code A
+			table.columns().eq(0).each(function (colIdx) {
+				$('input', table.column(colIdx).footer()).on('keyup change', function () {
+					table.column(colIdx)
+						.search(this.value.replace(/;/g, "|"), true, false)
+						.draw();
+				} );
+			});
+
+			$('#multi-filter-select').DataTable( {
+				"pageLength": 5,
+				initComplete: function () {
+					this.api().columns().every( function () {
+						var column = this;
+						var select = $('<select class="form-control"><option value=""></option></select>')
+						.appendTo( $(column.footer()).empty() )
+						.on( 'change', function () {
+							var val = $.fn.dataTable.util.escapeRegex(
+								$(this).val()
+								);
+
+							column
+							.search( val ? '^'+val+'$' : '', true, false )
+							.draw();
+						} );
+
+						column.data().unique().sort().each( function ( d, j ) {
+							select.append( '<option value="'+d+'">'+d+'</option>' )
+						} );
+					} );
+				}
+			});
+
+			// Add Row
+			$('#add-row').DataTable({
+				"pageLength": 5,
+			});
+
+			var action = '<td> <div class="form-button-action"> <button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task"> <i class="fa fa-edit"></i> </button> <button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove"> <i class="fa fa-times"></i> </button> </div> </td>';
+
+			$('#addRowButton').click(function() {
+				$('#add-row').dataTable().fnAddData([
+					$("#addName").val(),
+					$("#addPosition").val(),
+					$("#addOffice").val(),
+					action
+					]);
+				$('#addRowModal').modal('hide');
+
+			});
+		});
+	</script>
+	<script>
+		const exportBtn = document.getElementById("export-btn");
+		const exportUrl = "export/customers";
+	
+		exportBtn.addEventListener("click", () => {
+			window.location.href = exportUrl;
+		});
+	</script>
+
+{% endblock javascripts %}

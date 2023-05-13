@@ -10,6 +10,8 @@ from django.template import loader
 from django.urls import reverse
 from .models import Customer, DetectionSystem, Rule
 from django.contrib.auth.models import User
+import csv
+from django.shortcuts import redirect
 
 @login_required(login_url="/login/")
 def index(request):
@@ -26,11 +28,12 @@ def pages(request):
     try:
 
         load_template = request.path.split('/')[-1]
+        
         if load_template == 'admin':
             return HttpResponseRedirect(reverse('admin:index'))
         context['segment'] = load_template
 
-        if load_template == 'index.html':  # Aquí se especifica la plantilla donde se quiere agregar nclients
+        if load_template == 'index.html':
             total_customers = Customer.objects.count()
             total_users = User.objects.count()
             total_detection_systems = DetectionSystem.objects.count()
@@ -40,6 +43,29 @@ def pages(request):
             context['total_users'] = total_users
             context['total_detection_systems'] = total_detection_systems
             context['total_rules'] = total_rules
+        
+        if load_template == 'tables-customers.html':
+            customers = Customer.objects.all()
+            
+            context['customers'] = customers
+            
+        if request.path.split('/')[1] == 'export':
+            object_to_export = request.path.split('/')[-1]
+            if object_to_export == 'customers':
+                customers = Customer.objects.all()
+                response = HttpResponse(
+                    content_type="text/csv",
+                    headers={"Content-Disposition": 'attachment; filename="customers.csv"'},
+                )
+
+                writer = csv.writer(response)
+                # CSV columns
+                writer.writerow(['ID', 'Name', 'Initials', 'Detection systems', 'Created at'])
+                for customer in customers:
+                    detection_systems = ', '.join([ds.name for ds in customer.detection_systems.all()])
+                    writer.writerow([customer.id, customer.name, customer.initials, detection_systems, customer.created_at])
+                # Return the response
+                return response
             
         html_template = loader.get_template('home/' + load_template)
         return HttpResponse(html_template.render(context, request))
