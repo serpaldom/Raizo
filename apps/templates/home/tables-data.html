@@ -531,7 +531,7 @@
 						</div>
 						<div class="card-body">
 							<div class="table-responsive">
-								<table id="multi-filter-select" class="display table table-striped table-hover" >
+								<table id="multi-filter-search" class="display table table-striped table-hover" >
 									<thead>
 										<tr>
 											<th>Name</th>
@@ -1266,6 +1266,39 @@
 	<script >
 		$(document).ready(function() {
 			$('#basic-datatables').DataTable({
+			});
+			
+			// Setup - add a text input to each footer cell
+			$('#multi-filter-search tfoot th').each(function () {
+				var title = $(this).text();
+				$(this).html('<input type="text" class="form-control" placeholder="Search ' + title + '" />');
+			});
+
+			// DataTable
+			var table = $('#multi-filter-search').DataTable({
+				
+				initComplete: function (){
+					var r = $('#multi-filter-search tfoot tr');
+					r.find('th').each(function(){
+						$(this).css('padding', 8);
+					});
+					$('#multi-filter-search thead').append(r);
+					$('#search_0').css('text-align', 'center');
+				},
+				"aLengthMenu": [
+					[5, 10, 25, 50, 100, 200, -1],
+					[5, 10, 25, 50, 100, 200, "All"]
+				],
+				"iDisplayLength": 5
+			});
+
+			// Code A
+			table.columns().eq(0).each(function (colIdx) {
+				$('input', table.column(colIdx).footer()).on('keyup change', function () {
+					table.column(colIdx)
+						.search(this.value.replace(/;/g, "|"), true, false)
+						.draw();
+				} );
 			});
 
 			$('#multi-filter-select').DataTable( {
