@@ -105,4 +105,27 @@ class Rule(models.Model):
         super().save(*args, **kwargs)
     class Meta:
         db_table = "Rules"
+class Watcher(models.Model):
+    name = models.CharField(max_length=255)
+    customers = models.ManyToManyField(Customer)
+    detection_systems = models.ManyToManyField(DetectionSystem)
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()  
 
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        db_table = "Watchers"
+        
+class Report(models.Model):
+    name = models.CharField(max_length=255)
+    customers = models.ManyToManyField(Customer)
+    detection_systems = models.ManyToManyField(DetectionSystem)
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()  
+
+    def __str__(self):
+        return self.name

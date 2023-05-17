@@ -5,7 +5,7 @@ Copyright (c) 2019 - present AppSeed.us
 
 from django import forms
 from django.contrib import admin
-from .models import Customer, DetectionSystem, Rule, MitreTactic, MitreTechnique
+from .models import Customer, DetectionSystem, Rule, MitreTactic, MitreTechnique, Watcher, Report
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django import forms
@@ -59,7 +59,32 @@ class RuleList(admin.ModelAdmin):
     
     detection_systems_display.short_description = "Detection Systems"
 
-        
+class WatcherAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'customers_display', 'detection_systems_display', 'created_at', 'modified_at')
+
+    def customers_display(self, obj):
+        return ", ".join([c.name for c in obj.customers.all()])
+    
+    customers_display.short_description = "Customers"
+
+    def detection_systems_display(self, obj):
+        return ", ".join([d.name for d in obj.detection_systems.all()])
+    
+    detection_systems_display.short_description = "Detection Systems"
+
+class ReportAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'customers_display', 'detection_systems_display', 'created_at', 'modified_at')
+
+    def customers_display(self, obj):
+        return ", ".join([c.name for c in obj.customers.all()])
+    
+    customers_display.short_description = "Customers"
+
+    def detection_systems_display(self, obj):
+        return ", ".join([d.name for d in obj.detection_systems.all()])
+    
+    detection_systems_display.short_description = "Detection Systems"
+     
 @receiver(post_save, sender=Customer)
 def apply_rule_to_new_customer(sender, instance, created, **kwargs):
     if created and instance.update_general_rules and instance.detection_systems.exists():
@@ -75,3 +100,5 @@ admin.site.register(DetectionSystem, DetectionSystemList)
 admin.site.register(Rule, RuleList)
 admin.site.register(MitreTactic, MitreTacticAdminList)
 admin.site.register(MitreTechnique,MitretechniqueAdminList)
+admin.site.register(Watcher, WatcherAdmin)
+admin.site.register(Report, ReportAdmin)
