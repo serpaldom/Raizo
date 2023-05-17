@@ -95,6 +95,21 @@ def pages(request):
             detection_systems = DetectionSystem.objects.all()
             
             context['detection_systems'] = detection_systems
+        
+        if load_template == 'tables-rules.html':
+            rules = Rule.objects.all()
+            
+            context['rules'] = rules
+            
+        if load_template == 'tables-watchers.html':
+            watchers = Watcher.objects.all()
+            
+            context['watchers'] = watchers
+        
+        if load_template == 'tables-reports.html':
+            reports = Report.objects.all()
+            
+            context['reports'] = reports
             
         if request.path.split('/')[1] == 'export':
             object_to_export = request.path.split('/')[-1]

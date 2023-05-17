@@ -10,7 +10,7 @@
 	<div class="content">
 		<div class="page-inner">
 			<div class="page-header">
-				<h4 class="page-title">Detection Systems</h4>
+				<h4 class="page-title">Reports</h4>
 				<ul class="breadcrumbs">
 					<li class="nav-home">
 						<a href="#">
@@ -27,7 +27,7 @@
 						<i class="flaticon-right-arrow"></i>
 					</li>
 					<li class="nav-item">
-						<a href="#">Detection Systems</a>
+						<a href="#">Reports</a>
 					</li>
 				</ul>
 			</div>
@@ -35,7 +35,7 @@
 				<div class="col-md-12">
 					<div class="card">
 						<div class="card-header">
-							<h4 class="card-title">Detection Systems List</h4>
+							<h4 class="card-title">Reports List</h4>
 							<div class="d-flex justify-content-end">
 								<button id="export-btn" href="#" class="btn btn-info btn-border btn-round btn-sm mr-2">
 									<span class="btn-label">
@@ -52,7 +52,7 @@
 										<tr>
 											<th>ID</th>
 											<th>Name</th>
-											<th>Type</th>
+											<th>Detection Systems</th>
 											<th>Customers</th>
 											<th>Created At (UTC)</th>
 											{% if user.is_staff %}
@@ -64,34 +64,42 @@
 										<tr>
 											<th>ID</th>
 											<th>Name</th>
-											<th>Type</th>
+											<th>Detection Systems</th>
 											<th>Customers</th>
 											<th>Created At (UTC)</th>
 										</tr>
 									</tfoot>
 									<tbody>
-										{% for detection_system in detection_systems %}
+										{% for report in reports %}
 										<tr>
-											<td>{{ detection_system.id }}</td>
-											<td>{{ detection_system.name }}</td>
-											<td>{{ detection_system.type }}</td>
+											<td>{{ report.id }}</td>
+											<td>{{ report.name }}</td>
 											<td>
-											{% if detection_system.customers.exists %}
-												{% for customer in detection_system.customers.all %}
+												{% if report.detection_systems.exists %}
+													{% for detection_system in report.detection_systems.all %}
+													  {{ detection_system.name }}{% if not forloop.last %}, {% endif %}
+													{% endfor %}
+												{% else %}
+													None
+												{% endif %}
+												</td>
+											<td>
+											{% if report.customers.exists %}
+												{% for customer in report.customers.all %}
 												  {{ customer.name }} ({{ customer.initials }}){% if not forloop.last %}, {% endif %}
 												{% endfor %}
 											{% else %}
 												None
 											{% endif %}
 											</td>
-											<td>{{ detection_system.created_at }}</td>
+											<td>{{ report.created_at }}</td>
 											{% if user.is_staff %}
 											<td>
 												<div class="form-button-action">
-													<a type="button" data-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit" href="/admin/home/detectionsystem/{{detection_system.id}}/change/">
+													<a type="button" data-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit" href="/admin/home/report/{{report.id}}/change/">
 														<i class="fa fa-edit"></i>
 													</a>
-													<a type="button" data-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove" href="/admin/home/detectionsystem/{{detection_system.id}}/change/">
+													<a type="button" data-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove" href="/admin/home/report/{{report.id}}/change/">
 														<i class="fa fa-times"></i>
 													</a>
 												</div>

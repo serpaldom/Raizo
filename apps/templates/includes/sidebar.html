@@ -71,9 +71,44 @@
 								<p>Detection Systems</p>
 							</a>
 						</li>
+						<li class="nav-item {% if 'rules' in segment %} active {% endif %}">
+							<a data-toggle="collapse" href="#rules" class="collapsed" aria-expanded="false">
+								<i class="fas fa-ruler"></i>
+								<p>Rules Tables</p>
+								<span class="caret"></span>
+							</a>
+							<div class="collapse" id="rules">
+								<ul class="nav nav-collapse">
+									<li>
+										<a  href="/tables-rules.html">
+											<span class="sub-item">Total Rules</span>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</li>
+						
+						<li class="nav-item {% if 'tables-watchers' in segment %} active {% endif %}">
+							<a  href="/tables-watchers.html">
+								<i class="fas fa-glasses"></i>
+								<p>Watchers</p>
+							</a>
+						</li>
+						<li class="nav-item {% if 'tables-reports' in segment %} active {% endif %}">
+							<a  href="/tables-reports.html">
+								<i class="far fa-eye"></i>
+								<p>Reports</p>
+							</a>
+						</li>
+						<li class="nav-section">
+							<span class="sidebar-mini-icon">
+								<i class="fa fa-ellipsis-h"></i>
+							</span>
+							<h4 class="text-section">Tools</h4>
+						</li>
 						<li class="nav-item {% if 'ui-' in segment %} active {% endif %}">
 							<a data-toggle="collapse" href="#base">
-								<i class="fas fa-layer-group"></i>
+								<i class="far fa-newspaper"></i>
 								<p>Base</p>
 								<span class="caret"></span>
 							</a>
