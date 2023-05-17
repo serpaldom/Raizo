@@ -5,12 +5,18 @@ Copyright (c) 2019 - present AppSeed.us
 
 from django import template
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect, HttpResponseServerError
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django.urls import reverse
-from .models import Customer, DetectionSystem, Rule
+from .models import Customer, DetectionSystem, Rule, Watcher, Report
 from django.contrib.auth.models import User
 import csv
+from django.utils import timezone
+from django.db.models import Count
+from datetime import timedelta
+from django.contrib.admin.models import LogEntry
+
+
 
 @login_required(login_url="/login/")
 def index(request):
@@ -37,11 +43,48 @@ def pages(request):
             total_users = User.objects.count()
             total_detection_systems = DetectionSystem.objects.count()
             total_rules = Rule.objects.count()
+            total_watchers = Watcher.objects.count()
+            total_reports = Report.objects.count()
             
             context['total_customers'] = total_customers
             context['total_users'] = total_users
             context['total_detection_systems'] = total_detection_systems
             context['total_rules'] = total_rules
+            context['total_watchers'] = total_watchers
+            context['total_reports'] = total_reports
+            
+            # Obtener la fecha y hora actual
+            now = timezone.now()
+
+            # Obtener las fechas límite para el último día, últimos 7 días y último mes
+            last_day = now - timedelta(days=1)
+            last_week = now - timedelta(days=7)
+            last_month = now - timedelta(days=30)
+
+            # Obtener los 3 usuarios que han creado la mayor cantidad de Rule en el último día
+            top_users_last_day = User.objects.annotate(total_rules=Count('created_rules')).filter(
+                created_rules__created_at__gte=last_day
+            ).order_by('-total_rules')[:3]
+
+            # Obtener los 3 usuarios que han creado la mayor cantidad de Rule en los últimos 7 días
+            top_users_last_week = User.objects.annotate(total_rules=Count('created_rules')).filter(
+                created_rules__created_at__gte=last_week
+            ).order_by('-total_rules')[:3]
+
+            # Obtener los 3 usuarios que han creado la mayor cantidad de Rule en el último mes
+            top_users_last_month = User.objects.annotate(total_rules=Count('created_rules')).filter(
+                created_rules__created_at__gte=last_month
+            ).order_by('-total_rules')[:3]
+            
+            # Agregar los resultados al contexto
+            context['top_users_last_day'] = top_users_last_day
+            context['top_users_last_week'] = top_users_last_week
+            context['top_users_last_month'] = top_users_last_month
+            
+            # Last 6 actions performed by user
+            recent_actions = LogEntry.objects.select_related('user').order_by('-action_time')[:6]
+            
+            context['recent_actions'] = recent_actions
         
         if load_template == 'tables-customers.html':
             customers = Customer.objects.all()

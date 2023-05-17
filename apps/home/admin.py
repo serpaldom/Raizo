@@ -9,6 +9,7 @@ from .models import Customer, DetectionSystem, Rule, MitreTactic, MitreTechnique
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django import forms
+from django.contrib.admin.models import LogEntry
 
 
 class CustomerForm(forms.ModelForm):
@@ -84,6 +85,9 @@ class ReportAdmin(admin.ModelAdmin):
         return ", ".join([d.name for d in obj.detection_systems.all()])
     
     detection_systems_display.short_description = "Detection Systems"
+    
+class LogEntryAdmin(admin.ModelAdmin):
+    list_display = ['action_time', 'user', 'content_type', 'object_id', 'action_flag']
      
 @receiver(post_save, sender=Customer)
 def apply_rule_to_new_customer(sender, instance, created, **kwargs):
@@ -102,3 +106,4 @@ admin.site.register(MitreTactic, MitreTacticAdminList)
 admin.site.register(MitreTechnique,MitretechniqueAdminList)
 admin.site.register(Watcher, WatcherAdmin)
 admin.site.register(Report, ReportAdmin)
+admin.site.register(LogEntry, LogEntryAdmin)
