@@ -59,10 +59,16 @@
 							</span>
 							<h4 class="text-section">Data</h4>
 						</li>
-						<li class="nav-item">
+						<li class="nav-item {% if 'tables-customers' in segment %} active {% endif %}">
 							<a  href="/tables-customers.html">
 								<i class="fas fa-building"></i>
 								<p>Customers</p>
+							</a>
+						</li>
+						<li class="nav-item {% if 'tables-detection_systems' in segment %} active {% endif %}">
+							<a  href="/tables-detection_systems.html">
+								<i class="far fa-eye"></i>
+								<p>Detection Systems</p>
 							</a>
 						</li>
 						<li class="nav-item {% if 'ui-' in segment %} active {% endif %}">
@@ -178,6 +184,7 @@
 								</ul>
 							</div>
 						</li>
+						<!--
 						<li class="nav-item {% if 'tables' in segment %} active {% endif %}">
 							<a data-toggle="collapse" href="#tables">
 								<i class="fas fa-table"></i>
@@ -199,6 +206,7 @@
 								</ul>
 							</div>
 						</li>
+						-->
 						<li class="nav-item {% if 'maps' in segment %} active {% endif %}">
 							<a data-toggle="collapse" href="#maps">
 								<i class="fas fa-map-marker-alt"></i>

@@ -48,6 +48,11 @@ def pages(request):
             customers = Customer.objects.all()
             
             context['customers'] = customers
+        
+        if load_template == 'tables-detection_systems.html':
+            detection_systems = DetectionSystem.objects.all()
+            
+            context['detection_systems'] = detection_systems
             
         if request.path.split('/')[1] == 'export':
             object_to_export = request.path.split('/')[-1]
@@ -60,10 +65,26 @@ def pages(request):
 
                 writer = csv.writer(response)
                 # CSV columns
-                writer.writerow(['ID', 'Name', 'Initials', 'Detection systems', 'Created at'])
+                writer.writerow(['ID', 'Name', 'Initials', 'Detection systems', 'Created by', 'Created at (UTC)','Modified at (UTC)'])
                 for customer in customers:
                     detection_systems = ', '.join([ds.name for ds in customer.detection_systems.all()])
-                    writer.writerow([customer.id, customer.name, customer.initials, detection_systems, customer.created_at])
+                    writer.writerow([customer.id, customer.name, customer.initials, detection_systems,customer.created_by, customer.created_at, customer.modified_at])
+                # Return the response
+                return response
+            
+            elif object_to_export == 'detection_systems':
+                detection_systems = DetectionSystem.objects.all()
+                response = HttpResponse(
+                    content_type="text/csv",
+                    headers={"Content-Disposition": 'attachment; filename="detection_systems.csv"'},
+                )
+
+                writer = csv.writer(response)
+                # CSV columns
+                writer.writerow(['ID', 'Name', 'Type', 'Customers', 'Created by', 'Created at (UTC)','Modified at (UTC)'])
+                for detection_system in detection_systems:
+                    customers = ', '.join([customer.name for customer in detection_system.customers.all()])
+                    writer.writerow([detection_system.id, detection_system.name, detection_system.type, customers, detection_system.created_by, detection_system.created_at, detection_system.modified_at])
                 # Return the response
                 return response
             
