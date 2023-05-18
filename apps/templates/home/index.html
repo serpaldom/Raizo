@@ -182,94 +182,142 @@
 				</div>
 				<div class="col-md-6">
 					<div class="card full-height">
-						<div class="card-header">
-							<div class="card-head-row">
-								<div class="card-title">Support Tickets</div>
-								<div class="card-tools">
-									<ul class="nav nav-pills nav-secondary nav-pills-no-bd nav-sm" id="pills-tab" role="tablist">
-										<li class="nav-item">
-											<a class="nav-link" id="pills-today" data-toggle="pill" href="#pills-today" role="tab" aria-selected="true">Today</a>
-										</li>
-										<li class="nav-item">
-											<a class="nav-link active" id="pills-week" data-toggle="pill" href="#pills-week" role="tab" aria-selected="false">Week</a>
-										</li>
-										<li class="nav-item">
-											<a class="nav-link" id="pills-month" data-toggle="pill" href="#pills-month" role="tab" aria-selected="false">Month</a>
-										</li>
-									</ul>
-								</div>
-							</div>
-						</div>
 						<div class="card-body">
-							<div class="d-flex">
-								<div class="avatar avatar-online">
-									<span class="avatar-title rounded-circle border border-white bg-info">J</span>
+							<div class="card-title">Created Rules This Week</div>
+							<div class="row py-3">
+								<div class="col-md-4 d-flex flex-column justify-content-around">
+									<div>
+										<h6 class="fw-bold text-uppercase text-success op-8">Rules</h6>
+										<h3 class="fw-bold">{{total_rules_in_week}}</h3>
+										<h6 class="fw-bold text-uppercase text-danger op-8">Rules by Type of Detection System</h6>
+										{% for type, count in total_rules_by_detection_system_type.items %}
+										<h5 class="fw-bold">{{ type }} ({{ count }})</h5>
+										{% endfor %}
+									</div>
 								</div>
-								<div class="flex-1 ml-3 pt-1">
-									<h6 class="text-uppercase fw-bold mb-1">Joko Subianto <span class="text-warning pl-3">pending</span></h6>
-									<span class="text-muted">I am facing some trouble with my viewport. When i start my</span>
-								</div>
-								<div class="float-right pt-1">
-									<small class="text-muted">8:40 PM</small>
-								</div>
-							</div>
-							<div class="separator-dashed"></div>
-							<div class="d-flex">
-								<div class="avatar avatar-offline">
-									<span class="avatar-title rounded-circle border border-white bg-secondary">P</span>
-								</div>
-								<div class="flex-1 ml-3 pt-1">
-									<h6 class="text-uppercase fw-bold mb-1">Prabowo Widodo <span class="text-success pl-3">open</span></h6>
-									<span class="text-muted">I have some query regarding the license issue.</span>
-								</div>
-								<div class="float-right pt-1">
-									<small class="text-muted">1 Day Ago</small>
+								<div class="col-md-8 flex-grow-1">
+									<div id="chart-container">
+										<canvas id="totalIncomeChartWeek"></canvas>
+									</div>
 								</div>
 							</div>
-							<div class="separator-dashed"></div>
-							<div class="d-flex">
-								<div class="avatar avatar-away">
-									<span class="avatar-title rounded-circle border border-white bg-danger">L</span>
+							<div class="card-title">Created Rules This Year</div>
+							<div class="row py-3">
+								<div class="col-md-4 d-flex flex-column justify-content-around">
+									<div>
+										<h6 class="fw-bold text-uppercase text-success op-8">Rules</h6>
+										<h3 class="fw-bold">{{total_rules_in_year}}</h3>
+									</div>
 								</div>
-								<div class="flex-1 ml-3 pt-1">
-									<h6 class="text-uppercase fw-bold mb-1">Lee Chong Wei <span class="text-muted pl-3">closed</span></h6>
-									<span class="text-muted">Is there any update plan for RTL version near future?</span>
-								</div>
-								<div class="float-right pt-1">
-									<small class="text-muted">2 Days Ago</small>
-								</div>
-							</div>
-							<div class="separator-dashed"></div>
-							<div class="d-flex">
-								<div class="avatar avatar-offline">
-									<span class="avatar-title rounded-circle border border-white bg-secondary">P</span>
-								</div>
-								<div class="flex-1 ml-3 pt-1">
-									<h6 class="text-uppercase fw-bold mb-1">Peter Parker <span class="text-success pl-3">open</span></h6>
-									<span class="text-muted">I have some query regarding the license issue.</span>
-								</div>
-								<div class="float-right pt-1">
-									<small class="text-muted">2 Day Ago</small>
-								</div>
-							</div>
-							<div class="separator-dashed"></div>
-							<div class="d-flex">
-								<div class="avatar avatar-away">
-									<span class="avatar-title rounded-circle border border-white bg-danger">L</span>
-								</div>
-								<div class="flex-1 ml-3 pt-1">
-									<h6 class="text-uppercase fw-bold mb-1">Logan Paul <span class="text-muted pl-3">closed</span></h6>
-									<span class="text-muted">Is there any update plan for RTL version near future?</span>
-								</div>
-								<div class="float-right pt-1">
-									<small class="text-muted">2 Days Ago</small>
+								<div class="col-md-8 flex-grow-1">
+									<div id="chart-container">
+										<canvas id="totalIncomeChartMonth"></canvas>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
+			<div class="row">
+				
+				<div class="col-md-4">
+					<div class="card full-height">
+						<div class="card-header">
+							<div class="card-head-row">
+								<div class="card-title">Top Rules Creators Today</div>
+							</div>
+						</div>
+						<div id="top-users-today" class="card-body">
+							{% if top_users_last_today %}
+								{% for user in top_users_last_today %}
+								<div class="d-flex">
+									<div class="avatar avatar-online">
+										<span class="avatar-title rounded-circle border border-white bg-info">{{user|make_list|first|upper}}</span>
+									</div>
+									<div class="flex-1 ml-3 pt-1">
+										<h6 class="text-uppercase fw-bold mb-1">{% if forloop.counter == 1 %}<i class="fas fa-chess-king text-warning"></i>{% endif %} {{user}}</h6>
+									</div>
+									<div class="float-right pt-1">
+										<small class="text-muted">Top {{forloop.counter}}</small>
+									</div>
+								</div>
+								<div class="separator-dashed"></div>
+								{% endfor %}
+							{% else %}
+								<div class="d-flex">
+									<p> There're no rules created by any user yet</p>
+								</div>
+							{% endif %}
+						</div>
+					</div>
+				</div>
 
+				<div class="col-md-4">
+					<div class="card full-height">
+						<div class="card-header">
+							<div class="card-head-row">
+								<div class="card-title">Top Rules Creators This Week</div>
+							</div>
+						</div>
+						<div id="top-users-week" class="card-body">
+							{% if top_users_last_week %}
+								{% for user in top_users_last_week %}
+								<div class="d-flex">
+									<div class="avatar avatar-online">
+										<span class="avatar-title rounded-circle border border-white bg-info">{{user|make_list|first|upper}}</span>
+									</div>
+									<div class="flex-1 ml-3 pt-1">
+										<h6 class="text-uppercase fw-bold mb-1">{% if forloop.counter == 1 %}<i class="fas fa-chess-king text-warning"></i>{% endif %} {{user}}</h6>
+									</div>
+									<div class="float-right pt-1">
+										<small class="text-muted">Top {{forloop.counter}}</small>
+									</div>
+								</div>
+								<div class="separator-dashed"></div>
+								{% endfor %}
+							{% else %}
+								<div class="d-flex">
+									<p> There're no rules created by any user yet</p>
+								</div>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-4">
+					<div class="card full-height">
+						<div class="card-header">
+							<div class="card-head-row">
+								<div class="card-title">Top Rules Creators This Month</div>
+							</div>
+						</div>
+						<div id="top-users-week" class="card-body">
+							{% if top_users_last_month %}
+								{% for user in top_users_last_month %}
+								<div class="d-flex">
+									<div class="avatar avatar-online">
+										<span class="avatar-title rounded-circle border border-white bg-info">{{user|make_list|first|upper}}</span>
+									</div>
+									<div class="flex-1 ml-3 pt-1">
+										<h6 class="text-uppercase fw-bold mb-1">{% if forloop.counter == 1 %}<i class="fas fa-chess-king text-warning"></i>{% endif %} {{user}}</h6>
+									</div>
+									<div class="float-right pt-1">
+										<small class="text-muted">Top {{forloop.counter}}</small>
+									</div>
+								</div>
+								<div class="separator-dashed"></div>
+								{% endfor %}
+							{% else %}
+								<div class="d-flex">
+									<p> There're no rules created by any user yet</p>
+								</div>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+
+			</div>
 			<div class="row">
 				<div class="col-md-8">
 					<div class="card">
@@ -609,9 +657,9 @@
 	<script src="/static/assets/js/demo.js"></script>
 
 	<script>
-		var totalIncomeChart = document.getElementById('totalIncomeChart').getContext('2d');
-
-		var mytotalIncomeChart = new Chart(totalIncomeChart, {
+		var totalIncomeChartWeek = document.getElementById('totalIncomeChartWeek').getContext('2d');
+		
+		var mytotalIncomeChartWeek = new Chart(totalIncomeChartWeek, {
 			type: 'bar',
 			data: {
 				labels: ["S", "M", "T", "W", "T", "F", "S", "S", "M", "T"],
@@ -619,7 +667,46 @@
 					label: "Total Income",
 					backgroundColor: '#ff9e27',
 					borderColor: 'rgb(23, 125, 255)',
-					data: [6, 4, 9, 5, 4, 6, 4, 3, 8, 10],
+					data: {{ rules_by_day_list }},
+				}],
+			},
+			options: {
+				responsive: true,
+				maintainAspectRatio: false,
+				legend: {
+					display: false,
+				},
+				scales: {
+					yAxes: [{
+						ticks: {
+							display: false //this will remove only the label
+						},
+						gridLines : {
+							drawBorder: false,
+							display : false
+						}
+					}],
+					xAxes : [ {
+						gridLines : {
+							drawBorder: false,
+							display : false
+						}
+					}]
+				},
+			}
+		});
+
+		var totalIncomeChartMonth = document.getElementById('totalIncomeChartMonth').getContext('2d');
+
+		var mytotalIncomeChartMonth = new Chart(totalIncomeChartMonth, {
+			type: 'bar',
+			data: {
+				labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+				datasets: [{
+					label: "Total Income",
+					backgroundColor: '#ff9e27',
+					borderColor: 'rgb(23, 125, 255)',
+					data: {{rules_by_month_list}},
 				}],
 			},
 			options: {
