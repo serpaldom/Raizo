@@ -1,11 +1,11 @@
 import datetime
-from django.db.models import Count
+from django.db.models import Count, Avg, Q
 from django.contrib.admin.models import LogEntry
 from .models import Customer, DetectionSystem, Rule, Watcher, Report, MitreTactic, MitreTechnique
 from django.contrib.auth.models import User
 from django.db.models import Count
 from django.contrib.admin.models import LogEntry
-from django.db.models.functions import ExtractMonth
+from django.db.models.functions import ExtractMonth, TruncMonth, TruncDay
 from django.utils import timezone
 
 class DatabaseManager:
@@ -219,3 +219,21 @@ class DatabaseManager:
         Get all rules associated with a specific MITRE technique.
         """
         return Rule.objects.filter(mitre_techniques__id=technique_id)
+
+    def get_rules_by_severity(self):
+            """
+            Get the number of rules grouped by severity.
+            """
+            return Rule.objects.values('severity').annotate(count=Count('id')).order_by('severity')
+
+    def get_top_rules_by_severity(self, severity, limit=3):
+        """
+        Get the top rules by severity.
+        """
+        return Rule.objects.filter(severity=severity).order_by('-created_at')[:limit]
+    
+    def get_distribution_by_severity(self):
+        """
+        Get the distribution of rules by severity.
+        """
+        return Rule.objects.values('severity').annotate(count=Count('id')).order_by('severity')

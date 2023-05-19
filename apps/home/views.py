@@ -68,7 +68,7 @@ def pages(request):
                 top_users_last_week = db_manager.get_top_users_last_week(limit=5)
 
                 # Obtener los 3 usuarios que han creado la mayor cantidad de Rule en el último mes
-                top_users_last_month = db_manager.get_top_users_last_day(limit=5)
+                top_users_last_month = db_manager.get_top_users_last_month(limit=5)
             except:
                 top_users_last_day = 0
                 top_users_last_week = 0
@@ -142,6 +142,28 @@ def pages(request):
             except:
                 distribution_by_tactic = 0
                 pass
+            
+            # Rule - Severity distribution
+            severity_order = ['Critical', 'Very High', 'High', 'Medium', 'Low', 'Informational']
+            distribution_by_severity_list = []
+            try:
+                distribution_by_severity = db_manager.get_distribution_by_severity()
+                
+                # Obtener el recuento de reglas para cada severidad en el orden especificado
+                for severity in severity_order:
+                    count = next((item['count'] for item in distribution_by_severity if item['severity'] == severity), 0)
+                    distribution_by_severity_list.append(count)       
+            except:
+                # En caso de que ocurra una excepción, establecer todos los recuentos en 0
+                distribution_by_severity_list = [0] * len(severity_order)
+                pass
+            
+            try:
+                recent_rules = db_manager.get_recent_rules()  
+            except:
+                # En caso de que ocurra una excepción, establecer todos los recuentos en 0
+                recent_rules = ""
+                pass
 
             # Last 6 actions performed by user
             try:
@@ -166,6 +188,8 @@ def pages(request):
                 'rules_by_month_list': rules_by_month_list,
                 'total_rules_in_year': total_rules_in_year,
                 'distribution_by_tactic':distribution_by_tactic_list,
+                'distribution_by_severity':distribution_by_severity_list,
+                'recent_rules': recent_rules,
                 'recent_actions': recent_actions,
             })
 

@@ -43,8 +43,8 @@ class DetectionSystemList(admin.ModelAdmin):
     list_display = ('id', 'name', 'type', 'created_by','created_at', 'modified_at')
     
 class RuleList(admin.ModelAdmin):
-    list_display = ('id', 'name', 'mitre_tactics_display', 'mitre_techniques_display', 'technologies', 'tags', 'created_by', 'detection_systems_display', 'created_at','modified_at')
-
+    list_display = ('id', 'name', 'severity', 'mitre_tactics_display', 'mitre_techniques_display', 'technologies', 'tags', 'created_by', 'detection_systems_display', 'created_at','modified_at')
+    
     def mitre_tactics_display(self, obj):
         return ", ".join([f"{t.id}-{t.name}" for t in obj.mitre_tactics.all()])
 

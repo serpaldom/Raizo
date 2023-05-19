@@ -84,8 +84,19 @@ class MitreTechnique(models.Model):
         super().save(*args, **kwargs)
 
 class Rule(models.Model):
+    
+    SEVERITY_CHOICES = [
+        ('Critical', 'Critical'),
+        ('Very High', 'Very High'),
+        ('High', 'High'),
+        ('Medium', 'Medium'),
+        ('Low', 'Low'),
+        ('Informational', 'Informational'),
+    ]
+    
     id = models.CharField(max_length=10, primary_key=True)
     name = models.CharField(max_length=255)
+    severity = models.CharField(max_length=20, choices=SEVERITY_CHOICES)
     mitre_tactics = models.ManyToManyField(MitreTactic,related_name='rules')
     mitre_techniques = models.ManyToManyField(MitreTechnique,related_name='rules')
     technologies = models.CharField(max_length=255)
