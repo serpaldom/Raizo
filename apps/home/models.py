@@ -5,7 +5,7 @@ Copyright (c) 2019 - present AppSeed.us
 
 from django.db import models
 from django.contrib.auth.models import User
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, ValidationError
 from simple_history.models import HistoricalRecords
 
 class Customer(models.Model):
@@ -103,8 +103,17 @@ class Rule(models.Model):
         if self.created_by and not self.created_by.is_staff:
             raise PermissionDenied("Only staff members can create customers")
         super().save(*args, **kwargs)
+    
+    def clean(self):
+        super().clean()
+
+        # Verificar si las técnicas están alineadas con la táctica MITRE
+        for technique in self.mitre_techniques.all():
+            if technique.mitre_tactic != self.mitre_tactics.first():
+                raise ValidationError(f'The technique {technique.name} is not aligned with the MITRE tactic {self.mitre_tactics.first().name}.')
     class Meta:
         db_table = "Rules"
+        
 class Watcher(models.Model):
     name = models.CharField(max_length=255)
     customers = models.ManyToManyField(Customer)
