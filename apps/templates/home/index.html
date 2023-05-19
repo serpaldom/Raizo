@@ -198,7 +198,7 @@
 				<div class="col-md-3">
 					<div class="card full-height">
 						<div class="card-header">
-							<div class="card-title">Radar Chart</div>
+							<div class="card-title">Distribution of Rules by Severity</div>
 						</div>
 						<div class="card-body">
 							<div class="chart-container">
@@ -237,7 +237,7 @@
 								{% endfor %}
 							{% else %}
 								<div class="d-flex">
-									<p> There're no rules created by any user yet</p>
+									<p class="text-center"> There're no rules created by any user yet</p>
 								</div>
 							{% endif %}
 						</div>
@@ -255,7 +255,7 @@
 							{% if top_users_last_week %}
 								{% for user in top_users_last_week %}
 								<div class="d-flex">
-									<div class="avatar avatar-online">
+									<div class="avatar">
 										<span class="avatar-title rounded-circle border border-white bg-info">{{user|make_list|first|upper}}</span>
 									</div>
 									<div class="flex-1 ml-3 pt-1">
@@ -269,7 +269,7 @@
 								{% endfor %}
 							{% else %}
 								<div class="d-flex">
-									<p> There're no rules created by any user yet</p>
+									<p class="text-center"> There're no rules created by any user yet</p>
 								</div>
 							{% endif %}
 						</div>
@@ -287,11 +287,11 @@
 							{% if top_users_last_month %}
 								{% for user in top_users_last_month %}
 								<div class="d-flex">
-									<div class="avatar avatar-online">
+									<div class="avatar">
 										<span class="avatar-title rounded-circle border border-white bg-info">{{user|make_list|first|upper}}</span>
 									</div>
 									<div class="flex-1 ml-3 pt-1">
-										<h6 class="text-uppercase fw-bold mb-1">{% if forloop.counter == 1 %}<i class="fas fa-chess-king text-warning"></i>{% endif %} {{user}}</h6>
+										<h6 class="text-uppercase fw-bold mb-1">{% if forloop.counter == 1 %}<i class="fa fa-chess-king text-warning"></i>{% endif %} {{user}}</h6>
 									</div>
 									<div class="float-right pt-1">
 										<small class="text-muted">Top {{forloop.counter}}</small>
@@ -346,7 +346,7 @@
 									</li>
 								</ol>
 							{% else %}
-								<p>No actions performed yet</p>
+								<p class="text-center">No actions performed yet</p>
 							{% endif %}
 						</div>
 					</div>
@@ -366,7 +366,7 @@
 											<th scope="col">ID</th>
 											<th scope="col">Name</th>
 											<th scope="col">Detection System</th>
-											<th scope="col">Creator</th>
+											<th scope="col">Created By</th>
 											<th scope="col">Created At</th>
 										</tr>
 									</thead>
@@ -382,7 +382,7 @@
 											</tr>
 										{% endfor %}
 										{% else %}
-										<p>There're no rules created yet</p>
+										<p class="text-center">There're no rules created yet</p>
 										{% endif %}
 									</tbody>
 								</table>
@@ -391,7 +391,7 @@
 					</div>
 				</div>
 			</div>
-
+			<!--
 			<div class="row row-card-no-pd">
 				<div class="col-md-12">
 					<div class="card">
@@ -660,6 +660,7 @@
 					</div>
 				</div>
 			</div>
+			-->
 			
 		</div>
 	</div>
