@@ -175,7 +175,7 @@
 									</div>
 								</div>
 								<div class="col-md-8 flex-grow-1">
-									<div id="chart-container">
+									<div id="chart-container" style="height: 100%;">
 										<canvas id="totalIncomeChartMonth"></canvas>
 									</div>
 								</div>
@@ -189,7 +189,7 @@
 							<div class="card-title">Distribution of Rules by MITRE Tactic</div>
 						</div>
 						<div class="card-body">
-							<div class="chart-container">
+							<div class="chart-container" style="height: 100%;">
 								<canvas id="pieChart" style="width: 50%; height: 50%"></canvas>
 							</div>
 						</div>
@@ -201,7 +201,7 @@
 							<div class="card-title">Distribution of Rules by Severity</div>
 						</div>
 						<div class="card-body">
-							<div class="chart-container">
+							<div class="chart-container" style="height: 100%;">
 								<canvas id="radarChart"></canvas>
 							</div>
 						</div>
@@ -312,7 +312,42 @@
 
 			<!-- Activity Stats -->
 			<div class="row">
-				<div class="col-md-6">
+				{% if user.is_superuser %}
+					<div class="col-md-3">
+						<div class="card full-height">
+							<div class="card-header">
+								<div class="card-head-row">
+									<div class="card-title">Current Active Sessions {% if current_sessions %}({{current_sessions.count}}){% else %}(0){% endif %}</div>
+								</div>
+							</div>
+							<div id="top-users-today" class="card-body">
+								<div class="table-responsive"> 
+									<table id="sessions-table" class="table table-striped table-striped-bg-default mt-3">
+										<thead>
+											<tr>
+												<th scope="col">ID</th>
+												<th scope="col">Expiration time (UTC)</th>
+											</tr>
+										</thead>
+										<tbody>
+											{% if current_sessions %}
+											{% for session in current_sessions %}
+												<tr>
+													<td>{{session.session_key}}</td>
+													<td>{{session.expire_date }}</td>
+												</tr>
+											{% endfor %}
+											{% else %}
+											<p class="text-center">There are not active sessions yet</p>
+											{% endif %}
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				{% endif %}
+				<div class="col-md-{% if user.is_superuser %}3{% else %}6{% endif %}">
 					<div class="card full-height">
 						<div class="card-header">
 							<div class="card-title">Last Activity</div>
@@ -344,6 +379,10 @@
 										<time class="date" datetime="{{ recent_actions.5.action_time|date:'M d H:m:s' }}">{{ recent_actions.5.action_time|date:'M d H:m:s' }}</time>
 										<span class="text">{{ recent_actions.5.user.username }} - {{ recent_actions.5.content_type }}: <a href="/admin/admin/logentry/">{{ recent_actions.5.get_change_message }}</a></span>
 									</li>
+									<li class="feed-item feed-item-secondary">
+										<time class="date" datetime="{{ recent_actions.6.action_time|date:'M d H:m:s' }}">{{ recent_actions.0.action_time|date:'M d H:m:s' }}</time>
+										<span class="text">{{ recent_actions.6.user.username }} - {{ recent_actions.6.content_type }}: <a href="/admin/admin/logentry/">{{ recent_actions.6.get_change_message }}</a></span>
+									</li>
 								</ol>
 							{% else %}
 								<p class="text-center">No actions performed yet</p>
@@ -360,14 +399,14 @@
 						</div>
 						<div id="top-users-today" class="card-body">
 							<div class="table-responsive"> 
-								<table class="table table-striped table-striped-bg-default mt-3">
+								<table id="last-created-rules-table" class="table table-striped table-striped-bg-default mt-3">
 									<thead>
 										<tr>
 											<th scope="col">ID</th>
 											<th scope="col">Name</th>
 											<th scope="col">Detection System</th>
 											<th scope="col">Created By</th>
-											<th scope="col">Created At</th>
+											<th scope="col">Created At (UTC)</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -672,7 +711,23 @@
 
 	<!-- Atlantis DEMO methods, don't include it in your project! -->
 	<script src="/static/assets/js/setting-demo.js"></script>
-
+	{% if user.is_superuser%}
+	<script>
+		$(document).ready(function() {
+			$('#sessions-table').DataTable({
+				"scrollY": true
+			});
+		});
+	</script>
+	{% endif %}
+	<script>
+		$(document).ready(function() {
+			$('#last-created-rules-table').DataTable({
+				"scrollY": true,
+				"scrollX": true
+			});
+		});
+	</script>
 	<script>
 		var totalIncomeChartWeek = document.getElementById('totalIncomeChartWeek').getContext('2d'),
 		pieChart = document.getElementById('pieChart').getContext('2d'),
@@ -681,7 +736,7 @@
 		var mytotalIncomeChartWeek = new Chart(totalIncomeChartWeek, {
 			type: 'bar',
 			data: {
-				labels: ["S", "M", "T", "W", "T", "F", "S", "S", "M", "T"],
+				labels: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
 				datasets : [{
 					label: "Rules",
 					backgroundColor: '#ff9e27',
@@ -723,8 +778,8 @@
 				labels: ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"],
 				datasets: [{
 					label: "Rules",
-					backgroundColor: '#ff9e27',
-					borderColor: 'rgb(23, 125, 255)',
+					backgroundColor: '#7db6ff',
+					borderColor: 'rgb(125, 182, 255)',
 					data: {{rules_by_month_list}},
 				}],
 			},
@@ -773,7 +828,12 @@
 				responsive: true, 
 				maintainAspectRatio: false,
 				legend : {
-					position: 'bottom'
+					position: 'bottom',
+				},
+				scale: {
+					pointLabels: {
+						fontSize: 12,  // Ajusta el tamaño de fuente deseado
+					}
 				}
 			}
 		});
@@ -822,7 +882,7 @@
 						return value + ' (' + percentage + ')';
 					  },
 					fontColor: 'white',
-					fontSize: 14,
+					fontSize: 10,
 				},
 				tooltips: false,
 				layout: {

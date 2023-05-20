@@ -7,6 +7,7 @@ from django.db.models import Count
 from django.contrib.admin.models import LogEntry
 from django.db.models.functions import ExtractMonth, TruncMonth, TruncDay
 from django.utils import timezone
+from django.contrib.sessions.models import Session
 
 class DatabaseManager:
     def __init__(self):
@@ -237,3 +238,9 @@ class DatabaseManager:
         Get the distribution of rules by severity.
         """
         return Rule.objects.values('severity').annotate(count=Count('id')).order_by('severity')
+    
+    def get_current_sessions(self):
+        """
+        Get the current active sessions in the app.
+        """
+        return Session.objects.filter(expire_date__gte=timezone.now())

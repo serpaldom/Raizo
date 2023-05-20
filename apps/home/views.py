@@ -167,8 +167,15 @@ def pages(request):
 
             # Last 6 actions performed by user
             try:
-                recent_actions = db_manager.get_recent_actions()
+                recent_actions = db_manager.get_recent_actions(limit=7)
             except:
+                pass
+            
+            # Current active sessions
+            try:
+                current_sessions = db_manager.get_current_sessions()
+            except:
+                current_sessions = 0
                 pass
             
             # Add the results to the context            
@@ -191,6 +198,7 @@ def pages(request):
                 'distribution_by_severity':distribution_by_severity_list,
                 'recent_rules': recent_rules,
                 'recent_actions': recent_actions,
+                'current_sessions': current_sessions,
             })
 
         
