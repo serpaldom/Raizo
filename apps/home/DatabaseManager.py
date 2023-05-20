@@ -244,3 +244,21 @@ class DatabaseManager:
         Get the current active sessions in the app.
         """
         return Session.objects.filter(expire_date__gte=timezone.now())
+
+    def get_user_rules(self, user):
+        """
+        Get the rules created for a specific user.
+        """
+        return Rule.objects.filter(created_by=user)
+
+    def get_user_watchers(self, user):
+        """
+        Get the watchers created for a specific user.
+        """
+        return Watcher.objects.filter(created_by=user)
+
+    def get_user_reports(self, user):
+        """
+        Get the reports created for a specific user.
+        """
+        return Report.objects.filter(created_by=user)

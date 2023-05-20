@@ -1,0 +1,153 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Dashboard {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+			
+	<div class="content">
+        
+        <div class="page-inner mt--5">
+            <!-- Main info -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-profile">
+                        <div class="card-header" style="background-image: url('/static/assets/img/blogpost.jpg')">
+                            <div class="profile-picture">
+                                <div class="avatar avatar-xl">
+                                    <img src="/static/assets/img/profile.jpg" alt="..." class="avatar-img rounded-circle">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="user-profile text-center">
+                                <div class="name">{{user.fisrt_name}} {{user.last_name}}</div>
+                                <div class="job">{{user.email}}</div>
+                                <div class="desc">A man who hates loneliness</div>
+                                <div class="social-media">
+                                    <a class="btn btn-info btn-twitter btn-sm btn-link" href="#"> 
+                                        <span class="btn-label just-icon"><i class="flaticon-twitter"></i> </span>
+                                    </a>
+                                    <a class="btn btn-danger btn-sm btn-link" rel="publisher" href="#"> 
+                                        <span class="btn-label just-icon"><i class="flaticon-google-plus"></i> </span> 
+                                    </a>
+                                    <a class="btn btn-primary btn-sm btn-link" rel="publisher" href="#"> 
+                                        <span class="btn-label just-icon"><i class="flaticon-facebook"></i> </span> 
+                                    </a>
+                                    <a class="btn btn-danger btn-sm btn-link" rel="publisher" href="#"> 
+                                        <span class="btn-label just-icon"><i class="flaticon-dribbble"></i> </span> 
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row user-stats text-center">
+                                <div class="col-md-4">
+                                    <div class="number text-info"><b>{{user_rules.count}}</b></div>
+                                    <div class="title">Rules</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="number text-info"><b>{{user_watchers.count}}</b></div>
+                                    <div class="title">Watchers</div>
+                                </div>
+                                <div class="col-md-4 text-info">
+                                    <div class="number"><b>{{user_reports.count}}</b></div>
+                                    <div class="title">Reports</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- User statistics -->
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Permissions</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="permissions-table" class="table table-striped table-striped-bg-default mt-3">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Permission Code</th>
+                                            <th scope="col">Permission Name</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for permission in user.user_permissions.all %}
+                                            <tr>
+                                                <td>{{forloop.counter}}</td>
+                                                <td>{{permission.codename}}</td>
+                                                <td>{{permission.name}}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- User rules -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Created Rules</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="multi-filter-search" class="display table table-striped table-hover" >
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Name</th>
+                                            <th>Detection Systems</th>
+                                            <th>Created At (UTC)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for rule in user_rules %}
+                                        <tr>
+                                            <td>{{rule.id}}</td>
+                                            <td>{{rule.name}}</td>
+                                            <td>{{rule.detection_systems.all|join:", "}}</td>
+                                            <td>{{rule.created_at}}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+	</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+    $(document).ready(function() {
+        $('#permissions-table').DataTable({
+            "scrollY": true,
+            "scrollX": true
+        });
+    })
+
+    $(document).ready(function() {
+        $('#multi-filter-search').DataTable({
+            "scrollY": true,
+            "scrollX": true
+        });
+    })
+</script>
+{% endblock javascripts %}

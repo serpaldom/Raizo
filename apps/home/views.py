@@ -18,8 +18,11 @@ from datetime import timedelta, date
 from django.contrib.admin.models import LogEntry
 from django.db.models.functions import ExtractMonth
 from .DatabaseManager import DatabaseManager
+from .ExportManager import ExportManager
+from django.template.loader import render_to_string
 
-
+db_manager  = DatabaseManager()
+export_manager = ExportManager()
 
 @login_required(login_url="/login/")
 def index(request):
@@ -32,12 +35,10 @@ def index(request):
 @login_required(login_url="/login/")
 def pages(request):
     
-    db_manager  = DatabaseManager()
     context = {}
     # All resource paths end in .html.
     # Pick out the html file name from the url. And load that template.
     try:
-
         load_template = request.path.split('/')[-1]
 
         if load_template == 'admin':
@@ -227,73 +228,28 @@ def pages(request):
             
             context['reports'] = reports
             
+        if load_template == 'profile.html':
+            context['user_rules'] = db_manager.get_user_rules(request.user)
+            context['user_watchers'] = db_manager.get_user_watchers(request.user)
+            context['user_reports'] = db_manager.get_user_reports(request.user)
+            
         if request.path.split('/')[1] == 'export':
             object_to_export = request.path.split('/')[-1]
             if object_to_export == 'customers':
-                customers = Customer.objects.all()
-                response = HttpResponse(
-                    content_type="text/csv",
-                    headers={"Content-Disposition": 'attachment; filename="customers.csv"'},
-                )
-
-                writer = csv.writer(response)
-                # CSV columns
-                writer.writerow(['ID', 'Name', 'Initials', 'Detection systems', 'Created by', 'Created at (UTC)','Modified at (UTC)'])
-                for customer in customers:
-                    detection_systems = ', '.join([ds.name for ds in customer.detection_systems.all()])
-                    writer.writerow([customer.id, customer.name, customer.initials, detection_systems,customer.created_by, customer.created_at, customer.modified_at])
-                # Return the response
-                return response
+                export_manager.export_customers()
             
             elif object_to_export == 'detection_systems':
-                detection_systems = DetectionSystem.objects.all()
-                response = HttpResponse(
-                    content_type="text/csv",
-                    headers={"Content-Disposition": 'attachment; filename="detection_systems.csv"'},
-                )
-
-                writer = csv.writer(response)
-                # CSV columns
-                writer.writerow(['ID', 'Name', 'Type', 'Customers', 'Created by', 'Created at (UTC)','Modified at (UTC)'])
-                for detection_system in detection_systems:
-                    customers = ', '.join([customer.name for customer in detection_system.customers.all()])
-                    writer.writerow([detection_system.id, detection_system.name, detection_system.type, customers, detection_system.created_by, detection_system.created_at, detection_system.modified_at])
-                # Return the response
-                return response
+                export_manager.export_detection_systems()
             
             elif object_to_export == 'watchers':
-                watchers = Watcher.objects.all()
-                response = HttpResponse(
-                    content_type="text/csv",
-                    headers={"Content-Disposition": 'attachment; filename="watchers.csv"'},
-                )
-
-                writer = csv.writer(response)
-                # CSV columns
-                writer.writerow(['ID', 'Name', 'Customers', ' Detection Systems', 'Created by', 'Created at (UTC)','Modified at (UTC)'])
-                for watcher in watchers:
-                    customers = ', '.join([customer.name for customer in watcher.customers.all()])
-                    detection_systems = ', '.join([detection_system.name for detection_system in watcher.detection_systems.all()])
-                    writer.writerow([watcher.id, watcher.name, customers, detection_systems, watcher.created_by, watcher.created_at, watcher.modified_at])
-                # Return the response
-                return response
+                export_manager.export_watchers()
             
             elif object_to_export == 'reports':
-                reports = Report.objects.all()
-                response = HttpResponse(
-                    content_type="text/csv",
-                    headers={"Content-Disposition": 'attachment; filename="reports.csv"'},
-                )
-
-                writer = csv.writer(response)
-                # CSV columns
-                writer.writerow(['ID', 'Name', 'Customers', ' Detection Systems', 'Created by', 'Created at (UTC)','Modified at (UTC)'])
-                for report in reports:
-                    customers = ', '.join([customer.name for customer in report.customers.all()])
-                    detection_systems = ', '.join([detection_system.name for detection_system in report.detection_systems.all()])
-                    writer.writerow([report.id, report.name, customers, detection_systems, report.created_by, report.created_at, report.modified_at])
-                # Return the response
-                return response
+                export_manager.export_reports()
+            
+            elif object_to_export == 'dashboard':
+                
+                print("TODO")
             
         html_template = loader.get_template('home/' + load_template)
         return HttpResponse(html_template.render(context, request))

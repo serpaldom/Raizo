@@ -151,8 +151,8 @@ STATICFILES_DIRS = (
 # SESSION SECTION
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Motor de almacenamiento de sesiones
 SESSION_COOKIE_NAME = 'sessionid'  # Nombre de la cookie de sesión
-SESSION_COOKIE_AGE = 900  # Duración de la sesión en segundos
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # La sesión expira al cerrar el navegador
+SESSION_COOKIE_AGE = 1800  # Duración de la sesión en segundos
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # La sesión expira al cerrar el navegador
 SESSION_COOKIE_SECURE = False  # Solo se envía la cookie en conexiones seguras (HTTPS)
 
 #############################################################
