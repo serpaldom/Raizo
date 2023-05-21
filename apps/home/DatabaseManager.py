@@ -18,6 +18,42 @@ class DatabaseManager:
         self.today = timezone.localdate()
         self.start_of_week = self.today - timezone.timedelta(days=self.today.weekday())
         self.end_of_week = self.start_of_week + timezone.timedelta(days=6)
+        
+    def get_all_customers(self):
+        """
+        Get all customers.
+        """
+        return Customer.objects.all()
+
+    def get_all_users(self):
+        """
+        Get all users.
+        """
+        return User.objects.all()
+
+    def get_all_detection_systems(self):
+        """
+        Get all detection systems.
+        """
+        return DetectionSystem.objects.all()
+
+    def get_all_rules(self):
+        """
+        Get all rules.
+        """
+        return Rule.objects.all()
+
+    def get_all_watchers(self):
+        """
+        Get all watchers.
+        """
+        return Watcher.objects.all()
+
+    def get_all_reports(self):
+        """
+        Get all reports.
+        """
+        return Report.objects.all()
    
     def get_total_customers(self):
         """
@@ -226,6 +262,13 @@ class DatabaseManager:
             Get the number of rules grouped by severity.
             """
             return Rule.objects.values('severity').annotate(count=Count('id')).order_by('severity')
+        
+    def get_rules_by_detection_system(self, detection_system):
+        """
+        Get rules grouped by detection system.
+        """
+        return Rule.objects.filter(detection_system=detection_system)
+
 
     def get_top_rules_by_severity(self, severity, limit=3):
         """

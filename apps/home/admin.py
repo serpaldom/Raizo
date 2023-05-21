@@ -5,7 +5,7 @@ Copyright (c) 2019 - present AppSeed.us
 
 from django import forms
 from django.contrib import admin
-from .models import Customer, DetectionSystem, Rule, MitreTactic, MitreTechnique, Watcher, Report
+from .models import Customer, DetectionSystem, Rule, MitreTactic, MitreTechnique, Watcher, Report, Technologies, Tag
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django import forms
@@ -29,6 +29,12 @@ class CustomerAdmin(admin.ModelAdmin):
     
 class MitreTacticAdminList(admin.ModelAdmin):
     list_display = ('id', 'name', 'created_by','created_at', 'modified_at')
+
+class TechonologiesAdminList(admin.ModelAdmin):
+    list_display = ('id', 'name', 'created_by','created_at', 'modified_at')
+    
+class TagsAdminList(admin.ModelAdmin):
+    list_display = ('id', 'name', 'created_by','created_at', 'modified_at')
     
 class MitretechniqueAdminList(admin.ModelAdmin):
     list_display = ('id', 'name', 'mitre_tactic_display', 'created_by','created_at', 'modified_at')
@@ -43,7 +49,7 @@ class DetectionSystemList(admin.ModelAdmin):
     list_display = ('id', 'name', 'type', 'created_by','created_at', 'modified_at')
     
 class RuleList(admin.ModelAdmin):
-    list_display = ('id', 'name', 'severity', 'mitre_tactics_display', 'mitre_techniques_display', 'technologies', 'tags', 'created_by', 'detection_systems_display', 'created_at','modified_at')
+    list_display = ('id', 'name', 'severity', 'mitre_tactics_display', 'mitre_techniques_display', 'technologies_display', 'tags_display', 'created_by', 'detection_systems_display', 'created_at','modified_at')
     
     def mitre_tactics_display(self, obj):
         return ", ".join([f"{t.id}-{t.name}" for t in obj.mitre_tactics.all()])
@@ -60,8 +66,18 @@ class RuleList(admin.ModelAdmin):
     
     detection_systems_display.short_description = "Detection Systems"
 
+    def technologies_display(self, obj):
+        return ", ".join([t.name for t in obj.technologies.all()])
+    
+    technologies_display.short_description = "Technologies"
+
+    def tags_display(self, obj):
+        return ", ".join([tag.name for tag in obj.tags.all()])
+    
+    tags_display.short_description = "Tags"
+
 class WatcherAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'customers_display', 'detection_systems_display', 'created_at', 'modified_at')
+    list_display = ('id', 'name', 'customers_display', 'detection_systems_display', 'technologies_display', 'tags_display', 'created_at', 'modified_at')
 
     def customers_display(self, obj):
         return ", ".join([c.name for c in obj.customers.all()])
@@ -72,9 +88,19 @@ class WatcherAdmin(admin.ModelAdmin):
         return ", ".join([d.name for d in obj.detection_systems.all()])
     
     detection_systems_display.short_description = "Detection Systems"
+    
+    def technologies_display(self, obj):
+        return ", ".join([t.name for t in obj.technologies.all()])
+    
+    technologies_display.short_description = "Technologies"
+
+    def tags_display(self, obj):
+        return ", ".join([tag.name for tag in obj.tags.all()])
+    
+    tags_display.short_description = "Tags"
 
 class ReportAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'customers_display', 'detection_systems_display', 'created_at', 'modified_at')
+    list_display = ('id', 'name', 'customers_display', 'detection_systems_display', 'technologies_display', 'tags_display', 'created_at', 'modified_at')
 
     def customers_display(self, obj):
         return ", ".join([c.name for c in obj.customers.all()])
@@ -85,6 +111,16 @@ class ReportAdmin(admin.ModelAdmin):
         return ", ".join([d.name for d in obj.detection_systems.all()])
     
     detection_systems_display.short_description = "Detection Systems"
+
+    def technologies_display(self, obj):
+        return ", ".join([t.name for t in obj.technologies.all()])
+    
+    technologies_display.short_description = "Technologies"
+
+    def tags_display(self, obj):
+        return ", ".join([tag.name for tag in obj.tags.all()])
+    
+    tags_display.short_description = "Tags"
     
 class LogEntryAdmin(admin.ModelAdmin):
     list_display = ['action_time', 'user', 'content_type', 'object_id', 'action_flag']
@@ -107,3 +143,5 @@ admin.site.register(MitreTechnique,MitretechniqueAdminList)
 admin.site.register(Watcher, WatcherAdmin)
 admin.site.register(Report, ReportAdmin)
 admin.site.register(LogEntry, LogEntryAdmin)
+admin.site.register(Technologies, TechonologiesAdminList)
+admin.site.register(Tag, TagsAdminList)

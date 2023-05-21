@@ -6,10 +6,10 @@ Copyright (c) 2019 - present AppSeed.us
 from django import template
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.template import loader
 from django.urls import reverse
-from .models import Customer, DetectionSystem, Rule, Watcher, Report, MitreTactic, MitreTechnique
+from .models import Customer, DetectionSystem, Rule, Watcher, Report, MitreTactic, MitreTechnique, Technologies, Tag
 from django.contrib.auth.models import User
 import csv
 from django.utils import timezone
@@ -31,7 +31,6 @@ def index(request):
     return redirect("/index.html")
     #return HttpResponse(html_template.render(context, request))
 
-
 @login_required(login_url="/login/")
 def pages(request):
     
@@ -43,9 +42,11 @@ def pages(request):
 
         if load_template == 'admin':
             return HttpResponseRedirect(reverse('admin:index'))
+        
         context['segment'] = load_template
 
         if load_template == 'index.html':
+            
             try:
                 total_customers = db_manager.get_total_customers()
                 total_users = db_manager.get_total_users()
@@ -204,34 +205,38 @@ def pages(request):
 
         
         if load_template == 'tables-customers.html':
-            customers = Customer.objects.all()
-            
+            customers = Customer.objects.all()          
             context['customers'] = customers
         
         if load_template == 'tables-detection_systems.html':
             detection_systems = DetectionSystem.objects.all()
-            
             context['detection_systems'] = detection_systems
         
         if load_template == 'tables-rules.html':
             rules = Rule.objects.all()
-            
             context['rules'] = rules
             
         if load_template == 'tables-watchers.html':
             watchers = Watcher.objects.all()
-            
             context['watchers'] = watchers
         
         if load_template == 'tables-reports.html':
             reports = Report.objects.all()
-            
-            context['reports'] = reports
+            context['reports'] = reports    
             
         if load_template == 'profile.html':
+            # Get all detection systems for the sidebar
+            try:
+                detection_systems = db_manager.get_all_detection_systems()
+            except:
+                detection_systems = 0
+                pass
             context['user_rules'] = db_manager.get_user_rules(request.user)
             context['user_watchers'] = db_manager.get_user_watchers(request.user)
             context['user_reports'] = db_manager.get_user_reports(request.user)
+            context['user_in_top_last_week'] = request.user in db_manager.get_top_users_last_week(limit=5)
+            context['user_in_top_last_month'] = request.user in db_manager.get_top_users_last_week(limit=5)
+            context['detection_systems'] = detection_systems
             
         if request.path.split('/')[1] == 'export':
             object_to_export = request.path.split('/')[-1]

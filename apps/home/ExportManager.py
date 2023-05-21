@@ -73,3 +73,20 @@ class ExportManager:
 
         return response
     
+    @staticmethod
+    def export_reports():
+        watchers = Watcher.objects.all()
+        response = HttpResponse(
+            content_type="text/csv",
+            headers={"Content-Disposition": 'attachment; filename="watchers.csv"'},
+        )
+
+        writer = csv.writer(response)
+        writer.writerow(['ID', 'Name', 'Customers', ' Detection Systems', 'Created by', 'Created at (UTC)', 'Modified at (UTC)'])
+        for watcher in watchers:
+            customers = ', '.join([customer.name for customer in watcher.customers.all()])
+            detection_systems = ', '.join([detection_system.name for detection_system in watcher.detection_systems.all()])
+            writer.writerow([watcher.id, watcher.name, customers, detection_systems, watcher.created_by, watcher.created_at, watcher.modified_at])
+
+        return response
+    

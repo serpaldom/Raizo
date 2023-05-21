@@ -105,8 +105,8 @@
 											{%else%}
 												<td>None</td>
 											{% endif %}
-											<td>{{rule.technologies}}</td>
-											<td>{{rule.tags}}</td>
+											<td>{{rule.technologies.all|join:", "}}</td>
+											<td>{{rule.tags.all|join:", "}}</td>
 											<td>{{rule.detection_systems.all|join:", "}}</td>
 											<td>{{ rule.created_by }}</td>
 											<td>{{ rule.created_at }}</td>

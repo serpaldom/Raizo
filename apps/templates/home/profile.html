@@ -25,21 +25,34 @@
                             <div class="user-profile text-center">
                                 <div class="name">{{user.fisrt_name}} {{user.last_name}}</div>
                                 <div class="job">{{user.email}}</div>
-                                <div class="desc">A man who hates loneliness</div>
-                                <div class="social-media">
-                                    <a class="btn btn-info btn-twitter btn-sm btn-link" href="#"> 
-                                        <span class="btn-label just-icon"><i class="flaticon-twitter"></i> </span>
-                                    </a>
-                                    <a class="btn btn-danger btn-sm btn-link" rel="publisher" href="#"> 
-                                        <span class="btn-label just-icon"><i class="flaticon-google-plus"></i> </span> 
-                                    </a>
-                                    <a class="btn btn-primary btn-sm btn-link" rel="publisher" href="#"> 
-                                        <span class="btn-label just-icon"><i class="flaticon-facebook"></i> </span> 
-                                    </a>
-                                    <a class="btn btn-danger btn-sm btn-link" rel="publisher" href="#"> 
-                                        <span class="btn-label just-icon"><i class="flaticon-dribbble"></i> </span> 
-                                    </a>
-                                </div>
+                                {% if user.is_superuser or user.is_staff %}
+                                    <div class="social-media">
+                                        {% if user.is_superuser %}
+                                        <a class="btn btn-info btn-twitter btn-sm btn-link" href="#" title="You are super user"> 
+                                            <span class="btn-label just-icon" alt="You are super user"><i class="fas fa-user-cog text-danger"></i> </span>
+                                        </a>
+                                        {% endif %}
+                                        {% if user.is_staff %}
+                                        <a class="btn btn-danger btn-sm btn-link" rel="publisher" href="#" title="You are staff user"> 
+                                            <span class="btn-label just-icon" alt="You are staff user"><i class="fas fa-user-cog text-success"></i> </span> 
+                                        </a>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                                {% if user_in_top_last_month  or user_in_top_last_week %}
+                                    <div class="social-media">
+                                        {% if user_in_top_last_month %}
+                                            <a class="btn btn-info btn-twitter btn-sm btn-link" href="#" title="You are in the top 5 rule creator users this month!"> 
+                                                <span class="btn-label just-icon" alt="You are in the top 5 rule creator users this month!"><i class="icon-badge text-warning"></i> </span>
+                                            </a>
+                                        {% endif %}
+                                        {% if user_in_top_last_week %}
+                                            <a class="btn btn-danger btn-sm btn-link" rel="publisher" href="#" title="You are in the top 5 rule creator users this week!"> 
+                                                <span class="btn-label just-icon" alt="You are in the top 5 rule creator users this week!"><i class="icon-badge text-warning"></i> </span> 
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
                             </div>
                         </div>
                         <div class="card-footer">
@@ -63,6 +76,8 @@
             </div>
             <!-- User statistics -->
             <div class="row">
+                
+                <!-- User permissions -->
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header">
@@ -73,9 +88,9 @@
                                 <table id="permissions-table" class="table table-striped table-striped-bg-default mt-3">
                                     <thead>
                                         <tr>
-                                            <th scope="col">#</th>
-                                            <th scope="col">Permission Code</th>
-                                            <th scope="col">Permission Name</th>
+                                            <th width="20%">#</th>
+                                            <th width="40%">Permission Code</th>
+                                            <th width="40%">Permission Name</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -92,41 +107,118 @@
                         </div>
                     </div>
                 </div>
-                <!-- User rules -->
+
+                <!-- User rules/watchers/reports -->
                 <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title">Created Rules</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table id="multi-filter-search" class="display table table-striped table-hover" >
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Name</th>
-                                            <th>Detection Systems</th>
-                                            <th>Created At (UTC)</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for rule in user_rules %}
-                                        <tr>
-                                            <td>{{rule.id}}</td>
-                                            <td>{{rule.name}}</td>
-                                            <td>{{rule.detection_systems.all|join:", "}}</td>
-                                            <td>{{rule.created_at}}</td>
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
+					<div class="card full-height">
+						<div class="card-header">
+							<h4 class="card-title">User Statistics</h4>
+						</div>
+						<div class="card-body">
+                            <div class="d-flex justify-content-end">
+                                <ul class="nav nav-pills nav-secondary nav-pills-no-bd" id="pills-tab-without-border" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="pills-home-tab-nobd" data-toggle="pill" href="#rules-table" role="tab" aria-controls="rules-table" aria-selected="true">Rules</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="pills-profile-tab-nobd" data-toggle="pill" href="#watchers-table" role="tab" aria-controls="watchers-table" aria-selected="false">Watchers</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="pills-contact-tab-nobd" data-toggle="pill" href="#reports-table" role="tab" aria-controls="reports-table" aria-selected="false">Reports</a>
+                                    </li>
+                                </ul>
                             </div>
-                        </div>
-                    </div>
-                </div>
-
-
+							<div class="tab-content mt-2 mb-3" id="pills-without-border-tabContent">
+								<div class="tab-pane fade show active" id="rules-table" role="tabpanel" aria-labelledby="pills-home-tab-nobd">
+                                    {% if user_rules %}
+                                        <div class="table-responsive">
+                                            <table id="multi-filter-search-rules" class="display table table-striped table-hover" >
+                                                <thead>
+                                                    <tr>
+                                                        <th width="20%">ID</th>
+                                                        <th width="30%">Name</th>
+                                                        <th width="30%">Detection Systems</th>
+                                                        <th width="20%">Created At (UTC)</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for rule in user_rules %}
+                                                    <tr>
+                                                        <td>{{rule.id}}</td>
+                                                        <td>{{rule.name}}</td>
+                                                        <td>{{rule.detection_systems.all|join:", "}}</td>
+                                                        <td>{{rule.created_at}}</td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    {% else %}
+                                        <p>You don't have created any rule yet</p>
+                                    {% endif %}
+								</div>
+								<div class="tab-pane fade" id="watchers-table" role="tabpanel" aria-labelledby="pills-profile-tab-nobd">
+                                    {% if user_watchers %}
+                                        <div class="table-responsive">
+                                            <table id="multi-filter-search-watchers" class="display table table-striped table-hover" style="width:100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>ID</th>
+                                                        <th>Name</th>
+                                                        <th>Detection Systems</th>
+                                                        <th>Created At (UTC)</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for watcher in user_watchers %}
+                                                    <tr>
+                                                        <td>{{watcher.id}}</td>
+                                                        <td>{{watcher.name}}</td>
+                                                        <td>{{watcher.detection_systems.all|join:", "}}</td>
+                                                        <td>{{watcher.created_at}}</td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    {% else %}
+                                        <p>You don't have created any watcher yet</p>
+                                    {% endif %}
+								</div>
+								<div class="tab-pane fade" id="reports-table" role="tabpanel" aria-labelledby="pills-contact-tab-nobd">
+                                    {% if user_reports %}
+                                        <div class="table-responsive">
+                                            <table id="multi-filter-search-reports" class="display table table-striped table-hover" >
+                                                <thead>
+                                                    <tr>
+                                                        <th width="20%">ID</th>
+                                                        <th width="30%">Name</th>
+                                                        <th width="30%">Detection Systems</th>
+                                                        <th width="20%">Created At (UTC)</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for report in user_reports %}
+                                                    <tr>
+                                                        <td>{{report.id}}</td>
+                                                        <td>{{report.name}}</td>
+                                                        <td>{{report.detection_systems.all|join:", "}}</td>
+                                                        <td>{{report.created_at}}</td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    {% else %}
+                                        <p>You dont have created any report yet</p>
+                                    {% endif %}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
             </div>
+
         </div>
 
 	</div>
@@ -138,16 +230,105 @@
 <script>
     $(document).ready(function() {
         $('#permissions-table').DataTable({
-            "scrollY": true,
-            "scrollX": true
+            responsive: true,
+            searching: true
         });
     })
 
     $(document).ready(function() {
-        $('#multi-filter-search').DataTable({
-            "scrollY": true,
-            "scrollX": true
+        $('#multi-filter-search-rules').DataTable({
+            responsive: true,
+            searching: true
         });
     })
+
+    $(document).ready(function() {
+        $('#multi-filter-search-watchers').DataTable({
+            responsive: true,
+            searching: true
+        });
+    })
+
+    $(document).ready(function() {
+        $('#multi-filter-search-reports').DataTable({
+            responsive: true,
+            searching: true
+        });
+    })
+</script>
+<script>
+    $(document).ready(function() {
+        var placementFrom = 'bottom';
+        var placementAlign = 'right';
+        var style = $('#notify_style option:selected').val();
+      
+        var user_in_top_last_week = {{ user_in_top_last_week|lower }};
+        var user_in_top_last_month = {{ user_in_top_last_month|lower }};
+      
+        if (user_in_top_last_week) {
+          var contentWeek = {
+            message: 'Congratulations! You are in the top users of the week.',
+            title: 'Congratulations!',
+            icon: 'fa fa-trophy', // Reemplazar con el icono deseado
+            target: '_blank'
+          };
+      
+          $.notify(contentWeek, {
+            type: 'warning',
+            placement: {
+              from: placementFrom,
+              align: placementAlign
+            },
+            showDuration: 10000, // Tiempo de duración en milisegundos (10 segundos)
+            animate: {
+              enter: 'animated fadeInUp',
+              exit: 'animated fadeOutDown'
+            },
+            template:
+              '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+              '<span data-notify="icon" class="fa"></span>' +
+              '<div class="d-flex align-items-center">' +
+              '<span data-notify="title">{2}</span>' +
+              '</div>' +
+              '<div class="progress" data-notify="progressbar">' +
+              '<div class="progress-bar" role="progressbar" style="width: 100%;"></div>' +
+              '</div>' +
+              '</div>'
+          });
+        }
+      
+        if (user_in_top_last_month) {
+          var contentMonth = {
+            message: 'Congratulations! You are in the top users of the month.',
+            title: 'Congratulations!',
+            icon: 'fa fa-trophy', // Reemplazar con el icono deseado
+            target: '_blank'
+          };
+      
+          $.notify(contentMonth, {
+            type: 'warning',
+            placement: {
+              from: placementFrom,
+              align: placementAlign
+            },
+            showDuration: 10000, // Tiempo de duración en milisegundos (10 segundos)
+            animate: {
+              enter: 'animated fadeInUp',
+              exit: 'animated fadeOutDown'
+            },
+            template:
+              '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+              '<span data-notify="icon" class="fa"></span>' +
+              '<div class="d-flex align-items-center">' +
+              '<span data-notify="title">{2}</span>' +
+              '</div>' +
+              '<div class="progress" data-notify="progressbar">' +
+              '<div class="progress-bar" role="progressbar" style="width: 100%;"></div>' +
+              '</div>' +
+              '</div>'
+          });
+        }
+      });
+
 </script>
 {% endblock javascripts %}
