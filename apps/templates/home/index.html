@@ -6,23 +6,18 @@
 {% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
-			
+{% load static %}			
 	<div class="content">
-		<div class="panel-header bg-primary-gradient">
+		<div class="panel-header" style="background-image: url('{% static 'assets/img/background.jpeg' %}');">
 			<div class="page-inner py-5">
 				<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
 					<div>
 						<h2 class="text-white pb-2 fw-bold">Dashboard</h2>
 					</div>
-					{% if user.is_staff %}
-					<div class="ml-md-auto py-2 py-md-0">
-						<a href="/admin" class="btn btn-white btn-border btn-round mr-2">Manage</a>
-						<button  id="pdf-button" class="btn btn-white btn-border btn-round mr-2">Export to PDF (TODO)</button >
-					</div>
-					{% endif %}
 				</div>
 			</div>
 		</div>
+		
 		<div class="page-inner mt--5">
 			
 			<div class="row mt--2">
@@ -155,10 +150,6 @@
 									<div>
 										<h6 class="fw-bold text-uppercase text-success op-8">Rules</h6>
 										<h3 class="fw-bold">{{total_rules_in_week}}</h3>
-										<h6 class="fw-bold text-uppercase text-danger op-8">Rules by Type of Detection System</h6>
-										{% for type, count in total_rules_by_detection_system_type.items %}
-										<h5 class="fw-bold">{{ type }} ({{ count }})</h5>
-										{% endfor %}
 									</div>
 								</div>
 								<div class="col-md-8 flex-grow-1">
@@ -173,6 +164,10 @@
 									<div>
 										<h6 class="fw-bold text-uppercase text-success op-8">Rules</h6>
 										<h3 class="fw-bold">{{total_rules_in_year}}</h3>
+										<h6 class="fw-bold text-uppercase text-danger op-8">Rules by Type of Detection System</h6>
+										{% for result in total_rules_by_detection_system_type %}
+											<h5 class="fw-bold">{{ result.type }} ({{ result.rule_count }})</h5>
+										{% endfor %}
 									</div>
 								</div>
 								<div class="col-md-8 flex-grow-1">

@@ -37,12 +37,13 @@ class TagsAdminList(admin.ModelAdmin):
     list_display = ('id', 'name', 'created_by','created_at', 'modified_at')
     
 class MitretechniqueAdminList(admin.ModelAdmin):
-    list_display = ('id', 'name', 'mitre_tactic_display', 'created_by','created_at', 'modified_at')
+    list_display = ('id', 'name', 'mitre_tactics_display', 'created_by', 'created_at', 'modified_at')
 
-    def mitre_tactic_display(self, obj):
-        return f"{obj.mitre_tactic.id} - {obj.mitre_tactic.name}"
+    def mitre_tactics_display(self, obj):
+        tactic_names = ", ".join([tactic.name for tactic in obj.mitre_tactics.all()])
+        return tactic_names
 
-    mitre_tactic_display.short_description = "MITRE Tactic"
+    mitre_tactics_display.short_description = "MITRE Tactics"
 
 
 class DetectionSystemList(admin.ModelAdmin):

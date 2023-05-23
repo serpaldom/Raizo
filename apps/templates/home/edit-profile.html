@@ -1,0 +1,91 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} UI Forms {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+	<div class="content">
+		<div class="page-inner">
+			<div class="page-header">
+				<h4 class="page-title">Forms</h4>
+				<ul class="breadcrumbs">
+					<li class="nav-home">
+						<a href="#">
+							<i class="flaticon-home"></i>
+						</a>
+					</li>
+					<li class="separator">
+						<i class="flaticon-right-arrow"></i>
+					</li>
+					<li class="nav-item">
+						<a href="#">Forms</a>
+					</li>
+					<li class="separator">
+						<i class="flaticon-right-arrow"></i>
+					</li>
+					<li class="nav-item">
+						<a href="#">Basic Form</a>
+					</li>
+				</ul>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="card">
+						<div class="card-header">
+							<div class="card-title">Edit Profile</div>
+						</div>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-6 col-lg-4">
+								</div>
+								<div class="col-md-6 col-lg-4">
+									<form method="POST">
+										{% csrf_token %}
+										<div class="form-group">
+											<label for="first_name">First Name</label>
+											<input type="text" class="form-control" id="first_name" name="first_name" placeholder="{{request.user.first_name}}">
+										</div>
+										<div class="form-group">
+											<label for="last_name">Last Name</label>
+											<input type="text" class="form-control" id="last_name" name="last_name" placeholder="{{request.user.last_name}}">
+										</div>
+										<div class="form-group">
+											<label for="email">Email Address</label>
+											<input type="email" class="form-control" id="email" name="email" placeholder="{{request.user.email}}">
+											<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+										</div>
+										<div class="form-group">
+											<label for="password">Password</label>
+											<input type="password" class="form-control" id="password" name="password" placeholder="Password">
+										</div>
+										<div class="form-group">
+											<label for="confirm_password">Repeat Password</label>
+											<input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Password">
+										</div>
+										<p></p>
+										<button type="submit" class="btn btn-success">Submit</button>
+										<a type="button" class="btn btn-danger" href="/profile.html">Cancel</a>	
+									</form>
+								</div>
+							</div>
+							<div class="col-md-6 col-lg-4"></div>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+	<!-- Atlantis DEMO methods, don't include it in your project! -->
+	<script src="/static/assets/js/setting-demo2.js"></script>
+
+{% endblock javascripts %}	

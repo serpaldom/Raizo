@@ -139,7 +139,7 @@ class DatabaseManager:
         """
         Get the count of rules per detection system.
         """
-        return Rule.objects.values('detection_systems__type').annotate(rule_count=Count('id'))
+        return DetectionSystem.objects.values('type').annotate(rule_count=Count('rules', distinct=True))
 
     def get_rules_by_month(self):
         """

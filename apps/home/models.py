@@ -58,7 +58,7 @@ class MitreTactic(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='created_mitre_tactics')
     modified_at = models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
-    
+
     def __str__(self):
         return f"{self.id} - {self.name}"
         
@@ -66,15 +66,17 @@ class MitreTactic(models.Model):
         if self.created_by and not self.created_by.is_staff:
             raise PermissionDenied("Only staff members can create customers")
         super().save(*args, **kwargs)
+
+
 class MitreTechnique(models.Model):
     id = models.CharField(max_length=10, primary_key=True)
     name = models.CharField(max_length=255)
-    mitre_tactic = models.ForeignKey(MitreTactic, on_delete=models.CASCADE, related_name='mitre_techniques')
+    mitre_tactics = models.ManyToManyField(MitreTactic, related_name='mitre_techniques')
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='created_mitre_techniques')
     modified_at = models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
-    
+
     def __str__(self):
         return f"{self.id} - {self.name}"
         
@@ -136,7 +138,7 @@ class Rule(models.Model):
     mitre_techniques = models.ManyToManyField(MitreTechnique,related_name='rules')
     technologies = models.ManyToManyField(Technologies, related_name='rules')
     created_at = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='rules')
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='created_rules')
     modified_at = models.DateTimeField(auto_now=True)
     tags = models.ManyToManyField(Tag, related_name='rules')
     detection_systems = models.ManyToManyField(DetectionSystem, related_name='rules')

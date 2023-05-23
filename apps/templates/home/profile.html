@@ -17,13 +17,13 @@
                         <div class="card-header" style="background-image: url('/static/assets/img/blogpost.jpg')">
                             <div class="profile-picture">
                                 <div class="avatar avatar-xl">
-                                    <img src="/static/assets/img/profile.jpg" alt="..." class="avatar-img rounded-circle">
+                                    <img src="/static/assets/img/avatar.svg" alt="..." class="avatar-img rounded-circle">
                                 </div>
                             </div>
                         </div>
                         <div class="card-body">
                             <div class="user-profile text-center">
-                                <div class="name">{{user.fisrt_name}} {{user.last_name}}</div>
+                                <div class="name">{{user.first_name}} {{user.last_name}}</div>
                                 <div class="job">{{user.email}}</div>
                                 {% if user.is_superuser or user.is_staff %}
                                     <div class="social-media">
@@ -53,6 +53,9 @@
                                         {% endif %}
                                     </div>
                                 {% endif %}
+                                <div class="view-profile">
+									<a href="/edit-profile.html" class="btn btn-secondary btn-block">Edit Profile Info</a>
+								</div>
                             </div>
                         </div>
                         <div class="card-footer">
@@ -227,6 +230,7 @@
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
+<script src="/static/assets/js/setting-demo.js"></script>
 <script>
     $(document).ready(function() {
         $('#permissions-table').DataTable({
