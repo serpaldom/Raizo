@@ -52,6 +52,7 @@
 										<tr>
 											<th>ID</th>
 											<th>Name</th>
+											<th>Severity</th>
 											<th>Mitre Tactics</th>
 											<th>Mitre Techniques</th>
 											<th>Technologies</th>
@@ -68,6 +69,7 @@
 										<tr>
 											<th>ID</th>
 											<th>Name</th>
+											<th>Severity</th>
 											<th>Mitre Tactics</th>
 											<th>Mitre Techniques</th>
 											<th>Technologies</th>
@@ -82,6 +84,7 @@
 										<tr>
 											<td>{{ rule.id }}</td>
 											<td>{{ rule.name }}</td>
+											<td>{{ rule.severity }}</td>
 											{% if rule.mitre_tactics.count < 3  %}
 												<td>{{ rule.mitre_tactics.all|join:", " }}</td>
 											{% elif rule.mitre_tactics.count >= 3 %}

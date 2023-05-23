@@ -400,6 +400,7 @@
 										<tr>
 											<th scope="col">ID</th>
 											<th scope="col">Name</th>
+											<th scope="col">Severity</th>
 											<th scope="col">Detection System</th>
 											<th scope="col">Created By</th>
 											<th scope="col">Created At (UTC)</th>
@@ -411,6 +412,7 @@
 											<tr>
 												<td>{{rule.id}}</td>
 												<td>{{rule.name}}</td>
+												<td>{{rule.severity}}</td>
 												<td>{{rule.detection_systems.all|join:", "}}</td>
 												<td>{{rule.created_by}}</td>
 												<td>{{rule.created_at}}</td>
@@ -811,31 +813,31 @@
 		var myRadarChart = new Chart(radarChart, {
 			type: 'radar',
 			data: {
-				labels: ['Critical', 'Very High', 'High', 'Medium', 'Low', 'Informational'],
-				datasets: [{
-					data: {{distribution_by_severity}},
-					borderColor: '#1d7af3',
-					backgroundColor : 'rgba(29, 122, 243, 0.25)',
-					pointBackgroundColor: "#1d7af3",
-					pointHoverRadius: 4,
-					pointRadius: 3,
-					label: 'Rules'
-				},
-				]
+			  labels: ['Critical', 'Very High', 'High', 'Medium', 'Low', 'Informational'],
+			  datasets: [{
+				data: {{distribution_by_severity}}.map(value => parseInt(value, 10)),
+				borderColor: '#1d7af3',
+				backgroundColor: 'rgba(29, 122, 243, 0.25)',
+				pointBackgroundColor: "#1d7af3",
+				pointHoverRadius: 4,
+				pointRadius: 3,
+				label: 'Rules'
+			  }]
 			},
-			options : {
-				responsive: true, 
-				maintainAspectRatio: false,
-				legend : {
-					position: 'bottom',
-				},
-				scale: {
-					pointLabels: {
-						fontSize: 12,  // Ajusta el tamaño de fuente deseado
-					}
+			options: {
+			  responsive: true,
+			  maintainAspectRatio: false,
+			  legend: {
+				position: 'bottom',
+			  },
+			  scale: {
+				pointLabels: {
+				  fontSize: 12,
 				}
+			  }
 			}
-		});
+		  });
+		  
 
 		var myPieChart = new Chart(pieChart, {
 			type: 'pie',

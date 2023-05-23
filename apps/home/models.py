@@ -14,7 +14,7 @@ class Customer(models.Model):
     update_general_rules = models.BooleanField(default=True)
     detection_systems = models.ManyToManyField('DetectionSystem', related_name='customers')
     created_at = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='created_customers')
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='customers')
     modified_at = models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
     
@@ -37,7 +37,7 @@ class DetectionSystem(models.Model):
     name = models.CharField(max_length=255)
     type = models.CharField(max_length=4, choices=TYPE_CHOICES)
     created_at = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='created_detection_systems')
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='detection_systems')
     modified_at = models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
     
@@ -55,7 +55,7 @@ class MitreTactic(models.Model):
     id = models.CharField(max_length=10, primary_key=True)
     name = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='created_mitre_tactics')
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='mitre_tactics')
     modified_at = models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
 
@@ -77,7 +77,7 @@ class MitreTechnique(models.Model):
     name = models.CharField(max_length=255)
     mitre_tactics = models.ManyToManyField(MitreTactic, related_name='mitre_techniques')
     created_at = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='created_mitre_techniques')
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='mitre_techniques')
     modified_at = models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
     
@@ -147,7 +147,7 @@ class Rule(models.Model):
     mitre_techniques = models.ManyToManyField(MitreTechnique, related_name='rules')
     technologies = models.ManyToManyField(Technologies, related_name='rules')
     created_at = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='created_rules')
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='rules')
     modified_at = models.DateTimeField(auto_now=True)
     tags = models.ManyToManyField(Tag, related_name='rules')
     detection_systems = models.ManyToManyField(DetectionSystem, related_name='rules')

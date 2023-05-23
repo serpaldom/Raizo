@@ -95,24 +95,24 @@ class DatabaseManager:
         """
         Get the top users who created the most rules in the last day.
         """
-        return User.objects.annotate(total_rules=Count('created_rules')).filter(
-            created_rules__created_at__gte=self.last_day
+        return User.objects.annotate(total_rules=Count('rules')).filter(
+            rules__created_at__gte=self.last_day
         ).order_by('-total_rules')[:limit]
 
     def get_top_users_last_week(self, limit=3):
         """
         Get the top users who created the most rules in the last week.
         """
-        return User.objects.annotate(total_rules=Count('created_rules')).filter(
-            created_rules__created_at__gte=self.last_week
+        return User.objects.annotate(total_rules=Count('rules')).filter(
+            rules__created_at__gte=self.last_week
         ).order_by('-total_rules')[:limit]
 
     def get_top_users_last_month(self, limit=3):
         """
         Get the top users who created the most rules in the last month.
         """
-        return User.objects.annotate(total_rules=Count('created_rules')).filter(
-            created_rules__created_at__gte=self.last_month
+        return User.objects.annotate(total_rules=Count('rules')).filter(
+            rules__created_at__gte=self.last_month
         ).order_by('-total_rules')[:limit]
 
     def get_rules_by_day_of_week(self):
@@ -177,7 +177,7 @@ class DatabaseManager:
         """
         Get the count of rules created by each user.
         """
-        return User.objects.values('username').annotate(rule_count=Count('created_rules'))
+        return User.objects.values('username').annotate(rule_count=Count('rules'))
 
     def get_rule_counts_by_detection_type(self):
         """
@@ -189,13 +189,13 @@ class DatabaseManager:
         """
         Get the average number of rules created per user.
         """
-        return User.objects.annotate(rule_count=Count('created_rules')).aggregate(average=Avg('rule_count'))
+        return User.objects.annotate(rule_count=Count('rules')).aggregate(average=Avg('rule_count'))
 
     def get_user_with_most_rules(self):
         """
         Get the user with the highest number of created rules.
         """
-        return User.objects.annotate(rule_count=Count('created_rules')).order_by('-rule_count').first()
+        return User.objects.annotate(rule_count=Count('rules')).order_by('-rule_count').first()
 
     def get_rules_within_date_range(self, start_date, end_date):
         """

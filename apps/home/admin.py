@@ -10,7 +10,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django import forms
 from django.contrib.admin.models import LogEntry
-
+from django.contrib.sessions.models import Session
 
 class CustomerForm(forms.ModelForm):
     update_general_rules = forms.ChoiceField(choices=((True, 'Yes'), (False, 'No')))
@@ -145,6 +145,7 @@ admin.site.register(MitreTactic, MitreTacticAdminList)
 admin.site.register(MitreTechnique,MitretechniqueAdminList)
 admin.site.register(Watcher, WatcherAdmin)
 admin.site.register(Report, ReportAdmin)
-admin.site.register(LogEntry, LogEntryAdmin)
 admin.site.register(Technologies, TechonologiesAdminList)
 admin.site.register(Tag, TagsAdminList)
+admin.site.register(Session)
+admin.site.register(LogEntry, LogEntryAdmin)

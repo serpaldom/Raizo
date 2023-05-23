@@ -27,18 +27,6 @@
 				
 				{% if request.user.is_authenticated %}
 				<div class="container-fluid">
-					<div class="collapse" id="search-nav">
-						<form class="navbar-left navbar-form nav-search mr-md-3">
-							<div class="input-group">
-								<div class="input-group-prepend">
-									<button type="submit" class="btn btn-search pr-1">
-										<i class="fa fa-search search-icon"></i>
-									</button>
-								</div>
-								<input type="text" placeholder="Search ..." class="form-control">
-							</div>
-						</form>
-					</div>
 					<ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
 						{% if user.is_superuser or user.is_staff %}
 							<li class="nav-item dropdown hidden-caret">
@@ -55,38 +43,44 @@
 											<div class="row m-0">
 												<a class="col-6 col-md-4 p-0" href="/admin">
 													<div class="quick-actions-item">
-														<i class="flaticon-database"></i>
+														<i class="fas fa-database"></i>
 														<span class="text">Manage Database</span>
 													</div>
 												</a>
-												<a class="col-6 col-md-4 p-0" href="#">
+												<a class="col-6 col-md-4 p-0" href="/admin/home/customer/">
 													<div class="quick-actions-item">
-														<i class="flaticon-file-1"></i>
-														<span class="text">Generated Report</span>
+														<i class="fas fa-building"></i>
+														<span class="text">Create New Customer</span>
+													</div>
+												</a>
+												<a class="col-6 col-md-4 p-0" href="/admin/home/detectionsystem/">
+													<div class="quick-actions-item">
+														<i class="far fa-eye"></i>
+														<span class="text">Create New Detection System</span>
+													</div>
+												</a>
+												<a class="col-6 col-md-4 p-0" href="/admin/home/rule/">
+													<div class="quick-actions-item">
+														<i class="fas fa-ruler"></i>
+														<span class="text">Create New Rule</span>
+													</div>
+												</a>
+												<a class="col-6 col-md-4 p-0" href="/admin/home/watcher/">
+													<div class="quick-actions-item">
+														<i class="fas fa-glasses"></i>
+														<span class="text">Create New Watcher</span>
+													</div>
+												</a>
+												<a class="col-6 col-md-4 p-0" href="/admin/home/report/">
+													<div class="quick-actions-item">
+														<i class="fas fa-receipt"></i>
+														<span class="text">Create New Report</span>
 													</div>
 												</a>
 												<a class="col-6 col-md-4 p-0" href="#">
 													<div class="quick-actions-item">
-														<i class="flaticon-pen"></i>
-														<span class="text">Create New Post</span>
-													</div>
-												</a>
-												<a class="col-6 col-md-4 p-0" href="#">
-													<div class="quick-actions-item">
-														<i class="flaticon-interface-1"></i>
-														<span class="text">Create New Task</span>
-													</div>
-												</a>
-												<a class="col-6 col-md-4 p-0" href="#">
-													<div class="quick-actions-item">
-														<i class="flaticon-list"></i>
-														<span class="text">Completed Tasks</span>
-													</div>
-												</a>
-												<a class="col-6 col-md-4 p-0" href="#">
-													<div class="quick-actions-item">
-														<i class="flaticon-file"></i>
-														<span class="text">Create New Invoice</span>
+														<i class="fas fa-newspaper"></i>
+														<span class="text">Generate PDF Report</span>
 													</div>
 												</a>
 											</div>
