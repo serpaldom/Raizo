@@ -53,12 +53,14 @@ class RuleList(admin.ModelAdmin):
     list_display = ('id', 'name', 'severity', 'mitre_tactics_display', 'mitre_techniques_display', 'technologies_display', 'tags_display', 'created_by', 'detection_systems_display', 'created_at','modified_at')
     
     def mitre_tactics_display(self, obj):
-        return ", ".join([f"{t.id}-{t.name}" for t in obj.mitre_tactics.all()])
+        tactic_names = ", ".join([tactic.name for tactic in obj.mitre_tactics.all()])
+        return tactic_names
 
     mitre_tactics_display.short_description = "MITRE Tactics"
 
     def mitre_techniques_display(self, obj):
-        return ", ".join([f"{t.id}-{t.name}" for t in obj.mitre_techniques.all()])
+        technique_names = ", ".join([f"{technique.id} - {technique.name}" for technique in obj.mitre_techniques.all()])
+        return technique_names
 
     mitre_techniques_display.short_description = "MITRE Techniques"
 

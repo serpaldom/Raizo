@@ -37,6 +37,65 @@ def pages(request):
     '''
     # Código para crear el diccionario de técnicas de MITRE
     mitre_techniques_data = {
+        'T1548': 'Abuse Elevation Control Mechanism',
+        'T1548.001': 'Abuse Elevation Control Mechanism: Setuid and Setgid',
+        'T1548.002': 'Abuse Elevation Control Mechanism: Bypass User Account Control',
+        'T1548.003': 'Abuse Elevation Control Mechanism: Sudo and Sudo Caching',
+        'T1548.004': 'Abuse Elevation Control Mechanism: Elevated Execution with Prompt',
+        'T1134': 'Access Token Manipulation',
+        'T1134.001': 'Access Token Manipulation: Token Impersonation/Theft',
+        'T1134.002': 'Access Token Manipulation: Create Process with Token',
+        'T1134.003': 'Access Token Manipulation: Make and Impersonate Token',
+        'T1134.004': 'Access Token Manipulation: Parent PID Spoofing',
+        'T1134.005': 'Access Token Manipulation: SID-History Injection',
+        'T1547': 'Boot or Logon Autostart Execution',
+        'T1547.001': 'Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder',
+        'T1547.002': 'Boot or Logon Autostart Execution: Authentication Package',
+        'T1547.003': 'Boot or Logon Autostart Execution: Time Providers',
+        'T1547.004': 'Boot or Logon Autostart Execution: Winlogon Helper DLL',
+        'T1547.005': 'Boot or Logon Autostart Execution: Security Support Provider',
+        'T1547.006': 'Boot or Logon Autostart Execution: Kernel Modules and Extensions',
+        'T1547.007': 'Boot or Logon Autostart Execution: Re-opened Applications',
+        'T1547.008': 'Boot or Logon Autostart Execution: LSASS Driver',
+        'T1547.009': 'Boot or Logon Autostart Execution: Shortcut Modification',
+        'T1547.010': 'Boot or Logon Autostart Execution: Port Monitors',
+        'T1547.012': 'Boot or Logon Autostart Execution: Print Processors',
+        'T1547.013': 'Boot or Logon Autostart Execution: XDG Autostart Entries',
+        'T1547.014': 'Boot or Logon Autostart Execution: Active Setup',
+        'T1547.015': 'Boot or Logon Autostart Execution: Login Items',
+        'T1037': 'Boot or Logon Initialization Scripts',
+        'T1037.001': 'Boot or Logon Initialization Scripts: Logon Script (Windows)',
+        'T1037.002': 'Boot or Logon Initialization Scripts: Login Hook',
+        'T1037.003': 'Boot or Logon Initialization Scripts: Network Logon Script',
+        'T1037.004': 'Boot or Logon Initialization Scripts: RC Scripts',
+        'T1037.005': 'Boot or Logon Initialization Scripts: Startup Items',
+        'T1543': 'Create or Modify System Process',
+        'T1543.001': 'Create or Modify System Process: Launch Agent',
+        'T1543.002': 'Create or Modify System Process: Systemd Service',
+        'T1543.003': 'Create or Modify System Process: Windows Service',
+        'T1543.004': 'Create or Modify System Process: Launch Daemon',
+        'T1484': 'Domain Policy Modification',
+        'T1484.001': 'Domain Policy Modification: Group Policy Modification',
+        'T1484.002': 'Domain Policy Modification: Domain Trust Modification',
+        'T1611': 'Escape to Host',
+        'T1546': 'Event Triggered Execution',
+        'T1546.001': 'Event Triggered Execution: Change Default File Association',
+        'T1546.002': 'Event Triggered Execution: Screensaver',
+        'T1546.003': 'Event Triggered Execution: Windows Management Instrumentation Event Subscription',
+        'T1546.004': 'Event Triggered Execution: Unix Shell Configuration Modification',
+        'T1546.005': 'Event Triggered Execution: Trap',
+        'T1546.006': 'Event Triggered Execution: LC_LOAD_DYLIB Addition',
+        'T1546.007': 'Event Triggered Execution: Netsh Helper DLL',
+        'T1546.008': 'Event Triggered Execution: Accessibility Features',
+        'T1546.009': 'Event Triggered Execution: AppCert DLLs',
+        'T1546.010': 'Event Triggered Execution: AppInit DLLs',
+        'T1546.011': 'Event Triggered Execution: Application Shimming',
+        'T1546.012': 'Event Triggered Execution: Image File Execution Options Injection',
+        'T1546.013': 'Event Triggered Execution: PowerShell Profile',
+        'T1546.014': 'Event Triggered Execution: Emond',
+        'T1546.015': 'Event Triggered Execution: Component Object Model Hijacking',
+        'T1546.016': 'Event Triggered Execution: Installer Packages',
+        'T1068': 'Exploitation for Privilege Escalation',
         'T1574': 'Hijack Execution Flow',
         'T1574.001': 'Hijack Execution Flow: DLL Search Order Hijacking',
         'T1574.002': 'Hijack Execution Flow: DLL Side-Loading',
@@ -50,45 +109,25 @@ def pages(request):
         'T1574.011': 'Hijack Execution Flow: Services Registry Permissions Weakness',
         'T1574.012': 'Hijack Execution Flow: COR_PROFILER',
         'T1574.013': 'Hijack Execution Flow: KernelCallbackTable',
-        'T1525': 'Implant Internal Image',
-        'T1556': 'Modify Authentication Process',
-        'T1556.001': 'Modify Authentication Process: Domain Controller Authentication',
-        'T1556.002': 'Modify Authentication Process: Password Filter DLL',
-        'T1556.003': 'Modify Authentication Process: Pluggable Authentication Modules',
-        'T1556.004': 'Modify Authentication Process: Network Device Authentication',
-        'T1556.005': 'Modify Authentication Process: Reversible Encryption',
-        'T1556.006': 'Modify Authentication Process: Multi-Factor Authentication',
-        'T1556.007': 'Modify Authentication Process: Hybrid Identity',
-        'T1556.008': 'Modify Authentication Process: Network Provider DLL',
-        'T1137': 'Office Application Startup',
-        'T1137.001': 'Office Application Startup: Office Template Macros',
-        'T1137.002': 'Office Application Startup: Office Test',
-        'T1137.003': 'Office Application Startup: Outlook Forms',
-        'T1137.004': 'Office Application Startup: Outlook Home Page',
-        'T1137.005': 'Office Application Startup: Outlook Rules',
-        'T1137.006': 'Office Application Startup: Add-ins',
-        'T1542': 'Pre-OS Boot',
-        'T1542.001': 'Pre-OS Boot: System Firmware',
-        'T1542.002': 'Pre-OS Boot: Component Firmware',
-        'T1542.003': 'Pre-OS Boot: Bootkit',
-        'T1542.004': 'Pre-OS Boot: ROMMONkit',
-        'T1542.005': 'Pre-OS Boot: TFTP Boot',
+        'T1055': 'Process Injection',
+        'T1055.001': 'Process Injection: Dynamic-link Library Injection',
+        'T1055.002': 'Process Injection: Portable Executable Injection',
+        'T1055.003': 'Process Injection: Thread Execution Hijacking',
+        'T1055.004': 'Process Injection: Asynchronous Procedure Call',
+        'T1055.005': 'Process Injection: Thread Local Storage',
+        'T1055.008': 'Process Injection: Ptrace System Calls',
+        'T1055.009': 'Process Injection: Proc Memory',
+        'T1055.011': 'Process Injection: Extra Window Memory Injection',
+        'T1055.012': 'Process Injection: Process Hollowing',
+        'T1055.013': 'Process Injection: Process Doppelgänging',
+        'T1055.014': 'Process Injection: VDSO Hijacking',
+        'T1055.015': 'Process Injection: ListPlanting',
         'T1053': 'Scheduled Task/Job',
         'T1053.002': 'Scheduled Task/Job: At',
         'T1053.003': 'Scheduled Task/Job: Cron',
         'T1053.005': 'Scheduled Task/Job: Scheduled Task',
         'T1053.006': 'Scheduled Task/Job: Systemd Timers',
         'T1053.007': 'Scheduled Task/Job: Container Orchestration Job',
-        'T1505': 'Server Software Component',
-        'T1505.001': 'Server Software Component: SQL Stored Procedures',
-        'T1505.002': 'Server Software Component: Transport Agent',
-        'T1505.003': 'Server Software Component: Web Shell',
-        'T1505.004': 'Server Software Component: IIS Components',
-        'T1505.005': 'Server Software Component: Terminal Services DLL',
-        'T1205': 'Traffic Signaling',
-        'T1205.001': 'Traffic Signaling: Port Knocking',
-        'T1205.002': 'Traffic Signaling: Socket Filters',
-        'T1078': 'Valid Accounts',
         'T1078.001': 'Valid Accounts: Default Accounts',
         'T1078.002': 'Valid Accounts: Domain Accounts',
         'T1078.003': 'Valid Accounts: Local Accounts',
@@ -96,18 +135,20 @@ def pages(request):
     }
 
 
+    mitre_tactic_id = 'TA0004'  # ID de la táctica
+    mitre_tactic_name = 'Privilege Escalation'  # Nombre de la táctica
     # Crear las técnicas de MITRE asociadas a la táctica "Persistence" con el ID "TA0003"
-    mitre_tactic_id = 'TA0003'  # ID de la táctica
-    mitre_tactic_name = 'Persistence'  # Nombre de la táctica
-
     mitre_tactic = MitreTactic.objects.get(id=mitre_tactic_id, name=mitre_tactic_name)
 
     for technique_id, technique_name in mitre_techniques_data.items():
-        mitre_technique, _ = MitreTechnique.objects.get_or_create(
+        mitre_technique, created = MitreTechnique.objects.get_or_create(
             id=technique_id,
             name=technique_name
         )
-        mitre_technique.mitre_tactics.add(mitre_tactic)'''
+        if not created:  # Verificar si la técnica ya existe
+            mitre_technique.mitre_tactics.add(mitre_tactic)  # Añadir la táctica existente
+        else:
+            mitre_technique.save()  # Guardar la técnica creada'''
 
     
     context = {}
@@ -172,7 +213,7 @@ def pages(request):
 
                 # Realizar la búsqueda de reglas por tipo de sistema de detección y contar el número de reglas para cada tipo
                 rule_counts_by_detection_system = db_manager.get_rule_counts_by_detection_system()
-                print(rule_counts_by_detection_system)
+                
             except:
                 rules_by_day_list = [0, 0, 0, 0, 0, 0, 0]
                 total_rules_in_week = 0

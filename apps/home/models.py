@@ -59,6 +59,10 @@ class MitreTactic(models.Model):
     modified_at = models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
 
+    class Meta:
+        db_table = 'MitreTatics'
+        verbose_name_plural = "MitreTatics"
+        
     def __str__(self):
         return f"{self.id} - {self.name}"
         
@@ -76,6 +80,10 @@ class MitreTechnique(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='created_mitre_techniques')
     modified_at = models.DateTimeField(auto_now=True)
     history = HistoricalRecords()
+    
+    class Meta:
+        db_table = 'MitreTechniques'
+        verbose_name_plural = "MitreTechniques"
 
     def __str__(self):
         return f"{self.id} - {self.name}"
@@ -120,6 +128,7 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.name
+    
 class Rule(models.Model):
     
     SEVERITY_CHOICES = [
@@ -134,8 +143,8 @@ class Rule(models.Model):
     id = models.CharField(max_length=10, primary_key=True)
     name = models.CharField(max_length=255)
     severity = models.CharField(max_length=20, choices=SEVERITY_CHOICES)
-    mitre_tactics = models.ManyToManyField(MitreTactic,related_name='rules')
-    mitre_techniques = models.ManyToManyField(MitreTechnique,related_name='rules')
+    mitre_tactics = models.ManyToManyField(MitreTactic, related_name='rules')
+    mitre_techniques = models.ManyToManyField(MitreTechnique, related_name='rules')
     technologies = models.ManyToManyField(Technologies, related_name='rules')
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='created_rules')
@@ -155,12 +164,17 @@ class Rule(models.Model):
     def clean(self):
         super().clean()
 
-        # Verificar si las técnicas están alineadas con la táctica MITRE
+        # Verificar si las técnicas están alineadas con las tácticas de MITRE
         for technique in self.mitre_techniques.all():
-            if technique.mitre_tactic != self.mitre_tactics.first():
-                raise ValidationError(f'The technique {technique.name} is not aligned with the MITRE tactic {self.mitre_tactics.first().name}.')
+            tactic_ids = technique.mitre_tactics.values_list('id', flat=True)
+            if self.mitre_tactics.filter(id__in=tactic_ids).exists():
+                continue  # La técnica está alineada con al menos una táctica asociada a la regla
+            raise ValidationError(f'The technique {technique.name} is not aligned with any of the MITRE tactics associated with the rule.')
+    
     class Meta:
         db_table = "Rules"
+
+
         
 class Watcher(models.Model):
     name = models.CharField(max_length=255)
