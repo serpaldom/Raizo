@@ -149,7 +149,7 @@ class Rule(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='rules')
     modified_at = models.DateTimeField(auto_now=True)
-    tags = models.ManyToManyField(Tag, related_name='rules')
+    tags = models.ManyToManyField(Tag, related_name='rules',blank=True)
     detection_systems = models.ManyToManyField(DetectionSystem, related_name='rules')
     history = HistoricalRecords()
     

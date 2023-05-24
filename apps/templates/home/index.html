@@ -139,7 +139,7 @@
 				</div>
 			</div>
 
-			<!-- Rule Stats -->
+			<!-- Overall Stats -->
 			<div class="row">
 				<div class="col-md-4">
 					<div class="card full-height">
@@ -154,7 +154,7 @@
 								</div>
 								<div class="col-md-8 flex-grow-1">
 									<div id="chart-container">
-										<canvas id="totalIncomeChartWeek"></canvas>
+										<canvas id="totalIncomeChartWeek-rules"></canvas>
 									</div>
 								</div>
 							</div>
@@ -172,14 +172,101 @@
 								</div>
 								<div class="col-md-8 flex-grow-1">
 									<div id="chart-container" style="height: 100%;">
-										<canvas id="totalIncomeChartMonth"></canvas>
+										<canvas id="totalIncomeChartMonth-rules"></canvas>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="col-md-5">
+				<div class="col-md-4">
+					<div class="card full-height">
+						<div class="card-body">
+							<div class="card-title">Created Watchers This Week</div>
+							<div class="row py-3">
+								<div class="col-md-4 d-flex flex-column justify-content-around">
+									<div>
+										<h6 class="fw-bold text-uppercase text-success op-8">watchers</h6>
+										<h3 class="fw-bold">{{total_watchers_in_week}}</h3>
+									</div>
+								</div>
+								<div class="col-md-8 flex-grow-1">
+									<div id="chart-container">
+										<canvas id="totalIncomeChartWeek-watchers"></canvas>
+									</div>
+								</div>
+							</div>
+							<div class="card-title">Created Watchers This Year</div>
+							<div class="row py-3">
+								<div class="col-md-4 d-flex flex-column justify-content-around">
+									<div>
+										<h6 class="fw-bold text-uppercase text-success op-8">Watchers</h6>
+										<h3 class="fw-bold">{{total_watchers_in_year}}</h3>
+									</div>
+								</div>
+								<div class="col-md-8 flex-grow-1">
+									<div id="chart-container" style="height: 100%;">
+										<canvas id="totalIncomeChartMonth-watchers"></canvas>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="card full-height">
+						<div class="card-body">
+							<div class="card-title">Created Reports This Week</div>
+							<div class="row py-3">
+								<div class="col-md-4 d-flex flex-column justify-content-around">
+									<div>
+										<h6 class="fw-bold text-uppercase text-success op-8">Reports</h6>
+										<h3 class="fw-bold">{{total_reports_in_week}}</h3>
+									</div>
+								</div>
+								<div class="col-md-8 flex-grow-1">
+									<div id="chart-container">
+										<canvas id="totalIncomeChartWeek-reports"></canvas>
+									</div>
+								</div>
+							</div>
+							<div class="card-title">Created Reports This Year</div>
+							<div class="row py-3">
+								<div class="col-md-4 d-flex flex-column justify-content-around">
+									<div>
+										<h6 class="fw-bold text-uppercase text-success op-8">Reports</h6>
+										<h3 class="fw-bold">{{total_reports_in_year}}</h3>
+									</div>
+								</div>
+								<div class="col-md-8 flex-grow-1">
+									<div id="chart-container" style="height: 100%;">
+										<canvas id="totalIncomeChartMonth-reports"></canvas>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Overall Stats 2 -->
+			<div class="row">
+				<div class="col-md-12">
+					<div class="card full-height">
+						<div class="card-header">
+							<div class="card-title">Rules | Watchers | Reports by Month</div>
+						</div>
+						<div class="card-body">
+							<div class="chart-container"><div class="chartjs-size-monitor" style="position: absolute; inset: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
+								<canvas id="multipleLineChart" style="display: block; width: 815px; height: 300px;" width="815" height="300" class="chartjs-render-monitor"></canvas>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Rule Stats -->
+			<div class="row">
+				<div class="col-md-6">
 					<div class="card full-height">
 						<div class="card-header">
 							<div class="card-title">Distribution of Rules by MITRE Tactic</div>
@@ -191,7 +278,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-md-3">
+				<div class="col-md-6">
 					<div class="card full-height">
 						<div class="card-header">
 							<div class="card-title">Distribution of Rules by Severity</div>
@@ -204,38 +291,97 @@
 					</div>
 				</div>
 			</div>
-
 			<!-- Users Stats -->
 			<div class="row">
 				
 				<div class="col-md-4">
 					<div class="card full-height">
 						<div class="card-header">
-							<div class="card-head-row">
-								<div class="card-title">Top Rules Creators Today</div>
-							</div>
+							<h4 class="card-title">Top Creators Today</h4>
 						</div>
-						<div id="top-users-today" class="card-body">
-							{% if top_users_last_today %}
-								{% for user in top_users_last_today %}
-								<div class="d-flex">
-									<div class="avatar avatar-online">
-										<span class="avatar-title rounded-circle border border-white bg-info">{{user|make_list|first|upper}}</span>
-									</div>
-									<div class="flex-1 ml-3 pt-1">
-										<h6 class="text-uppercase fw-bold mb-1">{% if forloop.counter == 1 %}<i class="fas fa-chess-king text-warning"></i>{% endif %} {{user}}</h6>
-									</div>
-									<div class="float-right pt-1">
-										<small class="text-muted">Top {{forloop.counter}}</small>
-									</div>
+						<div class="card-body">
+							<div class="d-flex justify-content-end">
+								<ul class="nav nav-pills nav-secondary" id="pills-tab" role="tablist">
+									<li class="nav-item">
+										<a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#top_rules_today" role="tab" aria-controls="top_rules_today" aria-selected="true">Rules</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#top_watchers_today" role="tab" aria-controls="top_watchers_today" aria-selected="false">Watchers</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#top_reports_today" role="tab" aria-controls="top_reports_today" aria-selected="false">Reports</a>
+									</li>
+								</ul>
+							</div>
+							<div class="tab-content mt-2 mb-3" id="pills-tabContent">
+								<p></p>
+								<div class="tab-pane fade show active" id="top_rules_today" role="tabpanel" aria-labelledby="top_rules_today-tab">
+									{% if top_users_rules_last_today %}
+										{% for user in top_users_rules_last_today %}
+										<div class="d-flex">
+											<div class="avatar">
+												<span class="avatar-title rounded-circle border border-white bg-info">{{user|make_list|first|upper}}</span>
+											</div>
+											<div class="flex-1 ml-3 pt-1">
+												<h6 class="text-uppercase fw-bold mb-1">{% if forloop.counter == 1 %}<i class="fa fa-chess-king text-warning"></i>{% endif %} {{user}}</h6>
+											</div>
+											<div class="float-right pt-1">
+												<small class="text-muted">Top {{forloop.counter}}</small>
+											</div>
+										</div>
+										<div class="separator-dashed"></div>
+										{% endfor %}
+									{% else %}
+										<div class="d-flex">
+											<p> There're no rules created by any user yet</p>
+										</div>
+									{% endif %}
 								</div>
-								<div class="separator-dashed"></div>
-								{% endfor %}
-							{% else %}
-								<div class="d-flex">
-									<p class="text-center"> There're no rules created by any user yet</p>
+								<div class="tab-pane fade" id="top_watchers_today" role="tabpanel" aria-labelledby="top_watchers_today-tab">
+									{% if top_users_watchers_last_today %}
+										{% for user in  top_users_watchers_last_today %}
+										<div class="d-flex">
+											<div class="avatar">
+												<span class="avatar-title rounded-circle border border-white bg-info">{{user|make_list|first|upper}}</span>
+											</div>
+											<div class="flex-1 ml-3 pt-1">
+												<h6 class="text-uppercase fw-bold mb-1">{% if forloop.counter == 1 %}<i class="fa fa-chess-king text-warning"></i>{% endif %} {{user}}</h6>
+											</div>
+											<div class="float-right pt-1">
+												<small class="text-muted">Top {{forloop.counter}}</small>
+											</div>
+										</div>
+										<div class="separator-dashed"></div>
+										{% endfor %}
+									{% else %}
+										<div class="d-flex">
+											<p> There're no watchers created by any user yet</p>
+										</div>
+									{% endif %}
 								</div>
-							{% endif %}
+								<div class="tab-pane fade" id="top_reports_today" role="tabpanel" aria-labelledby="top_reports_today-tab">
+									{% if top_users_reports_last_today %}
+										{% for user in  top_users_reports_last_today %}
+										<div class="d-flex">
+											<div class="avatar">
+												<span class="avatar-title rounded-circle border border-white bg-info">{{user|make_list|first|upper}}</span>
+											</div>
+											<div class="flex-1 ml-3 pt-1">
+												<h6 class="text-uppercase fw-bold mb-1">{% if forloop.counter == 1 %}<i class="fa fa-chess-king text-warning"></i>{% endif %} {{user}}</h6>
+											</div>
+											<div class="float-right pt-1">
+												<small class="text-muted">Top {{forloop.counter}}</small>
+											</div>
+										</div>
+										<div class="separator-dashed"></div>
+										{% endfor %}
+									{% else %}
+										<div class="d-flex">
+											<p> There're no reports created by any user yet</p>
+										</div>
+									{% endif %}
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -243,31 +389,91 @@
 				<div class="col-md-4">
 					<div class="card full-height">
 						<div class="card-header">
-							<div class="card-head-row">
-								<div class="card-title">Top Rules Creators This Week</div>
-							</div>
+							<h4 class="card-title">Top Creators This Week</h4>
 						</div>
-						<div id="top-users-week" class="card-body">
-							{% if top_users_last_week %}
-								{% for user in top_users_last_week %}
-								<div class="d-flex">
-									<div class="avatar">
-										<span class="avatar-title rounded-circle border border-white bg-info">{{user|make_list|first|upper}}</span>
-									</div>
-									<div class="flex-1 ml-3 pt-1">
-										<h6 class="text-uppercase fw-bold mb-1">{% if forloop.counter == 1 %}<i class="fas fa-chess-king text-warning"></i>{% endif %} {{user}}</h6>
-									</div>
-									<div class="float-right pt-1">
-										<small class="text-muted">Top {{forloop.counter}}</small>
-									</div>
+						<div class="card-body">
+							<div class="d-flex justify-content-end">
+								<ul class="nav nav-pills nav-secondary" id="pills-tab" role="tablist">
+									<li class="nav-item">
+										<a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#top_rules_week" role="tab" aria-controls="top_rules_week" aria-selected="true">Rules</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#top_watchers_week" role="tab" aria-controls="top_watchers_week" aria-selected="false">Watchers</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#top_reports_week" role="tab" aria-controls="top_reports_week" aria-selected="false">Reports</a>
+									</li>
+								</ul>
+							</div>
+							<div class="tab-content mt-2 mb-3" id="pills-tabContent">
+								<p></p>
+								<div class="tab-pane fade show active" id="top_rules_week" role="tabpanel" aria-labelledby="top_rules_week-tab">
+									{% if top_users_rules_last_week %}
+										{% for user in top_users_rules_last_week %}
+										<div class="d-flex">
+											<div class="avatar">
+												<span class="avatar-title rounded-circle border border-white bg-info">{{user|make_list|first|upper}}</span>
+											</div>
+											<div class="flex-1 ml-3 pt-1">
+												<h6 class="text-uppercase fw-bold mb-1">{% if forloop.counter == 1 %}<i class="fa fa-chess-king text-warning"></i>{% endif %} {{user}}</h6>
+											</div>
+											<div class="float-right pt-1">
+												<small class="text-muted">Top {{forloop.counter}}</small>
+											</div>
+										</div>
+										<div class="separator-dashed"></div>
+										{% endfor %}
+									{% else %}
+										<div class="d-flex">
+											<p> There're no rules created by any user yet</p>
+										</div>
+									{% endif %}
 								</div>
-								<div class="separator-dashed"></div>
-								{% endfor %}
-							{% else %}
-								<div class="d-flex">
-									<p class="text-center"> There're no rules created by any user yet</p>
+								<div class="tab-pane fade" id="top_watchers_week" role="tabpanel" aria-labelledby="top_watchers_week-tab">
+									{% if top_users_watchers_last_week %}
+										{% for user in  top_users_watchers_last_week %}
+										<div class="d-flex">
+											<div class="avatar">
+												<span class="avatar-title rounded-circle border border-white bg-info">{{user|make_list|first|upper}}</span>
+											</div>
+											<div class="flex-1 ml-3 pt-1">
+												<h6 class="text-uppercase fw-bold mb-1">{% if forloop.counter == 1 %}<i class="fa fa-chess-king text-warning"></i>{% endif %} {{user}}</h6>
+											</div>
+											<div class="float-right pt-1">
+												<small class="text-muted">Top {{forloop.counter}}</small>
+											</div>
+										</div>
+										<div class="separator-dashed"></div>
+										{% endfor %}
+									{% else %}
+										<div class="d-flex">
+											<p> There're no watchers created by any user yet</p>
+										</div>
+									{% endif %}
 								</div>
-							{% endif %}
+								<div class="tab-pane fade" id="top_reports_week" role="tabpanel" aria-labelledby="top_reports_week-tab">
+									{% if top_users_reports_last_week %}
+										{% for user in  top_users_reports_last_week %}
+										<div class="d-flex">
+											<div class="avatar">
+												<span class="avatar-title rounded-circle border border-white bg-info">{{user|make_list|first|upper}}</span>
+											</div>
+											<div class="flex-1 ml-3 pt-1">
+												<h6 class="text-uppercase fw-bold mb-1">{% if forloop.counter == 1 %}<i class="fa fa-chess-king text-warning"></i>{% endif %} {{user}}</h6>
+											</div>
+											<div class="float-right pt-1">
+												<small class="text-muted">Top {{forloop.counter}}</small>
+											</div>
+										</div>
+										<div class="separator-dashed"></div>
+										{% endfor %}
+									{% else %}
+										<div class="d-flex">
+											<p> There're no reports created by any user yet</p>
+										</div>
+									{% endif %}
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -275,31 +481,91 @@
 				<div class="col-md-4">
 					<div class="card full-height">
 						<div class="card-header">
-							<div class="card-head-row">
-								<div class="card-title">Top Rules Creators This Month</div>
-							</div>
+							<h4 class="card-title">Top Creators This Month</h4>
 						</div>
-						<div id="top-users-week" class="card-body">
-							{% if top_users_last_month %}
-								{% for user in top_users_last_month %}
-								<div class="d-flex">
-									<div class="avatar">
-										<span class="avatar-title rounded-circle border border-white bg-info">{{user|make_list|first|upper}}</span>
-									</div>
-									<div class="flex-1 ml-3 pt-1">
-										<h6 class="text-uppercase fw-bold mb-1">{% if forloop.counter == 1 %}<i class="fa fa-chess-king text-warning"></i>{% endif %} {{user}}</h6>
-									</div>
-									<div class="float-right pt-1">
-										<small class="text-muted">Top {{forloop.counter}}</small>
-									</div>
+						<div class="card-body">
+							<div class="d-flex justify-content-end">
+								<ul class="nav nav-pills nav-secondary" id="pills-tab" role="tablist">
+									<li class="nav-item">
+										<a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#top_rules_month" role="tab" aria-controls="top_rules_month" aria-selected="true">Rules</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#top_watchers_month" role="tab" aria-controls="top_watchers_month" aria-selected="false">Watchers</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#top_reports_month" role="tab" aria-controls="top_reports_month" aria-selected="false">Reports</a>
+									</li>
+								</ul>
+							</div>
+							<div class="tab-content mt-2 mb-3" id="pills-tabContent">
+								<p></p>
+								<div class="tab-pane fade show active" id="top_rules_month" role="tabpanel" aria-labelledby="top_rules_month-tab">
+									{% if top_users_rules_last_month %}
+										{% for user in top_users_rules_last_month %}
+										<div class="d-flex">
+											<div class="avatar">
+												<span class="avatar-title rounded-circle border border-white bg-info">{{user|make_list|first|upper}}</span>
+											</div>
+											<div class="flex-1 ml-3 pt-1">
+												<h6 class="text-uppercase fw-bold mb-1">{% if forloop.counter == 1 %}<i class="fa fa-chess-king text-warning"></i>{% endif %} {{user}}</h6>
+											</div>
+											<div class="float-right pt-1">
+												<small class="text-muted">Top {{forloop.counter}}</small>
+											</div>
+										</div>
+										<div class="separator-dashed"></div>
+										{% endfor %}
+									{% else %}
+										<div class="d-flex">
+											<p> There're no rules created by any user yet</p>
+										</div>
+									{% endif %}
 								</div>
-								<div class="separator-dashed"></div>
-								{% endfor %}
-							{% else %}
-								<div class="d-flex">
-									<p> There're no rules created by any user yet</p>
+								<div class="tab-pane fade" id="top_watchers_month" role="tabpanel" aria-labelledby="top_watchers_month-tab">
+									{% if top_users_watchers_last_month %}
+										{% for user in  top_users_watchers_last_month %}
+										<div class="d-flex">
+											<div class="avatar">
+												<span class="avatar-title rounded-circle border border-white bg-info">{{user|make_list|first|upper}}</span>
+											</div>
+											<div class="flex-1 ml-3 pt-1">
+												<h6 class="text-uppercase fw-bold mb-1">{% if forloop.counter == 1 %}<i class="fa fa-chess-king text-warning"></i>{% endif %} {{user}}</h6>
+											</div>
+											<div class="float-right pt-1">
+												<small class="text-muted">Top {{forloop.counter}}</small>
+											</div>
+										</div>
+										<div class="separator-dashed"></div>
+										{% endfor %}
+									{% else %}
+										<div class="d-flex">
+											<p> There're no watchers created by any user yet</p>
+										</div>
+									{% endif %}
 								</div>
-							{% endif %}
+								<div class="tab-pane fade" id="top_reports_month" role="tabpanel" aria-labelledby="top_reports_month-tab">
+									{% if top_users_reports_last_month %}
+										{% for user in  top_users_reports_last_month %}
+										<div class="d-flex">
+											<div class="avatar">
+												<span class="avatar-title rounded-circle border border-white bg-info">{{user|make_list|first|upper}}</span>
+											</div>
+											<div class="flex-1 ml-3 pt-1">
+												<h6 class="text-uppercase fw-bold mb-1">{% if forloop.counter == 1 %}<i class="fa fa-chess-king text-warning"></i>{% endif %} {{user}}</h6>
+											</div>
+											<div class="float-right pt-1">
+												<small class="text-muted">Top {{forloop.counter}}</small>
+											</div>
+										</div>
+										<div class="separator-dashed"></div>
+										{% endfor %}
+									{% else %}
+										<div class="d-flex">
+											<p> There're no reports created by any user yet</p>
+										</div>
+									{% endif %}
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -730,11 +996,17 @@
 		});
 	</script>
 	<script>
-		var totalIncomeChartWeek = document.getElementById('totalIncomeChartWeek').getContext('2d'),
+		var totalIncomeChartWeek_rule = document.getElementById('totalIncomeChartWeek-rules').getContext('2d'),
+		totalIncomeChartMonth_rule = document.getElementById('totalIncomeChartMonth-rules').getContext('2d'),
+		totalIncomeChartWeek_watchers = document.getElementById('totalIncomeChartWeek-watchers').getContext('2d'),
+		totalIncomeChartMonth_watchers = document.getElementById('totalIncomeChartMonth-watchers').getContext('2d'),
+		totalIncomeChartWeek_reports = document.getElementById('totalIncomeChartWeek-reports').getContext('2d'),
+		totalIncomeChartMonth_reports = document.getElementById('totalIncomeChartMonth-reports').getContext('2d'),
+		multipleLineChart = document.getElementById('multipleLineChart').getContext('2d'),
 		pieChart = document.getElementById('pieChart').getContext('2d'),
 		radarChart = document.getElementById('radarChart').getContext('2d');
 		
-		var mytotalIncomeChartWeek = new Chart(totalIncomeChartWeek, {
+		var mytotalIncomeChartWeek_rule = new Chart(totalIncomeChartWeek_rule, {
 			type: 'bar',
 			data: {
 				labels: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
@@ -771,14 +1043,86 @@
 			}
 		});
 
-		var totalIncomeChartMonth = document.getElementById('totalIncomeChartMonth').getContext('2d');
+		var mytotalIncomeChartWeek_watchers = new Chart(totalIncomeChartWeek_watchers, {
+			type: 'bar',
+			data: {
+				labels: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
+				datasets : [{
+					label: "Rules",
+					backgroundColor: '#ff9e27',
+					borderColor: 'rgb(23, 125, 255)',
+					data: {{ watchers_by_day_list }},
+				}],
+			},
+			options: {
+				responsive: true,
+				maintainAspectRatio: false,
+				legend: {
+					display: false,
+				},
+				scales: {
+					yAxes: [{
+						ticks: {
+							display: false //this will remove only the label
+						},
+						gridLines : {
+							drawBorder: false,
+							display : false
+						}
+					}],
+					xAxes : [ {
+						gridLines : {
+							drawBorder: false,
+							display : false
+						}
+					}]
+				},
+			}
+		});
 
-		var mytotalIncomeChartMonth = new Chart(totalIncomeChartMonth, {
+		var mytotalIncomeChartWeek_reports = new Chart(totalIncomeChartWeek_reports, {
+			type: 'bar',
+			data: {
+				labels: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
+				datasets : [{
+					label: "Watchers",
+					backgroundColor: '#ff9e27',
+					borderColor: 'rgb(23, 125, 255)',
+					data: {{ reports_by_day_list }},
+				}],
+			},
+			options: {
+				responsive: true,
+				maintainAspectRatio: false,
+				legend: {
+					display: false,
+				},
+				scales: {
+					yAxes: [{
+						ticks: {
+							display: false //this will remove only the label
+						},
+						gridLines : {
+							drawBorder: false,
+							display : false
+						}
+					}],
+					xAxes : [ {
+						gridLines : {
+							drawBorder: false,
+							display : false
+						}
+					}]
+				},
+			}
+		});
+
+		var mytotalIncomeChartMonth_rule = new Chart(totalIncomeChartMonth_rule, {
 			type: 'bar',
 			data: {
 				labels: ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"],
 				datasets: [{
-					label: "Rules",
+					label: "Reports",
 					backgroundColor: '#7db6ff',
 					borderColor: 'rgb(125, 182, 255)',
 					data: {{rules_by_month_list}},
@@ -810,6 +1154,81 @@
 			}
 		});
 
+		var mytotalIncomeChartMonth_watchers = new Chart(totalIncomeChartMonth_watchers, {
+			type: 'bar',
+			data: {
+				labels: ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"],
+				datasets: [{
+					label: "Watchers",
+					backgroundColor: '#7db6ff',
+					borderColor: 'rgb(125, 182, 255)',
+					data: {{watchers_by_month_list}},
+				}],
+			},
+			options: {
+				responsive: true,
+				maintainAspectRatio: false,
+				legend: {
+					display: false,
+				},
+				scales: {
+					yAxes: [{
+						ticks: {
+							display: false //this will remove only the label
+						},
+						gridLines : {
+							drawBorder: false,
+							display : false
+						}
+					}],
+					xAxes : [ {
+						gridLines : {
+							drawBorder: false,
+							display : false
+						}
+					}]
+				},
+			}
+		});
+
+		var mytotalIncomeChartMonth_reports = new Chart(totalIncomeChartMonth_reports, {
+			type: 'bar',
+			data: {
+				labels: ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"],
+				datasets: [{
+					label: "Reports",
+					backgroundColor: '#7db6ff',
+					borderColor: 'rgb(125, 182, 255)',
+					data: {{reports_by_month_list}},
+				}],
+			},
+			options: {
+				responsive: true,
+				maintainAspectRatio: false,
+				legend: {
+					display: false,
+				},
+				scales: {
+					yAxes: [{
+						ticks: {
+							display: false //this will remove only the label
+						},
+						gridLines : {
+							drawBorder: false,
+							display : false
+						}
+					}],
+					xAxes : [ {
+						gridLines : {
+							drawBorder: false,
+							display : false
+						}
+					}]
+				},
+			}
+		});
+
+
 		var myRadarChart = new Chart(radarChart, {
 			type: 'radar',
 			data: {
@@ -831,8 +1250,11 @@
 				position: 'bottom',
 			  },
 			  scale: {
+				ticks: {
+					display:false,
+				  },
 				pointLabels: {
-				  fontSize: 12,
+				  fontSize: 11,
 				}
 			  }
 			}
@@ -893,6 +1315,72 @@
 						top: 20,
 						bottom: 20
 					}
+				}
+			}
+		});
+
+		var myMultipleLineChart = new Chart(multipleLineChart, {
+			type: 'line',
+			data: {
+				labels: ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"],
+				datasets: [{
+					label: "Rules",
+					borderColor: "#1d7af3",
+					pointBorderColor: "#FFF",
+					pointBackgroundColor: "#1d7af3",
+					pointBorderWidth: 2,
+					pointHoverRadius: 4,
+					pointHoverBorderWidth: 1,
+					pointRadius: 4,
+					backgroundColor: 'transparent',
+					fill: true,
+					borderWidth: 2,
+					data: {{rules_by_month_list}}
+				},{
+					label: "Watchers",
+					borderColor: "#59d05d",
+					pointBorderColor: "#FFF",
+					pointBackgroundColor: "#59d05d",
+					pointBorderWidth: 2,
+					pointHoverRadius: 4,
+					pointHoverBorderWidth: 1,
+					pointRadius: 4,
+					backgroundColor: 'transparent',
+					fill: true,
+					borderWidth: 2,
+					data: {{watchers_by_month_list}}
+				}, {
+					label: "Reports",
+					borderColor: "#f3545d",
+					pointBorderColor: "#FFF",
+					pointBackgroundColor: "#f3545d",
+					pointBorderWidth: 2,
+					pointHoverRadius: 4,
+					pointHoverBorderWidth: 1,
+					pointRadius: 4,
+					backgroundColor: 'transparent',
+					fill: true,
+					borderWidth: 2,
+					data: {{reports_by_month_list}}
+				}]
+			},
+			options : {
+				responsive: true, 
+				maintainAspectRatio: false,
+				legend: {
+					position: 'top',
+				},
+				tooltips: {
+					bodySpacing: 4,
+					mode:"nearest",
+					intersect: 0,
+					position:"nearest",
+					xPadding:10,
+					yPadding:10,
+					caretPadding:10
+				},
+				layout:{
+					padding:{left:15,right:15,top:15,bottom:15}
 				}
 			}
 		});

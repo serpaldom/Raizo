@@ -18,6 +18,7 @@ class DatabaseManager:
         self.today = timezone.localdate()
         self.start_of_week = self.today - timezone.timedelta(days=self.today.weekday())
         self.end_of_week = self.start_of_week + timezone.timedelta(days=6)
+        self.current_year = timezone.now().year
         
     def get_all_customers(self):
         """
@@ -91,7 +92,7 @@ class DatabaseManager:
         """
         return Report.objects.count()
 
-    def get_top_users_last_day(self, limit=3):
+    def get_top_users_rules_last_day(self, limit=3):
         """
         Get the top users who created the most rules in the last day.
         """
@@ -99,7 +100,7 @@ class DatabaseManager:
             rules__created_at__gte=self.last_day
         ).order_by('-total_rules')[:limit]
 
-    def get_top_users_last_week(self, limit=3):
+    def get_top_users_rules_last_week(self, limit=3):
         """
         Get the top users who created the most rules in the last week.
         """
@@ -107,13 +108,61 @@ class DatabaseManager:
             rules__created_at__gte=self.last_week
         ).order_by('-total_rules')[:limit]
 
-    def get_top_users_last_month(self, limit=3):
+    def get_top_users_rules_last_month(self, limit=3):
         """
         Get the top users who created the most rules in the last month.
         """
         return User.objects.annotate(total_rules=Count('rules')).filter(
             rules__created_at__gte=self.last_month
         ).order_by('-total_rules')[:limit]
+        
+    def get_top_users_watchers_last_day(self, limit=3):
+        """
+        Get the top users who created the most watchers in the last day.
+        """
+        return User.objects.annotate(total_watchers=Count('watchers')).filter(
+            watchers__created_at__gte=self.last_day
+        ).order_by('-total_watchers')[:limit]
+
+    def get_top_users_watchers_last_week(self, limit=3):
+        """
+        Get the top users who created the most watchers in the last week.
+        """
+        return User.objects.annotate(total_watchers=Count('watchers')).filter(
+            watchers__created_at__gte=self.last_week
+        ).order_by('-total_watchers')[:limit]
+
+    def get_top_users_watchers_last_month(self, limit=3):
+        """
+        Get the top users who created the most watchers in the last month.
+        """
+        return User.objects.annotate(total_watchers=Count('watchers')).filter(
+            watchers__created_at__gte=self.last_month
+        ).order_by('-total_watchers')[:limit]
+
+    def get_top_users_reports_last_day(self, limit=3):
+        """
+        Get the top users who created the most reports in the last day.
+        """
+        return User.objects.annotate(total_reports=Count('reports')).filter(
+            reports__created_at__gte=self.last_day
+        ).order_by('-total_reports')[:limit]
+
+    def get_top_users_reports_last_week(self, limit=3):
+        """
+        Get the top users who created the most reports in the last week.
+        """
+        return User.objects.annotate(total_reports=Count('reports')).filter(
+            reports__created_at__gte=self.last_week
+        ).order_by('-total_reports')[:limit]
+
+    def get_top_users_reports_last_month(self, limit=3):
+        """
+        Get the top users who created the most reports in the last month.
+        """
+        return User.objects.annotate(total_reports=Count('reports')).filter(
+            reports__created_at__gte=self.last_month
+        ).order_by('-total_reports')[:limit]
 
     def get_rules_by_day_of_week(self):
         """
@@ -122,12 +171,40 @@ class DatabaseManager:
         return Rule.objects.filter(created_at__gte=self.start_of_week).values('created_at__week_day').annotate(
             count=Count('id')
         ).order_by('created_at__week_day')
+    
+    def get_watchers_by_day_of_week(self):
+        """
+        Get the number of watchers created per day of the week.
+        """
+        return Watcher.objects.filter(created_at__gte=self.start_of_week).values('created_at__week_day').annotate(
+            count=Count('id')
+        ).order_by('created_at__week_day')
+        
+    def get_reports_by_day_of_week(self):
+        """
+        Get the number of reports created per day of the week.
+        """
+        return Report.objects.filter(created_at__gte=self.start_of_week).values('created_at__week_day').annotate(
+            count=Count('id')
+        ).order_by('created_at__week_day')
 
     def get_total_rules_in_week(self):
         """
         Get the total number of rules created in the current week.
         """
         return Rule.objects.filter(created_at__gte=self.start_of_week).count()
+    
+    def get_total_watchers_in_week(self):
+        """
+        Get the total number of watchers created in the current week.
+        """
+        return Watcher.objects.filter(created_at__gte=self.start_of_week).count()
+    
+    def get_total_reports_in_week(self):
+        """
+        Get the total number of reports created in the current week.
+        """
+        return Report.objects.filter(created_at__gte=self.start_of_week).count()
 
     def get_detection_system_types(self):
         """
@@ -149,11 +226,42 @@ class DatabaseManager:
             count=Count('id')
         ).order_by('month')
 
+    def get_watchers_by_month(self):
+        """
+        Get the number of watchers created per month.
+        """
+        return Watcher.objects.annotate(month=ExtractMonth('created_at')).values('month').annotate(
+            count=Count('id')
+        ).order_by('month')
+
+    def get_reports_by_month(self):
+        """
+        Get the number of reports created per month.
+        """
+        return Report.objects.annotate(month=ExtractMonth('created_at')).values('month').annotate(
+            count=Count('id')
+        ).order_by('month')
+
     def get_total_rules_in_year(self):
         """
         Get the total number of rules created in the current year.
         """
-        return Rule.objects.count()
+        return Rule.objects.filter(created_at__year=self.current_year).count()
+    
+    def get_total_watchers_in_year(self):
+        """
+        Get the total number of watchers created in the current year.
+        """
+        return Watcher.objects.filter(created_at__year=self.current_year).count()
+    
+    from django.utils import timezone
+
+    def get_total_reports_in_year(self):
+        """
+        Get the total number of reports created in the current year.
+        """
+        return Report.objects.filter(created_at__year=self.current_year).count()
+
     
     def get_tactic_ids(self):
         """

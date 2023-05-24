@@ -1,25 +1,6 @@
-import datetime
-from django.db.models import Count, Avg, Q
-from django.contrib.admin.models import LogEntry
-from .models import Customer, DetectionSystem, Rule, Watcher, Report, MitreTactic, MitreTechnique
-from django.contrib.auth.models import User
-from django.db.models import Count
-from django.contrib.admin.models import LogEntry
-from django.db.models.functions import ExtractMonth, TruncMonth, TruncDay
-from django.utils import timezone
-from django.contrib.sessions.models import Session
-from .DatabaseManager import DatabaseManager
+from .models import Customer, DetectionSystem, Watcher, Report
 import csv
-from io import BytesIO
 from django.http import HttpResponse
-from reportlab.lib.pagesizes import letter
-from reportlab.pdfgen import canvas
-from django.http import HttpResponse
-from django.template.loader import render_to_string
-from xhtml2pdf import pisa
-
-class DatabaseManager:
-    import csv
 from django.http import HttpResponse
 
 class ExportManager:
@@ -74,7 +55,7 @@ class ExportManager:
         return response
     
     @staticmethod
-    def export_reports():
+    def export_watchers():
         watchers = Watcher.objects.all()
         response = HttpResponse(
             content_type="text/csv",
