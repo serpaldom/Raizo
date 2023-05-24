@@ -1,4 +1,4 @@
-from .models import Customer, DetectionSystem, Watcher, Report
+from .models import Customer, DetectionSystem, Watcher, Report, Rule
 import csv
 from django.http import HttpResponse
 from django.http import HttpResponse
@@ -36,6 +36,26 @@ class ExportManager:
             writer.writerow([detection_system.id, detection_system.name, detection_system.type, customers, detection_system.created_by, detection_system.created_at, detection_system.modified_at])
 
         return response
+    
+    @staticmethod
+    def export_rules():
+        rules = Rule.objects.all()
+        response = HttpResponse(
+            content_type="text/csv",
+            headers={"Content-Disposition": 'attachment; filename="rules.csv"'},
+        )
+
+        writer = csv.writer(response)
+        writer.writerow(['ID', 'Name', 'Severity', 'Mitre Tactics', 'Mitre Techniques', 'Technologies', 'Tags', 'Created by', 'Created at (UTC)', 'Modified at (UTC)'])
+        for rule in rules:
+            mitre_tactics = ', '.join([tactic.name for tactic in rule.mitre_tactics.all()])
+            mitre_techniques = ', '.join([technique.name for technique in rule.mitre_techniques.all()])
+            technologies = ', '.join([technology.name for technology in rule.technologies.all()])
+            tags = ', '.join([tag.name for tag in rule.tags.all()])
+            writer.writerow([rule.id, rule.name, rule.severity, mitre_tactics, mitre_techniques, technologies, tags, rule.created_by, rule.created_at, rule.modified_at])
+
+        return response
+
     
     @staticmethod
     def export_reports():

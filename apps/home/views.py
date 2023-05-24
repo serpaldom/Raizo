@@ -445,6 +445,9 @@ def pages(request):
 
             elif object_to_export == 'detection_systems':
                 return export_manager.export_detection_systems()
+            
+            elif object_to_export == 'rules':
+                return export_manager.export_rules()
 
             elif object_to_export == 'watchers':
                 return export_manager.export_watchers()
