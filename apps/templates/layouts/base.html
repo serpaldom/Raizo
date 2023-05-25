@@ -27,6 +27,10 @@
 	<!-- CSS Files -->
 	<link rel="stylesheet" href="/static/assets/css/bootstrap.min.css">
 	<link rel="stylesheet" href="/static/assets/css/atlantis.css">
+	<link
+		rel="stylesheet"
+		href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+	/>
 	
 
 	<!-- CSS Just for demo purpose, don't include it in your project -->
@@ -54,7 +58,7 @@
 		{% if request.user.is_authenticated %}
 
 			<!-- Custom template | don't include it in your project! -->
-			{% include 'includes/configuration-plugin.html' %}
+			{# include 'includes/configuration-plugin.html'#}
 
 		{% endif %}		
 

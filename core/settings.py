@@ -1,7 +1,5 @@
 # -*- encoding: utf-8 -*-
-"""
-Copyright (c) 2019 - present AppSeed.us
-"""
+
 
 import os, environ
 
@@ -85,24 +83,24 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-if os.environ.get('DB_ENGINE') and os.environ.get('DB_ENGINE') == "mysql":
-    DATABASES = { 
-      'default': {
-        'ENGINE'  : 'django.db.backends.mysql', 
-        'NAME'    : os.getenv('DB_NAME'     , 'ryuk'),
-        'USER'    : os.getenv('DB_USERNAME' , 'Ryuk'),
-        'PASSWORD': os.getenv('DB_PASS'     , 'g8D8Hw3nTbks3yMa49zENA7Ues3FkkF'),
-        'HOST'    : os.getenv('DB_HOST'     , 'localhost'),
-        'PORT'    : os.getenv('DB_PORT'     , 3306),
-        }, 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'Ryuk',
+        'USER': 'Ryuk',
+        'PASSWORD': 'g8D8Hw3nTbks3yMa49zENA7Ues3FkkF',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
-else:
+}
+'''
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': 'db.sqlite3',
         }
     }
+'''
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 

@@ -292,6 +292,12 @@ class DatabaseManager:
         Get the count of rules created for each detection type.
         """
         return Rule.objects.values('detection_systems__type').annotate(rule_count=Count('id'))
+    
+    def get_rule_counts_by_technology(self):
+        """
+        Get the count of rules created for each technology.
+        """
+        return Rule.objects.values('technologies__name').annotate(rule_count=Count('id')).order_by('-rule_count')
 
     def get_average_rules_per_user(self):
         """

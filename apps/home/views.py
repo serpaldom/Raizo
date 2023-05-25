@@ -1,7 +1,5 @@
 # -*- encoding: utf-8 -*-
-"""
-Copyright (c) 2019 - present AppSeed.us
-"""
+
 
 from django import template
 from django.contrib.auth.decorators import login_required
@@ -13,7 +11,9 @@ from .DatabaseManager import DatabaseManager
 from .ExportManager import ExportManager
 from django.contrib import messages
 from django.views.decorators.cache import cache_page
-
+from .models import MitreTactic, Technologies
+import csv
+import os
 db_manager  = DatabaseManager()
 export_manager = ExportManager()
 
@@ -25,30 +25,8 @@ def index(request):
     #return HttpResponse(html_template.render(context, request))
 
 @login_required(login_url="/login/")
-@cache_page(60 * 15)
 def pages(request):
-    '''
-    # Código para crear el diccionario de técnicas de MITRE
-    mitre_techniques_data = {
-    }
-
-
-    mitre_tactic_id = 'TA0004'  # ID de la táctica
-    mitre_tactic_name = 'Privilege Escalation'  # Nombre de la táctica
-    # Crear las técnicas de MITRE asociadas a la táctica "Persistence" con el ID "TA0003"
-    mitre_tactic = MitreTactic.objects.get(id=mitre_tactic_id, name=mitre_tactic_name)
-
-    for technique_id, technique_name in mitre_techniques_data.items():
-        mitre_technique, created = MitreTechnique.objects.get_or_create(
-            id=technique_id,
-            name=technique_name
-        )
-        if not created:  # Verificar si la técnica ya existe
-            mitre_technique.mitre_tactics.add(mitre_tactic)  # Añadir la táctica existente
-        else:
-            mitre_technique.save()  # Guardar la técnica creada'''
-
-    
+                
     context = {}
     # All resource paths end in .html.
     # Pick out the html file name from the url. And load that template.
@@ -302,6 +280,11 @@ def pages(request):
                 # Set recent_rules to an empty string in case of an error
                 recent_rules = ""
                 pass
+            
+            try:
+                rule_counts_by_technology = db_manager.get_rule_counts_by_technology()
+            except Exception as e:
+                rule_counts_by_technology = None
 
             # Last 6 actions performed by user
             try:
@@ -356,6 +339,7 @@ def pages(request):
                 'distribution_by_severity': distribution_by_severity_list,
                 
                 'recent_rules': recent_rules,
+                'rule_counts_by_technology':rule_counts_by_technology,
                 'recent_actions': recent_actions,
                 'current_sessions': current_sessions,
             })
