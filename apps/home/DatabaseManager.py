@@ -262,7 +262,6 @@ class DatabaseManager:
         """
         return Report.objects.filter(created_at__year=self.current_year).count()
 
-    
     def get_tactic_ids(self):
         """
         Get the tactic IDs ordered by ID.
@@ -287,11 +286,17 @@ class DatabaseManager:
         """
         return User.objects.values('username').annotate(rule_count=Count('rules'))
 
-    def get_rule_counts_by_detection_type(self):
+    def get_rule_counts_by_detectionsystem_type(self):
         """
         Get the count of rules created for each detection type.
         """
         return Rule.objects.values('detection_systems__type').annotate(rule_count=Count('id'))
+    
+    def get_rule_counts_by_detectionsystem_name(self):
+        """
+        Get the count of rules created for each detection name.
+        """
+        return Rule.objects.values('detection_systems__name').annotate(rule_count=Count('id')).order_by('-rule_count')
     
     def get_rule_counts_by_technology(self):
         """

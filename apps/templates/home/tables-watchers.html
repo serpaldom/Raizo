@@ -33,7 +33,7 @@
 			</div>
 			<div class="row">
 				<div class="col-md-12 animate__animated animate__fadeIn">
-					<div class="card">
+					<div class="card full-height">
 						<div class="card-header">
 							<h4 class="card-title">Watchers List</h4>
 							<div class="d-flex justify-content-end">
@@ -132,7 +132,7 @@
 			// Setup - add a text input to each footer cell
 			$('#multi-filter-search tfoot th').each(function () {
 				var title = $(this).text();
-				$(this).html('<input type="text" class="form-control" placeholder="Search ' + title + '" />');
+				$(this).html('<input type="text" class="form-control" placeholder="Search ' + title + '" /><p></p>');
 			});
 
 			// DataTable

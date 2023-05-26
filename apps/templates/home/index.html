@@ -294,7 +294,7 @@
 
 			<!-- Rule Stats 2 -->
 			<div class="row">
-				<div class="col-md-12 animate__animated animate__fadeIn">
+				<div class="col-md-6 animate__animated animate__bounceInLeft">
 					<div class="card full-height">
 						<div class="card-header">
 							<h4 class="card-title">Rule Distribution by Technology</h4>
@@ -316,6 +316,37 @@
 														<td>{{ forloop.counter }}</td>
 														<td>{{ technology.technologies__name }}</td>
 														<td>{{ technology.rule_count }}</td>
+													</tr>
+												{% endfor %}
+											{% endif %}
+										</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 animate__animated animate__bounceInRight">
+					<div class="card full-height">
+						<div class="card-header">
+							<h4 class="card-title">Rule Distribution by Detection System</h4>
+						</div>
+						<div class="card-body">
+							<div class="table-responsive"> 
+								<table id="distribution-rules-detection-system" class="display table table-striped table-hover">
+									<thead>
+										<tr>
+											<th scope="col">#</th>
+											<th scope="col">Detection System</th>
+											<th scope="col">Rules</th>
+										</tr>
+									</thead>
+										<tbody>
+											{% if recent_rules %}
+												{% for detection_systems in rule_counts_by_detection_system_name %}
+													<tr>
+														<td>{{ forloop.counter }}</td>
+														<td>{{ detection_systems.detection_systems__name }}</td>
+														<td>{{ detection_systems.rule_count }}</td>
 													</tr>
 												{% endfor %}
 											{% endif %}
@@ -726,11 +757,6 @@
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 
-	<!-- Atlantis DEMO methods, don't include it in your project! -->
-	<script src="/static/assets/js/setting-demo.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
-
 	{% if user.is_superuser%}
 	<script>
 		$(document).ready(function() {
@@ -742,12 +768,33 @@
 	<script>
 		$(document).ready(function() {
 			$('#distribution-rules-techonolgy').DataTable({
+				"aLengthMenu": [
+					[5, 10, 25, 50, 100, 200, -1],
+					[5, 10, 25, 50, 100, 200, "All"]
+				],
+				"iDisplayLength": 5
+			});
+		});
+	</script>
+	<script>
+		$(document).ready(function() {
+			$('#distribution-rules-detection-system').DataTable({
+				"aLengthMenu": [
+					[5, 10, 25, 50, 100, 200, -1],
+					[5, 10, 25, 50, 100, 200, "All"]
+				],
+				"iDisplayLength": 5
 			});
 		});
 	</script>
 	<script>
 		$(document).ready(function() {
 			$('#last-created-rules-table').DataTable({
+				"aLengthMenu": [
+					[5, 10, 25, 50, 100, 200, -1],
+					[5, 10, 25, 50, 100, 200, "All"]
+				],
+				"iDisplayLength": 5
 			});
 		});
 	</script>

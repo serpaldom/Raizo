@@ -11,9 +11,7 @@ from .DatabaseManager import DatabaseManager
 from .ExportManager import ExportManager
 from django.contrib import messages
 from django.views.decorators.cache import cache_page
-from .models import MitreTactic, Technologies
-import csv
-import os
+
 db_manager  = DatabaseManager()
 export_manager = ExportManager()
 
@@ -25,7 +23,7 @@ def index(request):
     #return HttpResponse(html_template.render(context, request))
 
 @login_required(login_url="/login/")
-@cache_page(60 * 15)
+@cache_page(60 * 5)
 def pages(request):
                 
     context = {}
@@ -286,6 +284,11 @@ def pages(request):
                 rule_counts_by_technology = db_manager.get_rule_counts_by_technology()
             except Exception as e:
                 rule_counts_by_technology = None
+                
+            try:
+                rule_counts_by_detection_system_name = db_manager.get_rule_counts_by_detectionsystem_name()
+            except Exception as e:
+                rule_counts_by_detection_system_name = None
 
             # Last 6 actions performed by user
             try:
@@ -341,6 +344,7 @@ def pages(request):
                 
                 'recent_rules': recent_rules,
                 'rule_counts_by_technology':rule_counts_by_technology,
+                'rule_counts_by_detection_system_name':rule_counts_by_detection_system_name,
                 'recent_actions': recent_actions,
                 'current_sessions': current_sessions,
             })
