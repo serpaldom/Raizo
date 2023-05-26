@@ -38,6 +38,9 @@ You can change what database engine to use in the settings.py file. Remember to 
 <br />
 
 > **Step 2** - Install all dependencies
+```bash
+$  pip install -r requirements.txt    
+```
 
 <br />
 
