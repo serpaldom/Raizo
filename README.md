@@ -1,10 +1,10 @@
-# [Ryuk - Empower your SOC's Management]
+# Ryuk - Empower your SOC's Management
 
 **Ryuk** is a comprehensive inventory management system specifically designed for external or internal SOCs (Security Operations Centers). Its main objective is to facilitate cybersecurity management for one or multiple clients with multiple detection systems in their environments. These detection systems typically include assets such as "detection rules," "watchers," or "reports."
 
 Ryuk arises from the need for a specialized tool that enables the unified management of assets' inventory developed in each platform or client, while maintaining precise control over who, how, when, and where an asset affects the detection system. It provides SOC technicians and managers with the ability to build a robust and unified inventory using a relational database. This eliminates the dependence on generic tools like Excel, which, although powerful, do not meet more advanced needs such as information insertion control or long-term scalability.
 
-Furthermore, Ryuk is fully integrated with the MITRE ATT&CK framework (https://attack.mitre.org/). This integration allows for a comprehensive view of the cybersecurity protection status of your SOC.
+Furthermore, Ryuk is fully integrated with the [MITRE ATT&CK framework](https://attack.mitre.org/). This integration allows for a comprehensive view of the cybersecurity protection status of your SOC.
   
 <br />
 
