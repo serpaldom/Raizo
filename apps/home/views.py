@@ -25,6 +25,7 @@ def index(request):
     #return HttpResponse(html_template.render(context, request))
 
 @login_required(login_url="/login/")
+@cache_page(60 * 15)
 def pages(request):
                 
     context = {}
