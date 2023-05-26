@@ -1,18 +1,14 @@
 # -*- encoding: utf-8 -*-
 
-
-from django import forms
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 from .models import Customer, DetectionSystem, Rule, MitreTactic, MitreTechnique, Watcher, Report, Technologies, Tag, UserPreferences
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django import forms
 from django.contrib.admin.models import LogEntry
 from django.contrib.sessions.models import Session
-from .forms import RuleForm, CustomerForm
-from django.http import JsonResponse
+from .forms import RuleForm, CustomerForm, CustomUserCreationForm
 
 class UserPreferencesInline(admin.StackedInline):
     model = UserPreferences
@@ -20,6 +16,7 @@ class UserPreferencesInline(admin.StackedInline):
     verbose_name_plural = "User preferences"
 
 class UserAdmin(BaseUserAdmin):
+    add_form = CustomUserCreationForm
     inlines = [UserPreferencesInline]
         
 class CustomerAdmin(admin.ModelAdmin):
@@ -163,4 +160,6 @@ admin.site.register(Tag, TagsAdminList)
 admin.site.register(Session)
 admin.site.register(LogEntry, LogEntryAdmin)
 admin.site.unregister(User)
-admin.site.register(User, UserAdmin)
+admin.site.register(UserPreferences)  
+admin.site.register(User, UserAdmin)  
+

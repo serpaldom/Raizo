@@ -5,6 +5,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from .forms import LoginForm, SignUpForm
+from ..home.models import UserPreferences
+
 
 
 def login_view(request):
@@ -36,10 +38,14 @@ def register_user(request):
     if request.method == "POST":
         form = SignUpForm(request.POST)
         if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get("username")
-            raw_password = form.cleaned_data.get("password1")
-            user = authenticate(username=username, password=raw_password)
+            user = form.save(commit=False)  # Guarda el usuario sin enviar a la base de datos
+            user.set_password(form.cleaned_data.get("password1"))
+            user.save()
+
+            # Crea las preferencias del usuario
+            theme_preference = "dark"
+            user_preferences = UserPreferences(user=user, theme_preference=theme_preference)
+            user_preferences.save()
 
             msg = 'User created successfully.'
             success = True

@@ -6,6 +6,8 @@ from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied, ValidationError
 from simple_history.models import HistoricalRecords
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 class UserPreferences(models.Model):
     THEME_CHOICES = [
@@ -15,6 +17,11 @@ class UserPreferences(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     theme_preference = models.CharField(max_length=20, choices=THEME_CHOICES, default='dark')
     
+@receiver(post_save, sender=User)
+def create_user_preferences(sender, instance, created, **kwargs):
+    if created:
+        UserPreferences.objects.create(user=instance, theme_preference='dark')
+        
 class Customer(models.Model):
     name = models.CharField(max_length=255)
     initials = models.CharField(max_length=2)

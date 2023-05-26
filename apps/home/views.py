@@ -23,7 +23,6 @@ def index(request):
     #return HttpResponse(html_template.render(context, request))
 
 @login_required(login_url="/login/")
-@cache_page(60 * 5)
 def pages(request):
                 
     context = {}
@@ -416,21 +415,24 @@ def pages(request):
                 if password != confirm_password:
                     messages.error(request, 'Passwords do not match.')
                     return redirect('edit_profile.html')  # Redirect back to the edit form
-
-                # Update the fields in the user object
-                user = request.user
-                if theme_preferences.get(theme_preference) != user.userpreferences.theme_preference:
-                    user.userpreferences.theme_preference = theme_preferences.get(theme_preference)
-                    user.userpreferences.save()
-                if first_name:
-                    user.first_name = first_name
-                if last_name:
-                    user.last_name = last_name
-                if email:
-                    user.email = email
-                if password:
-                    user.set_password(password)
-                user.save()
+                try:
+                    # Update the fields in the user object
+                    user = request.user
+                    if theme_preferences.get(theme_preference) != user.userpreferences.theme_preference:
+                        user.userpreferences.theme_preference = theme_preferences.get(theme_preference)
+                        user.userpreferences.save()
+                    if first_name:
+                        user.first_name = first_name
+                    if last_name:
+                        user.last_name = last_name
+                    if email:
+                        user.email = email
+                    if password:
+                        user.set_password(password)
+                    
+                        user.save()
+                except Exception as e:
+                    print(e)
                     
 
                 messages.success(request, 'Profile updated successfully.')
