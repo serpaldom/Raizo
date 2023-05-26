@@ -37,21 +37,21 @@ You can change what database engine to use in the settings.py file. Remember to 
 
 <br />
 
-> **Step 2** - Install all dependencies
+> **Step 3** - Install all dependencies
 ```bash
 $  pip install -r requirements.txt    
 ```
 
 <br />
 
-> **Step 3** - Import initial data
+> **Step 4** - Import initial data
 
 ```bash
 $  python manage.py loaddata first_run_data.json    
 ```
 <br />
 
-> **Step 3** - Run it!
+> **Step 5** - Run it!
 
 Credentials for superuser: admin/admin
 
