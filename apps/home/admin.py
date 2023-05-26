@@ -3,12 +3,24 @@
 
 from django import forms
 from django.contrib import admin
-from .models import Customer, DetectionSystem, Rule, MitreTactic, MitreTechnique, Watcher, Report, Technologies, Tag
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.auth.models import User
+from .models import Customer, DetectionSystem, Rule, MitreTactic, MitreTechnique, Watcher, Report, Technologies, Tag, UserPreferences
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django import forms
 from django.contrib.admin.models import LogEntry
 from django.contrib.sessions.models import Session
+from .forms import RuleForm
+from django.http import JsonResponse
+
+class UserPreferencesInline(admin.StackedInline):
+    model = UserPreferences
+    can_delete = False
+    verbose_name_plural = "User preferences"
+
+class UserAdmin(BaseUserAdmin):
+    inlines = [UserPreferencesInline]
 
 class CustomerForm(forms.ModelForm):
     update_general_rules = forms.ChoiceField(choices=((True, 'Yes'), (False, 'No')))
@@ -49,7 +61,8 @@ class DetectionSystemList(admin.ModelAdmin):
     
 class RuleList(admin.ModelAdmin):
     list_display = ('id', 'name', 'severity', 'mitre_tactics_display', 'mitre_techniques_display', 'technologies_display', 'tags_display', 'created_by', 'detection_systems_display', 'created_at','modified_at')
-    
+    search_fields = ['name']
+    form = RuleForm
     def mitre_tactics_display(self, obj):
         tactic_names = ", ".join([tactic.name for tactic in obj.mitre_tactics.all()])
         return tactic_names
@@ -76,6 +89,57 @@ class RuleList(admin.ModelAdmin):
         return ", ".join([tag.name for tag in obj.tags.all()])
     
     tags_display.short_description = "Tags"
+    
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        # Obtener el contexto existente
+        extra_context = extra_context or {}
+
+        # Verificar si se realizó una solicitud POST (se envió el formulario)
+        if request.method == 'POST':
+            # Obtener el valor de las tácticas seleccionadas
+            selected_tactics = request.POST.getlist('tactics')
+
+            # Realizar la lógica para obtener las técnicas según las tácticas seleccionadas
+            # ...
+            
+            # Devolver las técnicas en formato JSON
+            data = [{'id': technique.id, 'name': technique.name} for technique in techniques]
+            return JsonResponse(data, safe=False)
+
+        # Agregar el script JavaScript al contexto existente
+        extra_context['admin_script'] = """
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script>
+            $(document).ready(function() {
+                $('#id_tactics').change(function() {
+                    var selectedTactics = $(this).val();
+
+                    // Realizar una solicitud AJAX para obtener las técnicas según las tácticas seleccionadas
+                    $.ajax({
+                        url: window.location.href,
+                        type: 'POST',
+                        data: {'tactics': selectedTactics},
+                        success: function(response) {
+                            // Limpiar el campo de selección de técnicas
+                            $('#id_techniques').empty();
+
+                            // Agregar las nuevas opciones de técnicas al campo de selección
+                            for (var i = 0; i < response.length; i++) {
+                                var technique = response[i];
+                                $('#id_techniques').append('<option value="' + technique.id + '">' + technique.name + '</option>');
+                            }
+                        },
+                        error: function(xhr, textStatus, errorThrown) {
+                            console.log('Error:', errorThrown);
+                        }
+                    });
+                });
+            });
+            </script>
+        """
+
+        # Llamar al método original de la superclase para renderizar el formulario
+        return super().change_view(request, object_id, form_url=form_url, extra_context=extra_context)
 
 class WatcherAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'customers_display', 'detection_systems_display', 'technologies_display', 'tags_display', 'created_at', 'modified_at')
@@ -147,3 +211,5 @@ admin.site.register(Technologies, TechonologiesAdminList)
 admin.site.register(Tag, TagsAdminList)
 admin.site.register(Session)
 admin.site.register(LogEntry, LogEntryAdmin)
+admin.site.unregister(User)
+admin.site.register(User, UserAdmin)

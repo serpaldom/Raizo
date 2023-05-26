@@ -45,6 +45,13 @@
 									<form method="POST">
 										{% csrf_token %}
 										<div class="form-group">
+											<label for="theme_preference">Theme Preference</label>
+											<select class="form-control" id="theme_preference" name="theme_preference">
+												<option>Light</option>
+												<option>Dark</option>
+											</select>
+										</div>
+										<div class="form-group">
 											<label for="first_name">First Name</label>
 											<input type="text" class="form-control" id="first_name" name="first_name" placeholder="{{request.user.first_name}}">
 										</div>

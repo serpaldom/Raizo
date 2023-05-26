@@ -35,7 +35,7 @@
     {% block stylesheets %}{% endblock stylesheets %}
 
 </head>
-<body data-background-color="dark">
+<body data-background-color="{% if request.user.userpreferences.theme_preference == 'dark' %}dark{% else %}bg2{%endif%}">
 	<div class="wrapper sidebar_minimize">
 
         {% include 'includes/navigation.html' %}

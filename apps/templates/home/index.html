@@ -272,7 +272,7 @@
 							<div class="card-title">Distribution of Rules by MITRE Tactic</div>
 						</div>
 						<div class="card-body">
-							<div class="chart-container" style="height: 100%;">
+							<div class="chart-container">
 								<canvas id="pieChart" style="width: 50%; height: 50%"></canvas>
 							</div>
 						</div>
@@ -284,7 +284,7 @@
 							<div class="card-title">Distribution of Rules by Severity</div>
 						</div>
 						<div class="card-body">
-							<div class="chart-container" style="height: 100%;">
+							<div class="chart-container">
 								<canvas id="radarChart"></canvas>
 							</div>
 						</div>
@@ -297,13 +297,11 @@
 				<div class="col-md-12 animate__animated animate__fadeIn">
 					<div class="card full-height">
 						<div class="card-header">
-							<div class="card-head-row">
-								<div class="card-title">Rule Distribution by Technology</div>
-							</div>
+							<h4 class="card-title">Rule Distribution by Technology</h4>
 						</div>
 						<div class="card-body">
 							<div class="table-responsive"> 
-								<table id="distribution-rules-techonolgy" class="table table-striped table-striped-bg-default mt-3">
+								<table id="distribution-rules-techonolgy" class="display table table-striped table-hover">
 									<thead>
 										<tr>
 											<th scope="col">#</th>
@@ -615,13 +613,11 @@
 					<div class="col-md-3 animate__animated animate__fadeIn">
 						<div class="card full-height">
 							<div class="card-header">
-								<div class="card-head-row">
-									<div class="card-title">Current Active Sessions {% if current_sessions %}({{current_sessions.count}}){% else %}(0){% endif %}</div>
-								</div>
+								<h4 class="card-title">Current Active Sessions {% if current_sessions %}({{current_sessions.count}}){% else %}(0){% endif %}</h4>
 							</div>
 							<div id="top-users-today" class="card-body">
 								<div class="table-responsive"> 
-									<table id="sessions-table" class="table table-striped table-striped-bg-default mt-3">
+									<table id="sessions-table" class="display table table-striped table-hover">
 										<thead>
 											<tr>
 												<th scope="col">ID</th>
@@ -629,16 +625,12 @@
 											</tr>
 										</thead>
 										<tbody>
-											{% if current_sessions %}
 											{% for session in current_sessions %}
 												<tr>
 													<td>{{session.session_key}}</td>
 													<td>{{session.expire_date }}</td>
 												</tr>
 											{% endfor %}
-											{% else %}
-											<p class="text-center">There are not active sessions yet</p>
-											{% endif %}
 										</tbody>
 									</table>
 								</div>
@@ -692,13 +684,11 @@
 				<div class="col-md-6 animate__animated animate__fadeIn">
 					<div class="card full-height">
 						<div class="card-header">
-							<div class="card-head-row">
-								<div class="card-title">Last Created Rules</div>
-							</div>
+							<h4 class="card-title">Last Created Rules</h4>
 						</div>
 						<div id="top-users-today" class="card-body">
 							<div class="table-responsive"> 
-								<table id="last-created-rules-table" class="table table-striped table-striped-bg-default mt-3">
+								<table id="last-created-rules-table" class="display table table-striped table-hover">
 									<thead>
 										<tr>
 											<th scope="col">ID</th>
@@ -710,7 +700,6 @@
 										</tr>
 									</thead>
 									<tbody>
-										{% if recent_rules %}
 										{% for rule in recent_rules %}
 											<tr>
 												<td>{{rule.id}}</td>
@@ -721,9 +710,6 @@
 												<td>{{rule.created_at}}</td>
 											</tr>
 										{% endfor %}
-										{% else %}
-										<p class="text-center">There're no rules created yet</p>
-										{% endif %}
 									</tbody>
 								</table>
 							</div>
@@ -762,7 +748,6 @@
 	<script>
 		$(document).ready(function() {
 			$('#last-created-rules-table').DataTable({
-
 			});
 		});
 	</script>
@@ -1055,7 +1040,7 @@
 						],
 					borderWidth: 0
 				}],
-				labels: ['Initial Access','Execution', 'Persistence', 'Privilege Escalation', 'Defense Evasion', 'Credential Access', 'Discovery', 'Lateral Movement', 'Collection', 'Command and Control', 'Exfiltration', 'Impact', 'Resource Development', 'Reconnaissance'] 
+				labels: ['Initial Access ({{distribution_by_tactic.0}})', 'Execution ({{distribution_by_tactic.1}})', 'Persistence ({{distribution_by_tactic.2}})', 'Privilege Escalation ({{distribution_by_tactic.3}})', 'Defense Evasion ({{distribution_by_tactic.4}})', 'Credential Access ({{distribution_by_tactic.5}})', 'Discovery ({{distribution_by_tactic.6}})', 'Lateral Movement ({{distribution_by_tactic.7}})', 'Collection ({{distribution_by_tactic.8}})', 'Command and Control ({{distribution_by_tactic.9}})', 'Exfiltration ({{distribution_by_tactic.10}})', 'Impact ({{distribution_by_tactic.11}})', 'Resource Development ({{distribution_by_tactic.12}})', 'Reconnaissance ({{distribution_by_tactic.13}})']
 			},
 			options : {
 				responsive: true, 
@@ -1078,7 +1063,15 @@
 					fontColor: 'white',
 					fontSize: 10,
 				},
-				tooltips: false,
+				tooltips: {
+					bodySpacing: 4,
+					mode:"nearest",
+					intersect: 0,
+					position:"nearest",
+					xPadding:10,
+					yPadding:10,
+					caretPadding:10
+				},
 				layout: {
 					padding: {
 						left: 20,

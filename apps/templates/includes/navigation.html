@@ -2,7 +2,7 @@
 		<div class="main-header">
 
 			<!-- Logo Header -->
-			<div class="logo-header" data-background-color="dark2">
+			<div class="logo-header" data-background-color="{% if request.user.userpreferences.theme_preference == 'dark' %}dark2{% else %}white{%endif%}">
 				
 				<a href="/index.html" class="logo">
 					<img src="/static/assets/img/logo.svg" alt="navbar brand" class="navbar-brand">
@@ -23,8 +23,7 @@
 			<!-- End Logo Header -->
 
 			<!-- Navbar Header -->
-			<nav class="navbar navbar-header navbar-expand-lg" data-background-color="dark">
-				
+			<nav class="navbar navbar-header navbar-expand-lg" data-background-color="{% if request.user.userpreferences.theme_preference == 'dark' %}dark2{% else %}white{%endif%}">
 				{% if request.user.is_authenticated %}
 				<div class="container-fluid">
 					<ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
@@ -41,12 +40,14 @@
 									<div class="quick-actions-scroll scrollbar-outer">
 										<div class="quick-actions-items">
 											<div class="row m-0">
-												<a class="col-6 col-md-4 p-0" href="/admin">
+												<a class="col-12 col-md-12 p-0" href="/admin">
 													<div class="quick-actions-item">
 														<i class="fas fa-database"></i>
 														<span class="text">Manage Database</span>
 													</div>
 												</a>
+											</div>
+											<div class="row m-0">
 												<a class="col-6 col-md-4 p-0" href="/admin/home/customer/">
 													<div class="quick-actions-item">
 														<i class="fas fa-building"></i>

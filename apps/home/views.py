@@ -396,6 +396,11 @@ def pages(request):
         if load_template == 'edit-profile.html':
             if request.method == 'POST':
                 # Get the fields sent in the POST request
+                theme_preferences ={
+                    "Light": "light",
+                    "Dark": "dark"
+                }
+                theme_preference = request.POST.get('theme_preference')
                 first_name = request.POST.get('first_name')
                 last_name = request.POST.get('last_name')
                 email = request.POST.get('email')
@@ -409,6 +414,9 @@ def pages(request):
 
                 # Update the fields in the user object
                 user = request.user
+                if theme_preferences.get(theme_preference) != user.userpreferences.theme_preference:
+                    user.userpreferences.theme_preference = theme_preferences.get(theme_preference)
+                    user.userpreferences.save()
                 if first_name:
                     user.first_name = first_name
                 if last_name:
@@ -418,6 +426,7 @@ def pages(request):
                 if password:
                     user.set_password(password)
                 user.save()
+                    
 
                 messages.success(request, 'Profile updated successfully.')
                 return redirect('profile.html')  # Redirect to the profile page or wherever you desire

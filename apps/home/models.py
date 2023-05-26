@@ -5,7 +5,16 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied, ValidationError
 from simple_history.models import HistoricalRecords
+from django.contrib.auth.models import User
 
+class UserPreferences(models.Model):
+    THEME_CHOICES = [
+        ('dark', 'Dark'),
+        ('light', 'Light'),
+    ]
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    theme_preference = models.CharField(max_length=20, choices=THEME_CHOICES, default='dark')
+    
 class Customer(models.Model):
     name = models.CharField(max_length=255)
     initials = models.CharField(max_length=2)
@@ -180,7 +189,7 @@ class Watcher(models.Model):
     detection_systems = models.ManyToManyField(DetectionSystem)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='watchers')
     technologies = models.ManyToManyField(Technologies, related_name='watchers')
-    tags = models.ManyToManyField(Tag, related_name='watchers')
+    tags = models.ManyToManyField(Tag, related_name='watchers', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
     history = HistoricalRecords()  
@@ -201,7 +210,7 @@ class Report(models.Model):
     detection_systems = models.ManyToManyField(DetectionSystem)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='reports')
     technologies = models.ManyToManyField(Technologies, related_name='reports')
-    tags = models.ManyToManyField(Tag, related_name='reports')
+    tags = models.ManyToManyField(Tag, related_name='reports', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
     history = HistoricalRecords()  
