@@ -1,8 +1,8 @@
 import os
 import csv
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import User
-from .models import MitreTactic, MitreTechnique, Tag, Technologies
+from django.core.exceptions import PermissionDenied
+from .models import MitreTactic, MitreTechnique, Technologies, Tag
 
 # Obtener el modelo de usuario actual
 User = get_user_model()
@@ -25,7 +25,7 @@ with open(csv_file_path, "r") as file:
             tactic_id = row["ID"]
             tactic_name = row["Name"]
 
-            tactic, _ = Tactic.objects.get_or_create(id=tactic_id)
+            tactic, _ = MitreTactic.objects.get_or_create(id=tactic_id)
             tactic.name = tactic_name
             tactic.created_by = current_user
             tactic.save()
@@ -39,7 +39,7 @@ with open(csv_file_path, "r") as file:
             technique_id = row["ID"]
             technique_name = row["Name"]
 
-            technique, _ = Technique.objects.get_or_create(id=technique_id)
+            technique, _ = MitreTechnique.objects.get_or_create(id=technique_id)
             technique.name = technique_name
             technique.created_by = current_user
             technique.save()
@@ -53,7 +53,7 @@ with open(csv_file_path, "r") as file:
             technology_id = row["ID"]
             technology_name = row["Name"]
 
-            technology, _ = Technology.objects.get_or_create(id=technology_id)
+            technology, _ = Technologies.objects.get_or_create(id=technology_id)
             technology.name = technology_name
             technology.created_by = current_user
             technology.save()

@@ -1,73 +1,236 @@
-import os
-import csv
-from django.contrib.auth import get_user_model
-from django.core.exceptions import PermissionDenied
-from .models import MitreTactic, MitreTechnique, Technologies, Tag
+# -*- encoding: utf-8 -*-
 
-# Obtener el modelo de usuario actual
-User = get_user_model()
 
-# Obtener el usuario actual
-current_user = User.objects.first()
+from django.db import models
+from django.contrib.auth.models import User
+from django.core.exceptions import PermissionDenied, ValidationError
+from simple_history.models import HistoricalRecords
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
-# Obtener la ruta del archivo CSV relativa a la ubicación actual de views.py
-current_directory = os.path.dirname(os.path.abspath(__file__))
-csv_file_path = os.path.join(current_directory, "default_data.csv")
+class UserPreferences(models.Model):
+    THEME_CHOICES = [
+        ('dark', 'Dark'),
+        ('light', 'Light'),
+    ]
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    theme_preference = models.CharField(max_length=20, choices=THEME_CHOICES, default='dark')
+    
+@receiver(post_save, sender=User)
+def create_user_preferences(sender, instance, created, **kwargs):
+    if created:
+        UserPreferences.objects.create(user=instance, theme_preference='dark')
+        
+class Customer(models.Model):
+    name = models.CharField(max_length=255)
+    initials = models.CharField(max_length=2)
+    update_general_rules = models.BooleanField(default=True)
+    detection_systems = models.ManyToManyField('DetectionSystem', related_name='customers')
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='customers')
+    modified_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
+    
+    def __str__(self):
+        return self.name
+    
+    def save(self, *args, **kwargs):
+        if self.created_by and not self.created_by.is_staff:
+            raise PermissionDenied("Only staff members can create customers")
+        super().save(*args, **kwargs)
+    
+    class Meta:
+        db_table = "Customers"
 
-# Abrir el archivo CSV
-with open(csv_file_path, "r") as file:
-    # Crear un lector CSV
-    reader = csv.DictReader(file)
+class DetectionSystem(models.Model):
+    TYPE_CHOICES = (
+        ('SIEM', 'SIEM'),
+        ('EDR', 'EDR'),
+    )
+    name = models.CharField(max_length=255)
+    type = models.CharField(max_length=4, choices=TYPE_CHOICES)
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='detection_systems')
+    modified_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
+    
+    def __str__(self):
+        return self.name
+        
+    def save(self, *args, **kwargs):
+        if self.created_by and not self.created_by.is_staff:
+            raise PermissionDenied("Only staff members can create customers")
+        super().save(*args, **kwargs)
+    class Meta:
+        db_table = "DetectionSystem"
 
-    # Crear las tactics
-    if "tactics" in reader.fieldnames:
-        for row in reader:
-            tactic_id = row["ID"]
-            tactic_name = row["Name"]
+class MitreTactic(models.Model):
+    id = models.CharField(max_length=10, primary_key=True)
+    name = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='mitre_tactics')
+    modified_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
 
-            tactic, _ = MitreTactic.objects.get_or_create(id=tactic_id)
-            tactic.name = tactic_name
-            tactic.created_by = current_user
-            tactic.save()
+    class Meta:
+        db_table = 'MitreTatics'
+        verbose_name_plural = "MitreTatics"
+        
+    def __str__(self):
+        return f"{self.id} - {self.name}"
+        
+    def save(self, *args, **kwargs):
+        if self.created_by and not self.created_by.is_staff:
+            raise PermissionDenied("Only staff members can create customers")
+        super().save(*args, **kwargs)
 
-    # Volver al inicio del archivo CSV
-    file.seek(0)
 
-    # Crear las techniques
-    if "techniques" in reader.fieldnames:
-        for row in reader:
-            technique_id = row["ID"]
-            technique_name = row["Name"]
+class MitreTechnique(models.Model):
+    id = models.CharField(max_length=10, primary_key=True)
+    name = models.CharField(max_length=255)
+    mitre_tactics = models.ManyToManyField(MitreTactic, related_name='mitre_techniques')
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='mitre_techniques')
+    modified_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
+    
+    class Meta:
+        db_table = 'MitreTechniques'
+        verbose_name_plural = "MitreTechniques"
 
-            technique, _ = MitreTechnique.objects.get_or_create(id=technique_id)
-            technique.name = technique_name
-            technique.created_by = current_user
-            technique.save()
+    def __str__(self):
+        return f"{self.id} - {self.name}"
+        
+    def save(self, *args, **kwargs):
+        if self.created_by and not self.created_by.is_staff:
+            raise PermissionDenied("Only staff members can create customers")
+        super().save(*args, **kwargs)
 
-    # Volver al inicio del archivo CSV
-    file.seek(0)
+class Technologies(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='Technologies')
+    modified_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
 
-    # Crear las technologies
-    if "technologies" in reader.fieldnames:
-        for row in reader:
-            technology_id = row["ID"]
-            technology_name = row["Name"]
+    def save(self, *args, **kwargs):
+        if self.created_by and not self.created_by.is_staff:
+            raise PermissionDenied("Only staff members can create customers")
+        super().save(*args, **kwargs)
+        
+    class Meta:
+        db_table = 'Technologies'
+        verbose_name_plural = "Technologies"
 
-            technology, _ = Technologies.objects.get_or_create(id=technology_id)
-            technology.name = technology_name
-            technology.created_by = current_user
-            technology.save()
+    def __str__(self):
+        return self.name
 
-    # Volver al inicio del archivo CSV
-    file.seek(0)
+class Tag(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='Tag')
+    modified_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
 
-    # Crear las tags
-    if "tags" in reader.fieldnames:
-        for row in reader:
-            tag_id = row["ID"]
-            tag_name = row["Name"]
+    def save(self, *args, **kwargs):
+        if self.created_by and not self.created_by.is_staff:
+            raise PermissionDenied("Only staff members can create customers")
+        super().save(*args, **kwargs)
+    class Meta:
+        db_table = 'Tags'
 
-            tag, _ = Tag.objects.get_or_create(id=tag_id)
-            tag.name = tag_name
-            tag.created_by = current_user
-            tag.save()
+    def __str__(self):
+        return self.name
+    
+class Rule(models.Model):
+    
+    SEVERITY_CHOICES = [
+        ('Critical', 'Critical'),
+        ('Very High', 'Very High'),
+        ('High', 'High'),
+        ('Medium', 'Medium'),
+        ('Low', 'Low'),
+        ('Informational', 'Informational'),
+    ]
+    
+    id = models.CharField(max_length=10, primary_key=True)
+    name = models.CharField(max_length=255)
+    severity = models.CharField(max_length=20, choices=SEVERITY_CHOICES)
+    mitre_tactics = models.ManyToManyField(MitreTactic, related_name='rules')
+    mitre_techniques = models.ManyToManyField(MitreTechnique, related_name='rules')
+    technologies = models.ManyToManyField(Technologies, related_name='rules')
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='rules')
+    modified_at = models.DateTimeField(auto_now=True)
+    tags = models.ManyToManyField(Tag, related_name='rules',blank=True)
+    detection_systems = models.ManyToManyField(DetectionSystem, related_name='rules')
+    history = HistoricalRecords()
+    
+    def __str__(self):
+        return self.name
+        
+    def save(self, *args, **kwargs):
+        if self.created_by and not self.created_by.is_staff:
+            raise PermissionDenied("Only staff members can create customers")
+        super().save(*args, **kwargs)
+    
+    def clean(self):
+        super().clean()
+
+        # Verificar si las técnicas están alineadas con las tácticas de MITRE
+        for technique in self.mitre_techniques.all():
+            tactic_ids = technique.mitre_tactics.values_list('id', flat=True)
+            if self.mitre_tactics.filter(id__in=tactic_ids).exists():
+                continue  # La técnica está alineada con al menos una táctica asociada a la regla
+            raise ValidationError(f'The technique {technique.name} is not aligned with any of the MITRE tactics associated with the rule.')
+    
+    class Meta:
+        db_table = "Rules"
+
+
+        
+class Watcher(models.Model):
+    name = models.CharField(max_length=255)
+    customers = models.ManyToManyField(Customer)
+    detection_systems = models.ManyToManyField(DetectionSystem)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='watchers')
+    technologies = models.ManyToManyField(Technologies, related_name='watchers')
+    tags = models.ManyToManyField(Tag, related_name='watchers', blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()  
+
+    def __str__(self):
+        return self.name
+    
+    def save(self, *args, **kwargs):
+        if self.created_by and not self.created_by.is_staff:
+            raise PermissionDenied("Only staff members can create customers")
+        super().save(*args, **kwargs)
+    class Meta:
+        db_table = "Watchers"
+        
+class Report(models.Model):
+    name = models.CharField(max_length=255)
+    customers = models.ManyToManyField(Customer)
+    detection_systems = models.ManyToManyField(DetectionSystem)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='reports')
+    technologies = models.ManyToManyField(Technologies, related_name='reports')
+    tags = models.ManyToManyField(Tag, related_name='reports', blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()  
+
+    def save(self, *args, **kwargs):
+        if self.created_by and not self.created_by.is_staff:
+            raise PermissionDenied("Only staff members can create customers")
+        super().save(*args, **kwargs)
+        
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        db_table = "Reports"
+    
+    
