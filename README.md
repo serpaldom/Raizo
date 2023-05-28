@@ -56,8 +56,7 @@ $  pip install -r requirements.txt
 
 You can import the initial data to start to user the app using this command (in case of postgreSQL)
 ```bash
-$      
-```pg_restore --dbname=**database name** default_data -U **username**
+$  pg_restore --dbname=**database name** default_data -U **username**
 <br />
 
 > **Step 5** - Run it!
