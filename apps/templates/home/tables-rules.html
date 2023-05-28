@@ -13,7 +13,7 @@
 				<h4 class="page-title">Rules</h4>
 				<ul class="breadcrumbs">
 					<li class="nav-home">
-						<a href="#">
+						<a href="/index.html">
 							<i class="flaticon-home"></i>
 						</a>
 					</li>
@@ -21,13 +21,13 @@
 						<i class="flaticon-right-arrow"></i>
 					</li>
 					<li class="nav-item">
-						<a href="#">Tables</a>
+						<a href="/index.html">Data</a>
 					</li>
 					<li class="separator">
 						<i class="flaticon-right-arrow"></i>
 					</li>
 					<li class="nav-item">
-						<a href="#">Rules</a>
+						<a href="/tables-rules.html">Rules</a>
 					</li>
 				</ul>
 			</div>
@@ -113,7 +113,7 @@
 											<td>{{rule.detection_systems.all|join:", "}}</td>
 											<td>{{ rule.created_by }}</td>
 											<td>{{ rule.created_at }}</td>
-											{% if user.is_staff %}
+											{% if user.is_staff or user.is_superuser %}
 											<td>
 												<div class="form-button-action">
 													<a type="button" data-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit" href="/admin/home/rule/{{rule.id}}/change/">
@@ -131,6 +131,13 @@
 								</table>
 							</div>
 						</div>
+						<div class="card p-3">
+							<div class="d-flex">
+								<div>
+									<h5 class="mb-1"><b>Tip: </b><small class="text-muted">You can combine searches by using filters on different columns. Additionally, you can concatenate searches within the same column using the OR operator represented by the character '|'. This allows you to perform more advanced and flexible searches on the table.</small></h5>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -142,8 +149,8 @@
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 
-	<!-- Atlantis DEMO methods, don't include it in your project! -->
-	<script src="/static/assets/js/setting-demo2.js"></script>
+	
+	
 	<script>
 		$(document).ready(function() {
 			$('#basic-datatables').DataTable({

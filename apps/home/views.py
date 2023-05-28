@@ -250,7 +250,7 @@ def pages(request):
             # Rule - Tactic Mitre distribution
             try:
                 tactic_ids = db_manager.get_tactic_ids()
-                distribution_by_tactic = db_manager.get_distribution_by_tactic()
+                distribution_by_tactic = db_manager.get_distribution_by_tactic_id()
                 distribution_by_tactic_list = [next((tactic['count'] for tactic in distribution_by_tactic if tactic['mitre_tactics__id'] == tactic_id), 0) for tactic_id in tactic_ids]
             except:
                 # Set counts to 0 in case of an error
@@ -374,7 +374,29 @@ def pages(request):
             # Retrieve all reports from the database
             reports = db_manager.get_all_reports()
             context['reports'] = reports
-
+            
+        if load_template == 'mitre-att&ck.html':
+            
+            try:
+                # Rule - Tactic Mitre distribution
+                tactic_distribution = db_manager.get_rules_distribution_by_tactic()
+                technique_distribution = db_manager.get_rules_distribution_by_technique()
+                tactic_ids = db_manager.get_tactic_ids()
+                distribution_by_tactic = db_manager.get_distribution_by_tactic_id()
+                distribution_by_tactic_list = [next((tactic['count'] for tactic in distribution_by_tactic if tactic['mitre_tactics__id'] == tactic_id), 0) for tactic_id in tactic_ids]
+            except:
+                # Set counts to 0 in case of an error
+                tactic_distribution = None
+                distribution_by_tactic_list = None
+                technique_distribution = None
+                pass
+            
+            context.update({
+                "tactic_distribution": tactic_distribution,
+                'distribution_by_tactic_list' : distribution_by_tactic_list,
+                'technique_distribution' : technique_distribution
+                })
+            
         if load_template == 'profile.html':
             try:
                 # Retrieve user-specific data for the profile page

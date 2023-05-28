@@ -267,12 +267,50 @@ class DatabaseManager:
         Get the tactic IDs ordered by ID.
         """
         return MitreTactic.objects.values_list('id', flat=True).order_by('id')
+    
+    def get_tactic_names(self):
+        """
+        Get the tactic IDs ordered by ID.
+        """
+        return MitreTactic.objects.values_list('name', flat=True).order_by('id')
 
-    def get_distribution_by_tactic(self):
+    def get_distribution_by_tactic_id(self):
+        """
+        Get the distribution of rules by MITRE tactic ID.
+        """
+        return Rule.objects.values('mitre_tactics__id').annotate(count=Count('id')).order_by('mitre_tactics__id')
+    
+    def get_rules_distribution_by_tactic(self):
         """
         Get the distribution of rules by MITRE tactic.
         """
-        return Rule.objects.values('mitre_tactics__id').annotate(count=Count('id')).order_by('mitre_tactics__id')
+        tactic_distribution = []
+
+        tactics = MitreTactic.objects.all().order_by('id')
+        for tactic in tactics:
+            tactic_id = tactic.id
+            tactic_name = tactic.name
+            rule_count = Rule.objects.filter(mitre_tactics=tactic).count()
+
+            tactic_distribution.append({"mitre_tactic": f"{tactic_id} - {tactic_name}", "rule_count": rule_count})
+
+        return tactic_distribution
+
+    def get_rules_distribution_by_technique(self):
+        """
+        Get the distribution of rules by MITRE technique.
+        """
+        technique_distribution = []
+
+        techniques = MitreTechnique.objects.all().order_by('id')
+        for technique in techniques:
+            technique_id = technique.id
+            technique_name = technique.name
+            rule_count = Rule.objects.filter(mitre_techniques=technique).count()
+
+            technique_distribution.append({"mitre_technique": f"{technique_id} - {technique_name}", "rule_count": rule_count})
+
+        return technique_distribution
 
     def get_recent_actions(self, limit=6):
         """

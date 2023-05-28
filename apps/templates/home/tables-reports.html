@@ -13,7 +13,7 @@
 				<h4 class="page-title">Reports</h4>
 				<ul class="breadcrumbs">
 					<li class="nav-home">
-						<a href="#">
+						<a href="/index.html">
 							<i class="flaticon-home"></i>
 						</a>
 					</li>
@@ -21,13 +21,13 @@
 						<i class="flaticon-right-arrow"></i>
 					</li>
 					<li class="nav-item">
-						<a href="#">Tables</a>
+						<a href="/index.html">Data</a>
 					</li>
 					<li class="separator">
 						<i class="flaticon-right-arrow"></i>
 					</li>
 					<li class="nav-item">
-						<a href="#">Reports</a>
+						<a href="/tables-reports">Reports</a>
 					</li>
 				</ul>
 			</div>
@@ -93,7 +93,7 @@
 											{% endif %}
 											</td>
 											<td>{{ report.created_at }}</td>
-											{% if user.is_staff %}
+											{% if user.is_staff or user.is_superuser %}
 											<td>
 												<div class="form-button-action">
 													<a type="button" data-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit" href="/admin/home/report/{{report.id}}/change/">
@@ -122,8 +122,8 @@
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 
-	<!-- Atlantis DEMO methods, don't include it in your project! -->
-	<script src="/static/assets/js/setting-demo2.js"></script>
+	
+	
 	<script >
 		$(document).ready(function() {
 			$('#basic-datatables').DataTable({

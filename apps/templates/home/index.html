@@ -254,7 +254,7 @@
 				<div class="col-md-12 animate__animated animate__fadeIn">
 					<div class="card full-height">
 						<div class="card-header">
-							<div class="card-title">Rules | Watchers | Reports by Month</div>
+							<div class="card-title">Progression of Rules | Watchers | Reports by Month</div>
 						</div>
 						<div class="card-body">
 							<div class="chart-container"><div class="chartjs-size-monitor" style="position: absolute; inset: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
@@ -297,7 +297,7 @@
 				<div class="col-md-6 animate__animated animate__bounceInLeft">
 					<div class="card full-height">
 						<div class="card-header">
-							<h4 class="card-title">Rule Distribution by Technology</h4>
+							<h4 class="card-title">Distribution of Rules by Technology</h4>
 						</div>
 						<div class="card-body">
 							<div class="table-responsive"> 
@@ -328,7 +328,7 @@
 				<div class="col-md-6 animate__animated animate__bounceInRight">
 					<div class="card full-height">
 						<div class="card-header">
-							<h4 class="card-title">Rule Distribution by Detection System</h4>
+							<h4 class="card-title">Distribution of Rules by Detection System</h4>
 						</div>
 						<div class="card-body">
 							<div class="table-responsive"> 
@@ -1205,34 +1205,5 @@
 			fillColor: 'rgba(255, 165, 52, .14)'
 		});
 	</script>
-
-	<!-- Export to PDF script -->
-	<script>
-		$(document).ready(function() {
-		  $("#pdf-button").click(function() {
-			// Captura el contenido HTML de tu página y envíalo al servidor para generar el PDF
-			var htmlContent = document.documentElement.innerHTML;
-			
-			$.ajax({
-			  url: "export/dashboard",  // URL del endpoint en tu servidor para generar el PDF
-			  type: "POST",
-			  data: {
-				html_content: htmlContent,
-				csrfmiddlewaretoken: "{{ csrf_token }}"
-			  },
-			  success: function(response) {
-				// Manipula la respuesta del servidor si es necesario
-				console.log(response);
-			  },
-			  error: function(xhr, status, error) {
-				// Maneja los errores si es necesario
-				console.log(error);
-			  }
-			});
-		  });
-		});
-	  </script>
-		
-
 
 {% endblock javascripts %}

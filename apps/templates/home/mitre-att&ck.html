@@ -1,0 +1,346 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} MITRE ATT&CK {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+{% load static %}	
+	<div class="content">
+		<div class="panel-header" style="background-image: url('{% static 'assets/img/background.jpeg' %}');">
+			<div class="page-inner py-5">
+				<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
+					<div>
+						<h2 class="text-white pb-2 fw-bold animate__animated animate__pulse">MITRE ATT&CK</h2>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="page-inner mt--5">
+			<!-- Distribution of Rules by MITRE Tactic Chart -->
+			<div class="row">
+				<div class="col-md-6 animate__animated animate__bounceInLeft">
+					<div class="card full-height">
+						<div class="card-header">
+							<div class="card-title">Distribution of Rules by MITRE Tactic</div>
+						</div>
+						<div class="card-body">
+							<div class="chart-container"><div class="chartjs-size-monitor" style="position: absolute; inset: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
+								<canvas id="pieChart" style="width: 815px; height: 300px; display: block;" width="815" height="300" class="chartjs-render-monitor"></canvas>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 animate__animated animate__bounceInRight">
+					<div class="card full-height">
+						<div class="card-header">
+							<div class="card-title">Distribution of Rules by MITRE Tactic</div>
+						</div>
+						<div class="card-body">
+							<div class="chart-container"><div class="chartjs-size-monitor" style="position: absolute; inset: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"><div class="chartjs-size-monitor-expand" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div></div><div class="chartjs-size-monitor-shrink" style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;"><div style="position:absolute;width:200%;height:200%;left:0; top:0"></div></div></div>
+								<canvas id="barChart" style="width: 815px; height: 300px; display: block;" width="815" height="300" class="chartjs-render-monitor"></canvas>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Distribution of Rules by MITRE Tactic table -->
+			<div class="row">
+				<div class="col-md-12 animate__animated animate__fadeIn">
+					<div class="card full-height">
+						<div class="card-header">
+							<h4 class="card-title">Distribution of Rules by Tactics</h4>
+						</div>
+						<div class="card-body">
+							<div class="table-responsive">
+								<table id="tactic-distribution" class="display table table-striped table-hover">
+									<thead>
+										<tr>
+											<th>MITRE Tactic</th>
+											<th>Total Rules</th>
+										</tr>
+									</thead>
+									<tfoot>
+										<tr>
+											<th>MITRE Tactic</th>
+											<th>Total Rules</th>
+										</tr>
+									</tfoot>
+									<tbody>
+										{% for distribution in tactic_distribution %}
+											<tr>
+												<td>{{ distribution.mitre_tactic }}</td>
+												<td>{{ distribution.rule_count }}</td>
+											</tr>
+										{% endfor %}
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Distribution of Rules by MITRE Technique Table -->
+			<div class="row">
+				<div class="col-md-12 animate__animated animate__fadeIn">
+					<div class="card full-height">
+						<div class="card-header">
+							<h4 class="card-title">Distribution of Rules by Techniques</h4>
+						</div>
+						<div class="card-body">
+							<div class="table-responsive">
+								<table id="technique-distribution" class="display table table-striped table-hover">
+									<thead>
+										<tr>
+											<th>MITRE Technique</th>
+											<th>Total Rules</th>
+										</tr>
+									</thead>
+									<tfoot>
+										<tr>
+											<th>MITRE Technique</th>
+											<th>Total Rules</th>
+										</tr>
+									</tfoot>
+									<tbody>
+										{% for distribution in technique_distribution %}
+											<tr>
+												<td>{{ distribution.mitre_technique }}</td>
+												<td>{{ distribution.rule_count }}</td>
+											</tr>
+										{% endfor %}
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>	
+			  
+		</div>
+	</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script >
+	$(document).ready(function() {
+		$('#basic-datatables').DataTable({
+		});
+		
+		// Setup - add a text input to each footer cell
+		$('#tactic-distribution tfoot th').each(function () {
+			var title = $(this).text();
+			$(this).html('<input type="text" class="form-control" placeholder="Search ' + title + '" /><p></p>');
+		});
+
+		// DataTable
+		var table = $('#tactic-distribution').DataTable({
+			
+			initComplete: function (){
+				var r = $('#tactic-distribution tfoot tr');
+				r.find('th').each(function(){
+					$(this).css('padding', 8);
+				});
+				$('#tactic-distribution thead').append(r);
+				$('#search_0').css('text-align', 'center');
+			},
+			"aLengthMenu": [
+				[5, 10, 25, 50, 100, 200, -1],
+				[5, 10, 25, 50, 100, 200, "All"]
+			],
+			"iDisplayLength": 5
+		});
+
+		// To add filters like | -> "OR" for all columns
+		table.columns().eq(0).each(function (colIdx) {
+			$('input', table.column(colIdx).footer()).on('keyup change', function () {
+				table.column(colIdx)
+					.search(this.value.replace(/;/g, "|"), true, false)
+					.draw();
+			});
+		});
+
+
+		// Add Row
+		$('#add-row').DataTable({
+			"pageLength": 5,
+		});
+	});
+</script>
+
+<script >
+	$(document).ready(function() {
+		$('#basic-datatables').DataTable({
+		});
+		
+		// Setup - add a text input to each footer cell
+		$('#technique-distribution tfoot th').each(function () {
+			var title = $(this).text();
+			$(this).html('<input type="text" class="form-control" placeholder="Search ' + title + '" /><p></p>');
+		});
+
+		// DataTable
+		var table = $('#technique-distribution').DataTable({
+			
+			initComplete: function (){
+				var r = $('#technique-distribution tfoot tr');
+				r.find('th').each(function(){
+					$(this).css('padding', 8);
+				});
+				$('#technique-distribution thead').append(r);
+				$('#search_0').css('text-align', 'center');
+			},
+			"aLengthMenu": [
+				[5, 10, 25, 50, 100, 200, -1],
+				[5, 10, 25, 50, 100, 200, "All"]
+			],
+			"iDisplayLength": 5
+		});
+
+		// To add filters like | -> "OR" for all columns
+		table.columns().eq(0).each(function (colIdx) {
+			$('input', table.column(colIdx).footer()).on('keyup change', function () {
+				table.column(colIdx)
+					.search(this.value.replace(/;/g, "|"), true, false)
+					.draw();
+			});
+		});
+
+		// Add Row
+		$('#add-row').DataTable({
+			"pageLength": 5,
+		});
+	});
+</script>
+
+<script>
+	var pieChart = document.getElementById('pieChart').getContext('2d'),
+	barChart = document.getElementById('barChart').getContext('2d');
+	var myPieChart = new Chart(pieChart, {
+		type: 'pie',
+		data: {
+			datasets: [{
+				data: {{distribution_by_tactic_list}},
+				backgroundColor: [
+					"#1d7af3",  // Initial Access
+					"#f3545d",  // Execution
+					"#fdaf4b",  // Persistence
+					"#6ab04c",  // Privilege Escalation
+					"#f9c851",  // Defense Evasion
+					"#4b7ad3",  // Credential Access
+					"#ff8b34",  // Discovery
+					"#8d6cab",  // Lateral Movement
+					"#e36064",  // Collection
+					"#32b4a6",  // Command and Control
+					"#f9a9a3",  // Exfiltration
+					"#3c434c",  // Impact
+					"#b7dbab",  // Resource Development
+					"#aab9d9",  // Reconnaissance
+					],
+				borderWidth: 0
+			}],
+			labels: ['Initial Access ({{distribution_by_tactic_list.0}})', 'Execution ({{distribution_by_tactic_list.1}})', 'Persistence ({{distribution_by_tactic_list.2}})', 'Privilege Escalation ({{distribution_by_tactic_list.3}})', 'Defense Evasion ({{distribution_by_tactic_list.4}})', 'Credential Access ({{distribution_by_tactic_list.5}})', 'Discovery ({{distribution_by_tactic_list.6}})', 'Lateral Movement ({{distribution_by_tactic_list.7}})', 'Collection ({{distribution_by_tactic_list.8}})', 'Command and Control ({{distribution_by_tactic_list.9}})', 'Exfiltration ({{distribution_by_tactic_list.10}})', 'Impact ({{distribution_by_tactic_list.11}})', 'Resource Development ({{distribution_by_tactic_list.12}})', 'Reconnaissance ({{distribution_by_tactic_list.13}})']
+		},
+		options : {
+			responsive: true, 
+			maintainAspectRatio: false,
+			legend: {
+				position : 'bottom',
+				labels : {
+					fontColor: 'rgb(154, 154, 154)',
+					fontSize: 11,
+					usePointStyle : true,
+					padding: 20
+				}
+			},
+			pieceLabel: {
+				render: function(args) {
+					var value = args.value;
+					var percentage = args.percentage.toFixed(1) + '%';
+					return value + ' (' + percentage + ')';
+				  },
+				fontColor: 'white',
+				fontSize: 10,
+			},
+			tooltips: {
+				bodySpacing: 4,
+				mode:"nearest",
+				intersect: 0,
+				position:"nearest",
+				xPadding:10,
+				yPadding:10,
+				caretPadding:10
+			},
+			layout: {
+				padding: {
+					left: 20,
+					right: 20,
+					top: 20,
+					bottom: 20
+				}
+			}
+		}
+	});
+
+	var barChart = new Chart(barChart, {
+		type: 'horizontalBar',
+		data: {
+			datasets: [{
+				data: {{distribution_by_tactic_list}},
+				backgroundColor: [
+					"#1d7af3",  // Initial Access
+					"#f3545d",  // Execution
+					"#fdaf4b",  // Persistence
+					"#6ab04c",  // Privilege Escalation
+					"#f9c851",  // Defense Evasion
+					"#4b7ad3",  // Credential Access
+					"#ff8b34",  // Discovery
+					"#8d6cab",  // Lateral Movement
+					"#e36064",  // Collection
+					"#32b4a6",  // Command and Control
+					"#f9a9a3",  // Exfiltration
+					"#3c434c",  // Impact
+					"#b7dbab",  // Resource Development
+					"#aab9d9",  // Reconnaissance
+				],
+				borderWidth: 0
+			}],
+			labels: ['Initial Access ({{distribution_by_tactic_list.0}})', 'Execution ({{distribution_by_tactic_list.1}})', 'Persistence ({{distribution_by_tactic_list.2}})', 'Privilege Escalation ({{distribution_by_tactic_list.3}})', 'Defense Evasion ({{distribution_by_tactic_list.4}})', 'Credential Access ({{distribution_by_tactic_list.5}})', 'Discovery ({{distribution_by_tactic_list.6}})', 'Lateral Movement ({{distribution_by_tactic_list.7}})', 'Collection ({{distribution_by_tactic_list.8}})', 'Command and Control ({{distribution_by_tactic_list.9}})', 'Exfiltration ({{distribution_by_tactic_list.10}})', 'Impact ({{distribution_by_tactic_list.11}})', 'Resource Development ({{distribution_by_tactic_list.12}})', 'Reconnaissance ({{distribution_by_tactic_list.13}})']
+		},
+		options: {
+			responsive: true,
+			maintainAspectRatio: false,
+			legend: {
+				display: false
+			},
+			scales: {
+				xAxes: [{
+					ticks: {
+						beginAtZero: true
+					}
+				}],
+				yAxes: [{
+					ticks: {
+						fontSize: 11
+					}
+				}]
+			},
+			layout: {
+				padding: {
+					left: 20,
+					right: 20,
+					top: 20,
+					bottom: 20
+				}
+			}
+		}
+	});
+	
+</script>
+{% endblock javascripts %}
