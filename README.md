@@ -33,6 +33,14 @@ $ cd Ryuk
 > **Step 2** - Create the database (optional if you use PostgreSQL/MySQL)
 
 You can change what database engine to use in the settings.py file. Remember to change the options to connect to your database properly.
+
+PostgreSQL:
+
+1. Install PostgreSQL server
+2. Create a new role based in the username that django will use to manage the database (specify in the settings.py file)
+3. Grant all permissions to that new role
+4. Create a database based in the database name that django will use to manage the database (specify in the settings.py file)
+5. Make the new role as owner of the new database
 <br />
 
 <br />
@@ -46,9 +54,10 @@ $  pip install -r requirements.txt
 
 > **Step 4** - Import initial data
 
+You can import the initial data to start to user the app using this command (in case of postgreSQL)
 ```bash
-$  python manage.py loaddata first_run_data.json    
-```
+$      
+```pg_restore --dbname=**database name** default_data -U **username**
 <br />
 
 > **Step 5** - Run it!
