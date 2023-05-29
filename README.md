@@ -19,7 +19,7 @@ Furthermore, Raizo is fully integrated with the [MITRE ATT&CK framework](https:/
 
 <br /> 
 
-## ✨ Start the app in Docker
+## ✨ Install the App
 
 > **Step 1** - Download the code from the GH repository (using `GIT`) 
 
@@ -71,14 +71,11 @@ $  python manage.py runserver
 At this point, the app runs at `http://127.0.0.1:8000/`. 
 <br />
 
-## ✨ Create Users
+## ✨ Sign in
 
 By default, the app redirects guest users to authenticate. In order to access the private pages, follow this set up: 
 
-- Start the app via `flask run`
-- Access the `registration` page and create a new user:
-  - `http://127.0.0.1:8000/register/`
-- Access the `sign in` page and authenticate
+- Access the `sign in` page and authenticate (admin/admin)
   - `http://127.0.0.1:8000/login/`
 
 <br />
