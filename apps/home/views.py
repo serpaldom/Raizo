@@ -10,7 +10,6 @@ from django.urls import reverse
 from .DatabaseManager import DatabaseManager
 from .ExportManager import ExportManager
 from django.contrib import messages
-from django.views.decorators.cache import cache_page
 
 db_manager  = DatabaseManager()
 export_manager = ExportManager()
@@ -84,15 +83,15 @@ def pages(request):
             except Exception as e:
                 print(e)
                 # Set counts to 0 in case of an error
-                top_users_rules_last_day = 0
-                top_users_rules_last_week = 0
-                top_users_rules_last_month = 0
-                top_users_watchers_last_day = 0
-                top_users_watchers_last_week = 0
-                top_users_watchers_last_month = 0
-                top_users_reports_last_day = 0
-                top_users_reports_last_week = 0
-                top_users_reports_last_month = 0
+                top_users_rules_last_day = None
+                top_users_rules_last_week = None
+                top_users_rules_last_month = None
+                top_users_watchers_last_day = None
+                top_users_watchers_last_week = None
+                top_users_watchers_last_month = None
+                top_users_reports_last_day = None
+                top_users_reports_last_week = None
+                top_users_reports_last_month = None
 
             try:
                 # Retrieve the number of rules by day of the current week
@@ -254,7 +253,7 @@ def pages(request):
                 distribution_by_tactic_list = [next((tactic['count'] for tactic in distribution_by_tactic if tactic['mitre_tactics__id'] == tactic_id), 0) for tactic_id in tactic_ids]
             except:
                 # Set counts to 0 in case of an error
-                distribution_by_tactic = 0
+                distribution_by_tactic = None
                 pass
             
             # Rule - Severity distribution
@@ -276,7 +275,7 @@ def pages(request):
                 recent_rules = db_manager.get_recent_rules()
             except:
                 # Set recent_rules to an empty string in case of an error
-                recent_rules = ""
+                recent_rules = None
                 pass
             
             try:
@@ -353,27 +352,27 @@ def pages(request):
         if load_template == 'tables-customers.html':
             # Retrieve all customers from the database
             customers = db_manager.get_all_customers()
-            context['customers'] = customers
+            context.update({'customers':customers})
 
         if load_template == 'tables-detection_systems.html':
             # Retrieve all detection systems from the database
             detection_systems = db_manager.get_all_detection_systems()
-            context['detection_systems'] = detection_systems
+            context.update({'detection_systems':detection_systems})
 
         if load_template == 'tables-rules.html':
             # Retrieve all rules from the database
             rules = db_manager.get_all_rules()
-            context['rules'] = rules
+            context.update({'rules':rules})
 
         if load_template == 'tables-watchers.html':
             # Retrieve all watchers from the database
             watchers = db_manager.get_all_watchers()
-            context['watchers'] = watchers
+            context.update({'watchers':watchers})
 
         if load_template == 'tables-reports.html':
             # Retrieve all reports from the database
             reports = db_manager.get_all_reports()
-            context['reports'] = reports
+            context.update({'reports':reports})
             
         if load_template == 'mitre-att&ck.html':
             
@@ -400,24 +399,34 @@ def pages(request):
         if load_template == 'profile.html':
             try:
                 # Retrieve user-specific data for the profile page
-                context['user_rules'] = db_manager.get_user_rules(request.user)
-                context['user_watchers'] = db_manager.get_user_watchers(request.user)
-                context['user_reports'] = db_manager.get_user_reports(request.user)
-                
+                user_rules = db_manager.get_user_rules(request.user)
+                user_watchers = db_manager.get_user_watchers(request.user)
+                user_reports = db_manager.get_user_reports(request.user)
+
                 # Check if the user is in the top users of the last week
-                context['user_in_top_last_week'] = request.user in db_manager.get_top_users_rules_last_week(limit=5)
-                
+                user_in_top_last_week = request.user in db_manager.get_top_users_rules_last_week(limit=5)
+
                 # Check if the user is in the top users of the last month
-                context['user_in_top_last_month'] = request.user in db_manager.get_top_users_rules_last_month(limit=5)
+                user_in_top_last_month = request.user in db_manager.get_top_users_rules_last_month(limit=5)
+
+                # Update the context with the retrieved data
+                context.update({
+                    'user_rules': user_rules,
+                    'user_watchers': user_watchers,
+                    'user_reports': user_reports,
+                    'user_in_top_last_week': user_in_top_last_week,
+                    'user_in_top_last_month': user_in_top_last_month,
+                })
             except:
-                # Set user-specific data to empty strings in case of an error
-                context['user_rules'] = ""
-                context['user_watchers'] = ""
-                context['user_reports'] = ""
-                context['user_in_top_last_week'] = ""
-                context['user_in_top_last_month'] = ""
-                context['detection_systems'] = ""
-                pass
+                # Set user-specific data to None in case of an error
+                context.update({
+                    'user_rules': None,
+                    'user_watchers': None,
+                    'user_reports': None,
+                    'user_in_top_last_week': None,
+                    'user_in_top_last_month': None,
+                })
+
 
         if load_template == 'edit-profile.html':
             if request.method == 'POST':
@@ -476,9 +485,6 @@ def pages(request):
 
             elif object_to_export == 'reports':
                 return export_manager.export_reports()
-
-            elif object_to_export == 'dashboard':
-                print("TODO")
 
 
         html_template = loader.get_template('home/' + load_template)

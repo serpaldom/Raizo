@@ -5,9 +5,9 @@
 			<div class="logo-header" data-background-color="{% if request.user.userpreferences.theme_preference == 'dark' %}dark2{% else %}white{%endif%}">
 				
 				<a href="/index.html" class="logo">
-					<img src="/static/assets/img/logo.svg" alt="navbar brand" class="navbar-brand">
-					<span style="font-family: Arial, sans-serif; font-size: 20px; font-weight: bold; margin-left: 5px; color: #85A4E6;">Ryuk</span>
-				</a>									
+					<!-- Logo Image -->
+				</a>
+				{% if request.user.is_authenticated %}									
 				<button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse" data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon">
 						<i class="icon-menu"></i>
@@ -19,6 +19,7 @@
 						<i class="icon-menu"></i>
 					</button>
 				</div>
+				{% endif %}
 			</div>
 			<!-- End Logo Header -->
 

@@ -1,4 +1,3 @@
-import datetime
 from django.db.models import Count, Avg, Q
 from django.contrib.admin.models import LogEntry
 from .models import Customer, DetectionSystem, Rule, Watcher, Report, MitreTactic, MitreTechnique
