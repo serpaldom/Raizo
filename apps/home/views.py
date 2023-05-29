@@ -10,7 +10,11 @@ from django.urls import reverse
 from .DatabaseManager import DatabaseManager
 from .ExportManager import ExportManager
 from django.contrib import messages
-
+import os
+import csv
+from django.contrib.auth import get_user_model
+from django.core.exceptions import PermissionDenied
+from .models import MitreTactic, MitreTechnique, Technologies, Tag
 db_manager  = DatabaseManager()
 export_manager = ExportManager()
 
@@ -23,6 +27,7 @@ def index(request):
 
 @login_required(login_url="/login/")
 def pages(request):
+    
                 
     context = {}
     # All resource paths end in .html.
@@ -36,6 +41,7 @@ def pages(request):
         context['segment'] = load_template
 
         if load_template == 'index.html':
+                
             # Retrieve various counts from the database
             try:
                 total_customers = db_manager.get_total_customers()
@@ -363,6 +369,11 @@ def pages(request):
             # Retrieve all rules from the database
             rules = db_manager.get_all_rules()
             context.update({'rules':rules})
+            
+        if load_template == 'tables-rules-exceptions.html':
+            # Retrieve all rules exceptions from the database
+            exceptions = db_manager.get_all_exceptions()
+            context.update({'exceptions':exceptions})
 
         if load_template == 'tables-watchers.html':
             # Retrieve all watchers from the database

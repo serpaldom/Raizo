@@ -77,12 +77,26 @@
 							</a>
 						</li>
 						<li class="nav-item {% if 'tables-rules' in segment %} active {% endif %}">
-							<a  href="/tables-rules.html">
+							<a data-toggle="collapse" href="#Rules" class="collapsed" aria-expanded="false">
 								<i class="fas fa-ruler"></i>
-								<p>Rules</p>
+								<p>Rules & Exceptions</p>
+								<span class="caret"></span>
 							</a>
+							<div class="collapse" id="Rules">
+								<ul class="nav nav-collapse">
+									<li>
+										<a href="/tables-rules.html">
+											<span class="sub-item">Rules</span>
+										</a>
+									</li>
+									<li>
+										<a href="/tables-rules-exceptions.html">
+											<span class="sub-item">Rules Exceptions</span>
+										</a>
+									</li>
+								</ul>
+							</div>
 						</li>
-						
 						
 						<li class="nav-item {% if 'tables-watchers' in segment %} active {% endif %}">
 							<a  href="/tables-watchers.html">

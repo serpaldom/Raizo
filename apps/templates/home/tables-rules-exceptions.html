@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Customers {% endblock %} 
+{% block title %} Rule Exceptions {% endblock %} 
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -10,7 +10,7 @@
 	<div class="content">
 		<div class="page-inner">
 			<div class="page-header">
-				<h4 class="page-title">Watchers</h4>
+				<h4 class="page-title">Rules</h4>
 				<ul class="breadcrumbs">
 					<li class="nav-home">
 						<a href="/index.html">
@@ -27,7 +27,13 @@
 						<i class="flaticon-right-arrow"></i>
 					</li>
 					<li class="nav-item">
-						<a href="/tables-watchers">Watchers</a>
+						<a href="/index.html">Rules & Exceptions</a>
+					</li>
+					<li class="separator">
+						<i class="flaticon-right-arrow"></i>
+					</li>
+					<li class="nav-item">
+						<a href="/tables-rules.html">Rule Exceptions</a>
 					</li>
 				</ul>
 			</div>
@@ -35,26 +41,21 @@
 				<div class="col-md-12 animate__animated animate__fadeIn">
 					<div class="card full-height">
 						<div class="card-header">
-							<h4 class="card-title">Watchers List</h4>
-							<div class="d-flex justify-content-end">
-								<button id="export-btn" href="#" class="btn btn-info btn-border btn-round btn-sm mr-2">
-									<span class="btn-label">
-										<i class="fa fa-pencil"></i>
-									</span>
-									Export
-								</button>
-							</div>
+							<h4 class="card-title">Rule Exceptions List</h4>
 						</div>
 						<div class="card-body">
 							<div class="table-responsive">
-								<table id="multi-filter-search" class="display table table-striped table-hover" >
+								<table id="multi-filter-search" class="display table table-striped table-hover">
 									<thead>
 										<tr>
 											<th>ID</th>
-											<th>Name</th>
+											<th>Rule</th>
 											<th>Detection Systems</th>
 											<th>Customers</th>
-											<th>Created At (UTC)</th>
+											<th>Artifacts</th>
+											<th>Description</th>
+											<th>Created By</th>
+											<th>Created At</th>
 											{% if user.is_staff or user.is_superuser %}
 											<th>Action</th>
 											{% endif %}
@@ -63,43 +64,33 @@
 									<tfoot>
 										<tr>
 											<th>ID</th>
-											<th>Name</th>
+											<th>Rule</th>
 											<th>Detection Systems</th>
 											<th>Customers</th>
-											<th>Created At (UTC)</th>
+											<th>Artifacts</th>
+											<th>Description</th>
+											<th>Created By</th>
+											<th>Created At</th>
 										</tr>
 									</tfoot>
 									<tbody>
-										{% for watcher in watchers %}
+										{% for exception in exceptions %}
 										<tr>
-											<td>{{ watcher.id }}</td>
-											<td>{{ watcher.name }}</td>
-											<td>
-												{% if watcher.detection_systems.exists %}
-													{% for detection_system in watcher.detection_systems.all %}
-													  {{ detection_system.name }}{% if not forloop.last %}, {% endif %}
-													{% endfor %}
-												{% else %}
-													None
-												{% endif %}
-												</td>
-											<td>
-											{% if watcher.customers.exists %}
-												{% for customer in watcher.customers.all %}
-												  {{ customer.name }} ({{ customer.initials }}){% if not forloop.last %}, {% endif %}
-												{% endfor %}
-											{% else %}
-												None
-											{% endif %}
-											</td>
-											<td>{{ watcher.created_at }}</td>
-											{% if user.is_staff or user.is_superuser %}
+											<td>{{ exception.id }}</td>
+											<td>{{ exception.rule }}</td>
+											<td>{{ exception.detection_system.all|join:", " }}</td>
+											<td>{{ exception.customers.all|join:", "}}</td>
+											<td>{{ exception.artifact }}</td>
+											<td>{{ exception.description }}</td>
+											<td>{{ exception.created_by }}</td>
+											<td>{{ exception.created_at }}</td>
+											{% if user.is_staff %}
 											<td>
 												<div class="form-button-action">
-													<a type="button" data-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit" href="/admin/home/watcher/{{watcher.id}}/change/">
+													<a type="button" data-toggle="tooltip" title="Edit" class="btn btn-link btn-primary btn-lg" href="{% url 'admin:home_exceptions_change' exception.id %}">
 														<i class="fa fa-edit"></i>
 													</a>
-													<a type="button" data-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove" href="/admin/home/watcher/{{watcher.id}}/change/">
+													<a type="button" data-toggle="tooltip" title="Remove" class="btn btn-link btn-danger" href="{% url 'admin:home_exceptions_delete' exception.id %}">
 														<i class="fa fa-times"></i>
 													</a>
 												</div>
@@ -132,7 +123,7 @@
 
 	
 	
-	<script >
+	<script>
 		$(document).ready(function() {
 			$('#basic-datatables').DataTable({
 			});
@@ -215,7 +206,7 @@
 	</script>
 	<script>
 		const exportBtn = document.getElementById("export-btn");
-		const exportUrl = "export/watchers";
+		const exportUrl = "export/rules";
 	
 		exportBtn.addEventListener("click", () => {
 			window.location.href = exportUrl;

@@ -16,6 +16,8 @@ class UserPreferences(models.Model):
     ]
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     theme_preference = models.CharField(max_length=20, choices=THEME_CHOICES, default='dark')
+    class Meta:
+        verbose_name_plural = "User Preferences"
     
 @receiver(post_save, sender=User)
 def create_user_preferences(sender, instance, created, **kwargs):
@@ -36,7 +38,7 @@ class Customer(models.Model):
         return self.name
     
     def save(self, *args, **kwargs):
-        if self.created_by and not self.created_by.is_staff:
+        if self.created_by and not (self.created_by.is_staff or self.created_by.is_superuser):
             raise PermissionDenied("Only staff members can create customers")
         super().save(*args, **kwargs)
     
@@ -59,7 +61,7 @@ class DetectionSystem(models.Model):
         return self.name
         
     def save(self, *args, **kwargs):
-        if self.created_by and not self.created_by.is_staff:
+        if self.created_by and not (self.created_by.is_staff or self.created_by.is_superuser):
             raise PermissionDenied("Only staff members can create customers")
         super().save(*args, **kwargs)
     class Meta:
@@ -81,7 +83,7 @@ class MitreTactic(models.Model):
         return f"{self.id} - {self.name}"
         
     def save(self, *args, **kwargs):
-        if self.created_by and not self.created_by.is_staff:
+        if self.created_by and not (self.created_by.is_staff or self.created_by.is_superuser):
             raise PermissionDenied("Only staff members can create customers")
         super().save(*args, **kwargs)
 
@@ -103,7 +105,7 @@ class MitreTechnique(models.Model):
         return f"{self.id} - {self.name}"
         
     def save(self, *args, **kwargs):
-        if self.created_by and not self.created_by.is_staff:
+        if self.created_by and not (self.created_by.is_staff or self.created_by.is_superuser):
             raise PermissionDenied("Only staff members can create customers")
         super().save(*args, **kwargs)
 
@@ -115,7 +117,7 @@ class Technologies(models.Model):
     history = HistoricalRecords()
 
     def save(self, *args, **kwargs):
-        if self.created_by and not self.created_by.is_staff:
+        if self.created_by and not (self.created_by.is_staff or self.created_by.is_superuser):
             raise PermissionDenied("Only staff members can create customers")
         super().save(*args, **kwargs)
         
@@ -134,7 +136,7 @@ class Tag(models.Model):
     history = HistoricalRecords()
 
     def save(self, *args, **kwargs):
-        if self.created_by and not self.created_by.is_staff:
+        if self.created_by and not (self.created_by.is_staff or self.created_by.is_superuser):
             raise PermissionDenied("Only staff members can create customers")
         super().save(*args, **kwargs)
     class Meta:
@@ -171,7 +173,7 @@ class Rule(models.Model):
         return self.name
         
     def save(self, *args, **kwargs):
-        if self.created_by and not self.created_by.is_staff:
+        if self.created_by and not (self.created_by.is_staff or self.created_by.is_superuser):
             raise PermissionDenied("Only staff members can create customers")
         super().save(*args, **kwargs)
     
@@ -205,7 +207,7 @@ class Watcher(models.Model):
         return self.name
     
     def save(self, *args, **kwargs):
-        if self.created_by and not self.created_by.is_staff:
+        if self.created_by and not (self.created_by.is_staff or self.created_by.is_superuser):
             raise PermissionDenied("Only staff members can create customers")
         super().save(*args, **kwargs)
     class Meta:
@@ -223,7 +225,7 @@ class Report(models.Model):
     history = HistoricalRecords()  
 
     def save(self, *args, **kwargs):
-        if self.created_by and not self.created_by.is_staff:
+        if self.created_by and not (self.created_by.is_staff or self.created_by.is_superuser):
             raise PermissionDenied("Only staff members can create customers")
         super().save(*args, **kwargs)
         
@@ -233,4 +235,29 @@ class Report(models.Model):
     class Meta:
         db_table = "Reports"
     
-    
+
+class Exceptions(models.Model):
+    rule = models.ForeignKey(Rule, on_delete=models.CASCADE, related_name='exceptions')
+    detection_system = models.ManyToManyField(DetectionSystem)
+    customers = models.ManyToManyField(Customer)
+    artifact = models.TextField()
+    description = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+
+    def __str__(self):
+        return f"Exception for Rule: {self.rule} in Detection System: {self.detection_system}"
+
+    def save(self, *args, **kwargs):
+        self.artifact = self.artifact.replace(", ", ",").replace(" ,", ",")
+
+        self.artifact = ",".join([a.strip() for a in self.artifact.split(",")])
+
+        if self.created_by and not (self.created_by.is_staff or self.created_by.is_superuser):
+            raise PermissionDenied("Only staff members can create exceptions")
+        super().save(*args, **kwargs)
+
+    class Meta:
+        db_table = "Exceptions"
+        verbose_name_plural = "Exceptions"

@@ -2,8 +2,24 @@ from django import forms
 from .models import Rule, MitreTechnique, Technologies, Customer
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib.auth.forms import UserCreationForm
-from .models import UserPreferences
+from .models import UserPreferences, Exceptions, DetectionSystem
 from django.contrib.auth.models import User
+class ExceptionsForm(forms.ModelForm):
+    detection_system = forms.ModelMultipleChoiceField(
+    queryset=DetectionSystem.objects.all(),
+    widget=FilteredSelectMultiple('Detection System', is_stacked=False),
+    )
+    customers = forms.ModelMultipleChoiceField(
+        queryset=Customer.objects.all(),
+        widget=FilteredSelectMultiple('Customers', is_stacked=False),
+    )
+
+    class Meta:
+        model = Exceptions
+        fields = '__all__'
+        widgets = {
+            'artifact': forms.Textarea(attrs={'rows': 4, 'placeholder': 'Separate multiple artifacts with commas.'}),
+        }
 
 class RuleForm(forms.ModelForm):
     mitre_techniques = forms.ModelMultipleChoiceField(

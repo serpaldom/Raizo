@@ -1,6 +1,6 @@
 from django.db.models import Count, Avg, Q
 from django.contrib.admin.models import LogEntry
-from .models import Customer, DetectionSystem, Rule, Watcher, Report, MitreTactic, MitreTechnique
+from .models import Customer, DetectionSystem, Rule, Watcher, Report, MitreTactic, MitreTechnique, Exceptions
 from django.contrib.auth.models import User
 from django.db.models import Count
 from django.contrib.admin.models import LogEntry
@@ -42,6 +42,12 @@ class DatabaseManager:
         Get all rules.
         """
         return Rule.objects.all()
+    
+    def get_all_exceptions(self):
+        """
+        Get all exceptions.
+        """
+        return Exceptions.objects.all()
 
     def get_all_watchers(self):
         """

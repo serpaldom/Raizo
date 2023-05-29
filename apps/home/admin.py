@@ -3,12 +3,12 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
-from .models import Customer, DetectionSystem, Rule, MitreTactic, MitreTechnique, Watcher, Report, Technologies, Tag, UserPreferences
+from .models import Customer, DetectionSystem, Rule, MitreTactic, MitreTechnique, Watcher, Report, Technologies, Tag, UserPreferences, Exceptions
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.admin.models import LogEntry
 from django.contrib.sessions.models import Session
-from .forms import RuleForm, CustomerForm, CustomUserCreationForm
+from .forms import RuleForm, CustomerForm, CustomUserCreationForm, ExceptionsForm
 
 class UserPreferencesInline(admin.StackedInline):
     model = UserPreferences
@@ -137,6 +137,25 @@ class ReportAdmin(admin.ModelAdmin):
 class LogEntryAdmin(admin.ModelAdmin):
     list_display = ['action_time', 'user', 'content_type', 'object_id', 'action_flag']
     search_fields = ['user']
+
+class ExceptionsAdmin(admin.ModelAdmin):
+    list_display = ('id', 'rule', 'get_detection_systems', 'get_customers', 'created_at')
+    list_filter = ('rule', 'detection_system', 'created_at')
+    search_fields = ('rule__name', 'detection_system__name', 'customers__name')
+    readonly_fields = ('created_at', 'modified_at')
+    verbose_name_plural = "Exceptions"
+    form = ExceptionsForm
+
+    def get_customers(self, obj):
+        return ", ".join([customer.name for customer in obj.customers.all()])
+    
+    def get_detection_systems(self, obj):
+        return ", ".join([detection_system.name for detection_system in obj.detection_system.all()])
+
+    get_customers.short_description = 'Customers'
+    get_detection_systems.short_description = 'Detection System'
+    
+
      
 @receiver(post_save, sender=Customer)
 def apply_rule_to_new_customer(sender, instance, created, **kwargs):
@@ -161,5 +180,6 @@ admin.site.register(Session)
 admin.site.register(LogEntry, LogEntryAdmin)
 admin.site.unregister(User)
 admin.site.register(UserPreferences)  
-admin.site.register(User, UserAdmin)  
+admin.site.register(User, UserAdmin)
+admin.site.register(Exceptions,ExceptionsAdmin)  
 

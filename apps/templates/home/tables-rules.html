@@ -27,6 +27,12 @@
 						<i class="flaticon-right-arrow"></i>
 					</li>
 					<li class="nav-item">
+						<a href="/index.html">Rules & Exceptions</a>
+					</li>
+					<li class="separator">
+						<i class="flaticon-right-arrow"></i>
+					</li>
+					<li class="nav-item">
 						<a href="/tables-rules.html">Rules</a>
 					</li>
 				</ul>
@@ -58,9 +64,10 @@
 											<th>Technologies</th>
 											<th>Tags</th>
 											<th>Detection Systems</th>
+											<th>Total Exceptions</th>
 											<th>Created By</th>
 											<th>Created At (UTC)</th>
-											{% if user.is_staff %}
+											{% if user.is_staff or user.is_superuser %}
 											<th>Action</th>
 											{% endif %}
 										</tr>
@@ -75,6 +82,7 @@
 											<th>Technologies</th>
 											<th>Tags</th>
 											<th>Detection Systems</th>
+											<th>Total Exceptions</th>
 											<th>Created By</th>
 											<th>Created At (UTC)</th>
 										</tr>
@@ -111,6 +119,7 @@
 											<td>{{rule.technologies.all|join:", "}}</td>
 											<td>{{rule.tags.all|join:", "}}</td>
 											<td>{{rule.detection_systems.all|join:", "}}</td>
+											<td>{{rule.exceptions.count}}</td>
 											<td>{{ rule.created_by }}</td>
 											<td>{{ rule.created_at }}</td>
 											{% if user.is_staff or user.is_superuser %}

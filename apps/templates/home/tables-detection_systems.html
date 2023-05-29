@@ -55,7 +55,7 @@
 											<th>Type</th>
 											<th>Customers</th>
 											<th>Created At (UTC)</th>
-											{% if user.is_staff %}
+											{% if user.is_staff or user.is_superuser %}
 											<th>Action</th>
 											{% endif %}
 										</tr>

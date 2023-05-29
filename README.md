@@ -83,11 +83,15 @@ $  pip install -r requirements.txt
 
 <br />
 
-> **Step 4** - Import initial data
+> **Step 4** - Create a superuser & import initial data
 
-You can import the initial data to start to user the app using this command (in case of postgreSQL)
+Create a super user:
 ```bash
-$  pg_restore --dbname=database name default_data -U username
+$  python3 manage.py createsuperuser
+```
+And then, import initial data
+```bash
+$   python3 manage.py loaddata default.json    
 ```
 <br />
 
@@ -173,11 +177,9 @@ The project is coded using a simple and intuitive structure presented below:
 
 **1**. Ability to upload CSV files in a specific format to bulk create multiple rules, customers, reports, and watchers simultaneously.
 
-**2**. Add the ability to register general exceptions for specific rules and/or customers.
+**2**. Add the capability for automatic synchronization of rule creation/deletion with detection system instances such as Elastic. 
 
-**3**. Add the capability for automatic synchronization of rule creation/deletion with detection system instances such as Elastic. 
-
-**4**. Dynamic generation of reports in PDF format. 
+**3**. Dynamic generation of reports in PDF format. 
 
 
 <br />
