@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Dashboard {% endblock %} 
+{% block title %} Overall Statistics {% endblock %} 
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -12,7 +12,7 @@
 			<div class="page-inner py-5">
 				<div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
 					<div>
-						<h2 class="text-white pb-2 fw-bold animate__animated animate__pulse">Dashboard</h2>
+						<h2 class="text-white pb-2 fw-bold animate__animated animate__pulse">Overall Statistics</h2>
 					</div>
 				</div>
 			</div>
@@ -24,7 +24,7 @@
 				<div class="col-md-12 animate__animated animate__fadeIn">
 					<div class="card full-height">
 						<div class="card-body">
-							<div class="card-title">Overall Statistics</div>
+							<div class="card-title"></div>
 							<p></p>
 							<div class="row">
 								<div class="col d-flex">
@@ -640,7 +640,7 @@
 			<!-- Activity Stats -->
 			<div class="row">
 				{% if user.is_superuser %}
-					<div class="col-md-3 animate__animated animate__fadeIn">
+					<div class="col-md-4 animate__animated animate__fadeIn">
 						<div class="card full-height">
 							<div class="card-header">
 								<h4 class="card-title">Current Active Sessions {% if current_sessions %}({{current_sessions.count}}){% else %}(0){% endif %}</h4>
@@ -658,7 +658,7 @@
 											{% for session in current_sessions %}
 												<tr>
 													<td>{{session.session_key}}</td>
-													<td>{{session.expire_date }}</td>
+													<td>{{session.expire_date}}</td>
 												</tr>
 											{% endfor %}
 										</tbody>
@@ -668,7 +668,7 @@
 						</div>
 					</div>
 				{% endif %}
-				<div class="col-md-{% if user.is_superuser %}3{% else %}6{% endif %} animate__animated animate__fadeIn">
+				<div class="col-md-{% if user.is_superuser %}2{% else %}6{% endif %} animate__animated animate__fadeIn">
 					<div class="card full-height">
 						<div class="card-header">
 							<div class="card-title">Last Activity</div>
