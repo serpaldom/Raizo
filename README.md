@@ -44,6 +44,7 @@ These screenshots showcase the user-friendly interface and powerful features of 
 - Database: `sqlite or PostgreSQL/MySQL (recomended for big enviroments with a lot of users which need concurrency)`
 - UI-Ready app, Django Native ORM
 - `Session-Based authentication`
+- Frontend based in [Atlantis Lite](https://themekita.com/demo-atlantis-lite-bootstrap/) 
 
 <br />
 
