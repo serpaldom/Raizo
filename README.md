@@ -17,20 +17,25 @@ Main Dashboard (2):
 <kbd>
   <img src="media/main_dashboard2.png">
 </kbd>
+
 Main Dashboard (3):
 <kbd>
   <img src="media/main_dashboard3.png">
 </kbd>
+
 MITRE Dashboard:
 <kbd>
   <img src="media/mitre_dashboard.png">
 </kbd>
+
 Rules Table:
 <kbd>
   <img src="media/rules_table.png">
 </kbd>
 
 These screenshots showcase the user-friendly interface and powerful features of Raizo, demonstrating its effectiveness in managing cybersecurity assets.
+
+**And, for those people who fear the dark, Raizo has a light mode available to users who configure it in their profile preferences.**
 <br />
 
 > 🚀 Built with [Django](https://www.djangoproject.com/)
