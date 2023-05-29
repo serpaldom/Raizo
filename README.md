@@ -5,7 +5,30 @@
 Raizo arises from the need for a specialized tool that enables the unified management of assets' inventory developed in each platform or client, while maintaining precise control over who, how, when, and where an asset affects the detection system. It provides SOC technicians and managers with the ability to build a robust and unified inventory using a relational database. This eliminates the dependence on generic tools like Excel, which, although powerful, do not meet more advanced needs such as information insertion control or long-term scalability.
 
 Furthermore, Raizo is fully integrated with the [MITRE ATT&CK framework](https://attack.mitre.org/). This integration allows for a comprehensive view of the cybersecurity protection status of your SOC.
-  
+
+
+<kbd>
+  <img src="media/main_dashboard.png" alt="Main Dashboard">
+</kbd>
+
+
+<kbd>
+  <img src="media/main_dashboard2.png" alt="Main Dashboard 2">
+</kbd>
+
+
+<kbd>
+  <img src="media/main_dashboard3.png" alt="Main Dashboard 3">
+</kbd>
+
+<kbd>
+  <img src="media/mitre_dashboard.png" alt="MITRE Dashboard">
+</kbd>
+
+<kbd>
+  <img src="media/rules_table.png" alt="Rules Table">
+</kbd>
+
 <br />
 
 > 🚀 Built with [Django](https://www.djangoproject.com/)
