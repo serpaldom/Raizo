@@ -97,13 +97,11 @@ $   python3 manage.py loaddata default.json
 
 > **Step 5** - Run it!
 
-Credentials for superuser: admin/admin
-
 ```bash
 $  python manage.py runserver   
 ```
 
-At this point, the app runs at `http://127.0.0.1:8000/`. 
+At this point, the app runs at `http://127.0.0.1:8000/`. User the superuser credentiales that you created before. 
 <br />
 
 ## ✨ Sign in
