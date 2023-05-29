@@ -140,13 +140,13 @@ The project is coded using a simple and intuitive structure presented below:
 
 ## ✨ Future features
 
-**1** Ability to upload CSV files in a specific format to bulk create multiple rules, customers, reports, and watchers simultaneously.
+**1**. Ability to upload CSV files in a specific format to bulk create multiple rules, customers, reports, and watchers simultaneously.
 
-**2** Add the ability to register general exceptions for specific rules and/or customers.
+**2**. Add the ability to register general exceptions for specific rules and/or customers.
 
-**3** Add the capability for automatic synchronization of rule creation/deletion with detection system instances such as Elastic. 
+**3**. Add the capability for automatic synchronization of rule creation/deletion with detection system instances such as Elastic. 
 
-**4** Dynamic generation of reports in PDF format. 
+**4**. Dynamic generation of reports in PDF format. 
 
 
 <br />
