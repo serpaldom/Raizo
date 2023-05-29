@@ -6,29 +6,31 @@ Raizo arises from the need for a specialized tool that enables the unified manag
 
 Furthermore, Raizo is fully integrated with the [MITRE ATT&CK framework](https://attack.mitre.org/). This integration allows for a comprehensive view of the cybersecurity protection status of your SOC.
 
+Take a look at some screenshots of Raizo's interface below:
 
+Main Dashboard:
 <kbd>
-  <img src="media/main_dashboard.png" alt="Main Dashboard">
+  <img src="media/main_dashboard.png">
 </kbd>
 
-
+Main Dashboard (2):
 <kbd>
-  <img src="media/main_dashboard2.png" alt="Main Dashboard 2">
+  <img src="media/main_dashboard2.png">
+</kbd>
+Main Dashboard (3):
+<kbd>
+  <img src="media/main_dashboard3.png">
+</kbd>
+MITRE Dashboard:
+<kbd>
+  <img src="media/mitre_dashboard.png">
+</kbd>
+Rules Table:
+<kbd>
+  <img src="media/rules_table.png">
 </kbd>
 
-
-<kbd>
-  <img src="media/main_dashboard3.png" alt="Main Dashboard 3">
-</kbd>
-
-<kbd>
-  <img src="media/mitre_dashboard.png" alt="MITRE Dashboard">
-</kbd>
-
-<kbd>
-  <img src="media/rules_table.png" alt="Rules Table">
-</kbd>
-
+These screenshots showcase the user-friendly interface and powerful features of Raizo, demonstrating its effectiveness in managing cybersecurity assets.
 <br />
 
 > 🚀 Built with [Django](https://www.djangoproject.com/)
