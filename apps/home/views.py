@@ -33,7 +33,11 @@ def pages(request):
     # All resource paths end in .html.
     # Pick out the html file name from the url. And load that template.
     try:
-        load_template = request.path.split('/')[-1]
+        if request.GET:
+            load_template = request.path.split('?')[0].split('/')[-1]
+            params = request.GET
+        else:
+            load_template = request.path.split('/')[-1]
 
         if load_template == 'admin':
             return HttpResponseRedirect(reverse('admin:index'))
@@ -384,6 +388,16 @@ def pages(request):
             # Retrieve all reports from the database
             reports = db_manager.get_all_reports()
             context.update({'reports':reports})
+            
+        if load_template == 'rule_details.html':
+            # Retrieve all reports from the database
+            try:
+                rule_details = db_manager.get_rule_details(params['id'])
+                exceptions = db_manager.get_exceptions_by_rule_id(params['id'])
+                context.update({'rule_details':rule_details,
+                                'exceptions':exceptions})
+            except Exception as e:
+                print(e)
             
         if load_template == 'mitre-att&ck.html':
             

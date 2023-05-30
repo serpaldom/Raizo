@@ -96,6 +96,37 @@ class DatabaseManager:
         Get the total number of reports.
         """
         return Report.objects.count()
+    
+    def get_rule_details(self, rule_id):
+        """
+        Get all details of a rule and its exceptions.
+        """
+        try:
+            rule = Rule.objects.get(id=rule_id)
+
+            rule_data = {
+                'id': rule.id,
+                'name': rule.name,
+                'severity': rule.severity,
+                'mitre_tactics': list(rule.mitre_tactics.values_list('name', flat=True)),
+                'mitre_techniques': list(rule.mitre_techniques.values_list('name', flat=True)),
+                'technologies': list(rule.technologies.values_list('name', flat=True)),
+                'tags': list(rule.tags.values_list('name', flat=True)),
+                'detection_systems': list(rule.detection_systems.values_list('name', flat=True)),
+                'created_by': rule.created_by.username,
+                'created_at': rule.created_at,
+            }
+
+            return rule_data
+        except Rule.DoesNotExist:
+            return None
+    def get_exceptions_by_rule_id(self, rule_id):
+        """
+        Get all exceptions for a specific rule.
+        """
+        return Exceptions.objects.filter(rule_id=rule_id)
+
+
 
     def get_top_users_rules_last_day(self, limit=3):
         """

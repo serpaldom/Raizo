@@ -1,6 +1,6 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} Customers {% endblock %} 
+{% block title %} Page Blank {% endblock %} 
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %}
@@ -10,7 +10,7 @@
 	<div class="content">
 		<div class="page-inner">
 			<div class="page-header">
-				<h4 class="page-title">Rules</h4>
+				<h4 class="page-title">Rule Details</h4>
 				<ul class="breadcrumbs">
 					<li class="nav-home">
 						<a href="/index.html">
@@ -29,27 +29,116 @@
 					<li class="nav-item">
 						<a href="/index.html">Rules & Exceptions</a>
 					</li>
+					<li class="nav-item">
+						<a href="/tables-rules.html">Rules</a>
+					</li>
 					<li class="separator">
 						<i class="flaticon-right-arrow"></i>
 					</li>
 					<li class="nav-item">
-						<a href="/tables-rules.html">Rules</a>
+						<a href="#">Rule Details</a>
 					</li>
 				</ul>
+			</div>
+			<div class ="row">
+				<div class="col-md-12 animate__animated animate__fadeIn">
+					<div class="card">
+						<div class="card-header">
+							<h4 class="card-title">Details</h4>
+							<div class="d-flex justify-content-end align-items-center">
+								{% if user.is_staff %}
+									<a type="button" data-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit" href="/admin/home/rule/{{rule_details.id}}/change/">
+										<i class="fa fa-edit"></i>
+									</a>
+									<a type="button" data-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg btn-warning " data-original-title="Back" href="/tables-rules.html">
+										<i class="icon-arrow-left"></i>
+									</a>
+								{% endif %}
+							</div>
+							
+						</div>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label class="control-label">ID</label>
+										<p class="form-control-static">{{ rule_details.id }}</p>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label class="control-label">Name</label>
+										<p class="form-control-static">{{ rule_details.name }}</p>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label class="control-label">Severity</label>
+										<p class="form-control-static">{{ rule_details.severity }}</p>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label class="control-label">Mitre Tactics</label>
+										<p class="form-control-static">{{ rule_details.mitre_tactics|join:", " }}</p>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label class="control-label">Mitre Techniques</label>
+										<p class="form-control-static">{{ rule_details.mitre_techniques|join:", " }}</p>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label class="control-label">Technologies</label>
+										<p class="form-control-static">{{ rule_details.technologies|join:", " }}</p>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label class="control-label">Tags</label>
+										<p class="form-control-static">{{ rule_details.tags|join:", " }}</p>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label class="control-label">Detection Systems</label>
+										<p class="form-control-static">{{ rule_details.detection_systems|join:", " }}</p>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label class="control-label">Created By</label>
+										<p class="form-control-static">{{ rule_details.created_by }}</p>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label class="control-label">Created At (UTC)</label>
+										<p class="form-control-static">{{ rule_details.created_at }}</p>
+									</div>
+								</div>
+							</div>
+							
+							
+						</div>
+					</div>
+				</div>
 			</div>
 			<div class="row">
 				<div class="col-md-12 animate__animated animate__fadeIn">
 					<div class="card">
 						<div class="card-header">
-							<h4 class="card-title">Total Rules List</h4>
-							<div class="d-flex justify-content-end">
-								<button id="export-btn" href="#" class="btn btn-info btn-border btn-round btn-sm mr-2">
-									<span class="btn-label">
-										<i class="fa fa-pencil"></i>
-									</span>
-									Export
-								</button>
-							</div>
+							<h4 class="card-title">Rule Exceptions ({{exceptions.count}})</h4>
 						</div>
 						<div class="card-body">
 							<div class="table-responsive">
@@ -57,16 +146,12 @@
 									<thead>
 										<tr>
 											<th>ID</th>
-											<th>Name</th>
-											<th>Severity</th>
-											<th>Mitre Tactics</th>
-											<th>Mitre Techniques</th>
-											<th>Technologies</th>
-											<th>Tags</th>
 											<th>Detection Systems</th>
-											<th>Total Exceptions</th>
+											<th>Customers</th>
+											<th>Artifacts</th>
+											<th>Description</th>
 											<th>Created By</th>
-											<th>Created At (UTC)</th>
+											<th>Created At</th>
 											{% if user.is_staff or user.is_superuser %}
 											<th>Action</th>
 											{% endif %}
@@ -75,63 +160,31 @@
 									<tfoot>
 										<tr>
 											<th>ID</th>
-											<th>Name</th>
-											<th>Severity</th>
-											<th>Mitre Tactics</th>
-											<th>Mitre Techniques</th>
-											<th>Technologies</th>
-											<th>Tags</th>
 											<th>Detection Systems</th>
-											<th>Total Exceptions</th>
+											<th>Customers</th>
+											<th>Artifacts</th>
+											<th>Description</th>
 											<th>Created By</th>
-											<th>Created At (UTC)</th>
+											<th>Created At</th>
 										</tr>
 									</tfoot>
 									<tbody>
-										{% for rule in rules %}
+										{% for exception in exceptions %}
 										<tr>
-											<td>{{ rule.id }}</td>
-											<td>{{ rule.name }}</td>
-											<td>{{ rule.severity }}</td>
-											{% if rule.mitre_tactics.count < 3  %}
-												<td>{{ rule.mitre_tactics.all|join:", " }}</td>
-											{% elif rule.mitre_tactics.count >= 3 %}
-											<td>
-												{% for tactic in rule.mitre_tactics.all %}
-													{{ tactic }}<br>
-												{% endfor %}
-											</td>
-											{% else %}
-												<td>None</td>
-											{% endif %}
-
-											{% if rule.mitre_techniques.count < 3 %}
-												<td>{{ rule.mitre_techniques.all|join:", " }}</td>
-											{% elif rule.mitre_techniques.count >= 3 %}
-											<td>
-												{% for technique in rule.mitre_techniques %}
-												{{ technique }}<br>
-												{% endfor %}
-											</td>
-											{%else%}
-												<td>None</td>
-											{% endif %}
-											<td>{{rule.technologies.all|join:", "}}</td>
-											<td>{{rule.tags.all|join:", "}}</td>
-											<td>{{rule.detection_systems.all|join:", "}}</td>
-											<td>{{rule.exceptions.count}}</td>
-											<td>{{ rule.created_by }}</td>
-											<td>{{ rule.created_at }}</td>
-											{% if user.is_staff or user.is_superuser %}
+											<td>{{ exception.id }}</td>
+											<td>{{ exception.detection_system.all|join:", " }}</td>
+											<td>{{ exception.customers.all|join:", "}}</td>
+											<td>{{ exception.artifact }}</td>
+											<td>{{ exception.description }}</td>
+											<td>{{ exception.created_by }}</td>
+											<td>{{ exception.created_at }}</td>
+											{% if user.is_staff %}
 											<td>
 												<div class="form-button-action">
-													<a type="button" data-toggle="tooltip" title="" class="btn btn-link btn-success btn-lg" data-original-title="View Details" href="/rule_details.html?id={{rule.id}}">
-														<i class="fab fa-wpforms"></i>
-													</a>
-													<a type="button" data-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit" href="/admin/home/rule/{{rule.id}}/change/">
+													<a type="button" data-toggle="tooltip" title="Edit" class="btn btn-link btn-primary btn-lg" href="{% url 'admin:home_exceptions_change' exception.id %}">
 														<i class="fa fa-edit"></i>
 													</a>
-													<a type="button" data-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg btn-danger" data-original-title="Remove" href="/admin/home/rule/{{rule.id}}/change/">
+													<a type="button" data-toggle="tooltip" title="Remove" class="btn btn-link btn-danger" href="{% url 'admin:home_exceptions_delete' exception.id %}">
 														<i class="fa fa-times"></i>
 													</a>
 												</div>
@@ -160,6 +213,7 @@
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
+
 {% block javascripts %}
 
 	
@@ -255,3 +309,4 @@
 	</script>
 
 {% endblock javascripts %}
+

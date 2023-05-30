@@ -33,13 +33,13 @@
 						<i class="flaticon-right-arrow"></i>
 					</li>
 					<li class="nav-item">
-						<a href="/tables-rules.html">Rule Exceptions</a>
+						<a href="#">Rules Exceptions</a>
 					</li>
 				</ul>
 			</div>
 			<div class="row">
 				<div class="col-md-12 animate__animated animate__fadeIn">
-					<div class="card full-height">
+					<div class="card">
 						<div class="card-header">
 							<h4 class="card-title">Rule Exceptions List</h4>
 						</div>
@@ -90,7 +90,7 @@
 													<a type="button" data-toggle="tooltip" title="Edit" class="btn btn-link btn-primary btn-lg" href="{% url 'admin:home_exceptions_change' exception.id %}">
 														<i class="fa fa-edit"></i>
 													</a>
-													<a type="button" data-toggle="tooltip" title="Remove" class="btn btn-link btn-danger" href="{% url 'admin:home_exceptions_delete' exception.id %}">
+													<a type="button" data-toggle="tooltip" title="Remove" class="btn btn-link btn-primary btn-lg btn-danger" href="{% url 'admin:home_exceptions_delete' exception.id %}">
 														<i class="fa fa-times"></i>
 													</a>
 												</div>
