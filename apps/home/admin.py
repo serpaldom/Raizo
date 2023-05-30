@@ -21,7 +21,8 @@ class UserAdmin(BaseUserAdmin):
         
 class CustomerAdmin(admin.ModelAdmin):
     form = CustomerForm
-    list_display = ('id', 'name', 'initials', 'detection_systems_display', 'update_general_rules', 'created_by', 'created_at', 'modified_at')
+    list_display = ('id', 'name', 'initials', 'detection_systems_display', 'created_by', 'created_at', 'modified_at')
+    list_filter = ('name', 'created_by','created_at', 'modified_at')
     search_fields = ['name']
 
     def detection_systems_display(self, obj):
@@ -30,18 +31,22 @@ class CustomerAdmin(admin.ModelAdmin):
     
 class MitreTacticAdminList(admin.ModelAdmin):
     list_display = ('id', 'name', 'created_by','created_at', 'modified_at')
+    list_filter = ('id', 'name', 'created_by','created_at', 'modified_at')
     search_fields = ['name']
 
 class TechonologiesAdminList(admin.ModelAdmin):
     list_display = ('id', 'name', 'created_by','created_at', 'modified_at')
+    list_filter = ('name', 'created_by','created_at', 'modified_at')
     search_fields = ['name']
     
 class TagsAdminList(admin.ModelAdmin):
     list_display = ('id', 'name', 'created_by','created_at', 'modified_at')
+    list_filter = ('name', 'created_by','created_at', 'modified_at')
     search_fields = ['name']
     
 class MitretechniqueAdminList(admin.ModelAdmin):
     list_display = ('id', 'name', 'mitre_tactics_display', 'created_by', 'created_at', 'modified_at')
+    list_filter = ('id', 'name', 'created_by','created_at', 'modified_at')
     search_fields = ['name']
 
     def mitre_tactics_display(self, obj):
@@ -53,10 +58,12 @@ class MitretechniqueAdminList(admin.ModelAdmin):
 
 class DetectionSystemList(admin.ModelAdmin):
     list_display = ('id', 'name', 'type', 'created_by','created_at', 'modified_at')
+    list_filter = ('id', 'name', 'type', 'created_by','created_at', 'modified_at')
     search_fields = ['name']
     
 class RuleList(admin.ModelAdmin):
     list_display = ('id', 'name', 'severity', 'mitre_tactics_display', 'mitre_techniques_display', 'technologies_display', 'tags_display', 'created_by', 'detection_systems_display', 'created_at','modified_at')
+    list_filter = ('id','name','severity', 'created_at', 'modified_at')
     search_fields = ['name']
     form = RuleForm
     def mitre_tactics_display(self, obj):
@@ -88,6 +95,7 @@ class RuleList(admin.ModelAdmin):
 
 class WatcherAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'customers_display', 'detection_systems_display', 'technologies_display', 'tags_display', 'created_at', 'modified_at')
+    list_filter = ('name', 'created_at', 'modified_at')
     search_fields = ['name']
 
     def customers_display(self, obj):
@@ -112,6 +120,7 @@ class WatcherAdmin(admin.ModelAdmin):
 
 class ReportAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'customers_display', 'detection_systems_display', 'technologies_display', 'tags_display', 'created_at', 'modified_at')
+    list_filter = ('name', 'created_at', 'modified_at')
     search_fields = ['name']
 
     def customers_display(self, obj):
@@ -139,8 +148,8 @@ class LogEntryAdmin(admin.ModelAdmin):
     search_fields = ['user']
 
 class ExceptionsAdmin(admin.ModelAdmin):
-    list_display = ('id', 'rule', 'get_detection_systems', 'get_customers', 'created_at')
-    list_filter = ('rule', 'detection_system', 'created_at')
+    list_display = ('id', 'rule', 'get_detection_systems', 'get_customers', 'created_at', 'modified_at')
+    list_filter = ('rule', 'detection_system', 'created_at', 'modified_at')
     search_fields = ('rule__name', 'detection_system__name', 'customers__name')
     readonly_fields = ('created_at', 'modified_at')
     verbose_name_plural = "Exceptions"
