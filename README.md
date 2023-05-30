@@ -33,6 +33,11 @@ Rules Table:
   <img src="media/rules_table.png">
 </kbd>
 
+Rules Details & Exceptions:
+<kbd>
+  <img src="media/rules_details.png">
+</kbd>
+
 These screenshots showcase the user-friendly interface and powerful features of Raizo, demonstrating its effectiveness in managing cybersecurity assets.
 
 **And, for those people who fear the dark, Raizo has a light mode available to users who configure it in their profile preferences.**
