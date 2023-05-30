@@ -35,7 +35,7 @@ Rules Table:
 
 Rules Details & Exceptions:
 <kbd>
-  <img src="media/rules_details.png">
+  <img src="media/rule_details.png">
 </kbd>
 
 These screenshots showcase the user-friendly interface and powerful features of Raizo, demonstrating its effectiveness in managing cybersecurity assets.
