@@ -46,7 +46,6 @@ class TagsAdminList(admin.ModelAdmin):
     
 class MitretechniqueAdminList(admin.ModelAdmin):
     list_display = ('id', 'name', 'mitre_tactics_display', 'created_by', 'created_at', 'modified_at')
-    list_filter = ('id', 'name', 'created_by','created_at', 'modified_at')
     search_fields = ['name']
 
     def mitre_tactics_display(self, obj):
