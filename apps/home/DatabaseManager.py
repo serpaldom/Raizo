@@ -126,7 +126,23 @@ class DatabaseManager:
         """
         return Exceptions.objects.filter(rule_id=rule_id)
 
+    def get_expired_exceptions_ids(self):
+        """
+        Retrieve the IDs and expiration dates of exceptions whose expiration time has passed.
 
+        Returns:
+            list: A list of dictionaries containing the IDs and expiration dates of expired exceptions.
+        """
+        # Filter exceptions whose expiration time has passed
+        expired_exceptions = Exceptions.objects.filter(Q(expiration_at__lt=self.now), Q(expiration_at__isnull=False))
+
+        # Get the IDs and expiration dates of expired exceptions
+        expired_exceptions_data = expired_exceptions.values('id', 'expiration_at')
+
+        # Convert the queryset into a list of dictionaries
+        expired_exceptions_list = list(expired_exceptions_data)
+
+        return expired_exceptions_list
 
     def get_top_users_rules_last_day(self, limit=3):
         """

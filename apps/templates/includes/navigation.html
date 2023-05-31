@@ -30,6 +30,39 @@
 					<ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
 						{% if user.is_superuser or user.is_staff %}
 							<li class="nav-item dropdown hidden-caret">
+								<a class="nav-link dropdown-toggle" href="#" id="notifDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									<i class="fa fa-bell"></i>
+									<span class="notification">{{ expired_exceptions|length }}</span>
+								</a>
+								<ul class="dropdown-menu notif-box animated fadeIn" aria-labelledby="notifDropdown">
+									<li>
+										<div class="dropdown-title">There are a total of {{ expired_exceptions|length }} expired rule exceptions</div>
+									</li>
+									<li>
+										<div class="scroll-wrapper notif-scroll scrollbar-outer" style="position: relative;">
+											<div class="notif-scroll scrollbar-outer scroll-content" style="height: auto; margin-bottom: 0px; margin-right: 0px; max-height: 200px; overflow-y: scroll;">
+												<div class="notif-center">
+													{% for exception_id in expired_exceptions %}
+														<a href="{% url 'admin:home_exceptions_delete' exception_id.id %}">
+															<div class="notif-icon notif-primary">
+																<i class="fas fa-bell-slash"></i>
+															</div>
+															<div class="notif-content">
+																<span class="block">
+																	Exception with ID {{ exception_id.id }} has expired
+																</span>
+																<span class="time">Expiration Date: {{ exception_id.expiration_at }}</span> 
+															</div>
+														</a>
+													{% endfor %}
+												</div>
+											</div>
+										</div>
+									</li>									
+									
+								</ul>
+							</li>
+							<li class="nav-item dropdown hidden-caret">
 								<a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="false">
 									<i class="fas fa-layer-group"></i>
 								</a>

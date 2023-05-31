@@ -91,7 +91,6 @@ def pages(request):
                 # Retrieve the top 5 users who created the most reports in the last month
                 top_users_reports_last_month = db_manager.get_top_users_reports_last_month(limit=5)
             except Exception as e:
-                print(e)
                 # Set counts to 0 in case of an error
                 top_users_rules_last_day = None
                 top_users_rules_last_week = None
@@ -289,14 +288,23 @@ def pages(request):
                 pass
             
             try:
+                # Get the rule counts by technology
                 rule_counts_by_technology = db_manager.get_rule_counts_by_technology()
             except Exception as e:
                 rule_counts_by_technology = None
                 
             try:
+                # Get the rule counts by detection system
                 rule_counts_by_detection_system_name = db_manager.get_rule_counts_by_detectionsystem_name()
             except Exception as e:
                 rule_counts_by_detection_system_name = None
+                
+            try:
+                # Get the expired exceptions
+                expired_exceptions = db_manager.get_expired_exceptions_ids()
+                print(expired_exceptions)
+            except Exception as e:
+                expired_exceptions = None
 
             # Last 6 actions performed by user
             try:
@@ -351,8 +359,9 @@ def pages(request):
                 'distribution_by_severity': distribution_by_severity_list,
                 
                 'recent_rules': recent_rules,
-                'rule_counts_by_technology':rule_counts_by_technology,
-                'rule_counts_by_detection_system_name':rule_counts_by_detection_system_name,
+                'rule_counts_by_technology': rule_counts_by_technology,
+                'rule_counts_by_detection_system_name': rule_counts_by_detection_system_name,
+                'expired_exceptions': expired_exceptions,
                 'recent_actions': recent_actions,
                 'current_sessions': current_sessions,
             })
@@ -397,7 +406,8 @@ def pages(request):
                 context.update({'rule_details':rule_details,
                                 'exceptions':exceptions})
             except Exception as e:
-                print(e)
+                rule_details = None
+                exceptions = None
             
         if load_template == 'mitre-att&ck.html':
             
