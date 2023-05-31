@@ -1,6 +1,6 @@
 # MIT License
 
-Frontend: Copyright (c) 2019 - present [AppSeed](http://appseed.us/)
+Frontend: Copyright (c) 2019 - present [AppSeed](http://appseed.us/)<br>
 Backend and Project: Copyright (c) 2023 - [Serpaldom](https://github.com/serpaldom)
 <br />
 
