@@ -19,7 +19,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY', default='#CHANGE#')
+SECRET_KEY = env('SECRET_KEY', default='Yp3s6v9y$B&E)H@McQfTjWnZq4t7w!z%')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
@@ -88,9 +88,9 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': '#CHANGE',
-        'USER': '#CHANGE',
-        'PASSWORD': '#CHANGE',
+        'NAME': 'Ryuk',
+        'USER': 'Ryuk',
+        'PASSWORD': 'g8D8Hw3nTbks3yMa49zENA7Ues3FkkF',
         'HOST': 'localhost',
         'PORT': '5432',
     }

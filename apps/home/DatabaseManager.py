@@ -113,6 +113,8 @@ class DatabaseManager:
                 'technologies': list(rule.technologies.values_list('name', flat=True)),
                 'tags': list(rule.tags.values_list('name', flat=True)),
                 'detection_systems': list(rule.detection_systems.values_list('name', flat=True)),
+                'query': rule.query,
+                'description': rule.description,
                 'created_by': rule.created_by.username,
                 'created_at': rule.created_at,
             }
