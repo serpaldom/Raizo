@@ -46,7 +46,7 @@ Get control of your rule exceptions and receive notifications when they expire!
 <kbd>
 <img src="media/expired_exception.png">
 </kbd>
-
+<br>
 
 Stay informed and take action on expired rule exceptions for better rule management.
 
