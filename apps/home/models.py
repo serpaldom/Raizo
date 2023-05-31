@@ -242,6 +242,7 @@ class Exceptions(models.Model):
     customers = models.ManyToManyField(Customer)
     artifact = models.TextField()
     description = models.TextField()
+    expiration_at = models.DateTimeField(blank=True, null=True, default=None)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)

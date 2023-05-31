@@ -147,7 +147,7 @@ class LogEntryAdmin(admin.ModelAdmin):
     search_fields = ['user']
 
 class ExceptionsAdmin(admin.ModelAdmin):
-    list_display = ('id', 'rule', 'get_detection_systems', 'get_customers', 'created_at', 'modified_at')
+    list_display = ('id', 'rule', 'get_detection_systems', 'get_customers', 'expiration_at','created_at', 'modified_at')
     list_filter = ('rule', 'detection_system', 'created_at', 'modified_at')
     search_fields = ('rule__name', 'detection_system__name', 'customers__name')
     readonly_fields = ('created_at', 'modified_at')

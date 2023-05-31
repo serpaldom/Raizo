@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'apps.home' # Enable the inner home (home)
+    
 ]
 
 MIDDLEWARE = [
