@@ -10,33 +10,43 @@ Take a look at some screenshots of Raizo's interface below:
 
 Main Dashboard:
 <kbd>
-  <img src="media/main_dashboard.png">
+<img src="media/main_dashboard.png">
 </kbd>
+Visualize key metrics and insights at a glance with the Main Dashboard.
 
 Main Dashboard (2):
 <kbd>
-  <img src="media/main_dashboard2.png">
+<img src="media/main_dashboard2.png">
 </kbd>
 
 Main Dashboard (3):
 <kbd>
-  <img src="media/main_dashboard3.png">
+<img src="media/main_dashboard3.png">
 </kbd>
 
 MITRE Dashboard:
 <kbd>
-  <img src="media/mitre_dashboard.png">
+<img src="media/mitre_dashboard.png">
 </kbd>
+Gain comprehensive visibility into MITRE ATT&CK® framework mappings and techniques.
 
 Rules Table:
 <kbd>
-  <img src="media/rules_table.png">
+<img src="media/rules_table.png">
 </kbd>
+Efficiently manage and organize your rules using the Rules Table, Watchers Table & Reports table.
 
-Rules Details & Exceptions:
+Rule Details & Exceptions:
 <kbd>
-  <img src="media/rule_details.png">
+<img src="media/rule_details.png">
 </kbd>
+View detailed information about a rule and its associated exceptions.
+
+Get control of your rule exceptions and receive notifications when they expire!
+<kbd>
+<img src="media/expired_exception.png">
+</kbd>
+Stay informed and take action on expired rule exceptions for better rule management.
 
 These screenshots showcase the user-friendly interface and powerful features of Raizo, demonstrating its effectiveness in managing cybersecurity assets.
 
