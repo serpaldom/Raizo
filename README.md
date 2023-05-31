@@ -46,6 +46,8 @@ Get control of your rule exceptions and receive notifications when they expire!
 <kbd>
 <img src="media/expired_exception.png">
 </kbd>
+
+
 Stay informed and take action on expired rule exceptions for better rule management.
 
 These screenshots showcase the user-friendly interface and powerful features of Raizo, demonstrating its effectiveness in managing cybersecurity assets.
