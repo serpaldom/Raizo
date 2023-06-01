@@ -42,11 +42,6 @@ def register_user(request):
             user.set_password(form.cleaned_data.get("password1"))
             user.save()
 
-            # Crea las preferencias del usuario
-            theme_preference = "dark"
-            user_preferences = UserPreferences(user=user, theme_preference=theme_preference)
-            user_preferences.save()
-
             msg = 'User created successfully.'
             success = True
 
