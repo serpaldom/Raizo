@@ -30,3 +30,4 @@ apps/static/assets/yarn.lock
 apps/static/assets/.temp
 
 core/settings.py
+core/settings.py
