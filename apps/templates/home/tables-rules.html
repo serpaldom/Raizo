@@ -67,9 +67,7 @@
 											<th>Total Exceptions</th>
 											<th>Created By</th>
 											<th>Created At (UTC)</th>
-											{% if user.is_staff or user.is_superuser %}
 											<th>Action</th>
-											{% endif %}
 										</tr>
 									</thead>
 									<tfoot>
@@ -122,21 +120,22 @@
 											<td>{{rule.exceptions.count}}</td>
 											<td>{{ rule.created_by }}</td>
 											<td>{{ rule.created_at }}</td>
-											{% if user.is_staff or user.is_superuser %}
+											
 											<td>
 												<div class="form-button-action">
 													<a type="button" data-toggle="tooltip" title="" class="btn btn-link btn-success btn-lg" data-original-title="View Details" href="/rule_details.html?id={{rule.id}}">
 														<i class="fab fa-wpforms"></i>
 													</a>
-													<a type="button" data-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit" href="/admin/home/rule/{{rule.id}}/change/">
-														<i class="fa fa-edit"></i>
-													</a>
-													<a type="button" data-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg btn-danger" data-original-title="Remove" href="/admin/home/rule/{{rule.id}}/change/">
-														<i class="fa fa-times"></i>
-													</a>
+													{% if user.is_staff or user.is_superuser %}
+														<a type="button" data-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit" href="/admin/home/rule/{{rule.id}}/change/">
+															<i class="fa fa-edit"></i>
+														</a>
+														<a type="button" data-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg btn-danger" data-original-title="Remove" href="/admin/home/rule/{{rule.id}}/change/">
+															<i class="fa fa-times"></i>
+														</a>
+													{% endif %}
 												</div>
 											</td>
-											{% endif %}
 										</tr>
 										{% endfor %}
 									</tbody>

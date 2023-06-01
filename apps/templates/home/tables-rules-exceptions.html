@@ -87,7 +87,7 @@
 											<td>{{ exception.expiration_at }}</td>
 											<td>{{ exception.created_by }}</td>
 											<td>{{ exception.created_at }}</td>
-											{% if user.is_staff %}
+											{% if user.is_staff or user.is_superuser %}
 											<td>
 												<div class="form-button-action">
 													<a type="button" data-toggle="tooltip" title="Edit" class="btn btn-link btn-primary btn-lg" href="{% url 'admin:home_exceptions_change' exception.id %}">

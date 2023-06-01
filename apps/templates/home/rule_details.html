@@ -46,14 +46,14 @@
 						<div class="card-header">
 							<h4 class="card-title">Details</h4>
 							<div class="d-flex justify-content-end align-items-center">
-								{% if user.is_staff %}
+								{% if user.is_staff or user.is_superuser %}
 									<a type="button" data-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit" href="/admin/home/rule/{{rule_details.id}}/change/">
 										<i class="fa fa-edit"></i>
 									</a>
-									<a type="button" data-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg btn-warning " data-original-title="Back" href="/tables-rules.html">
-										<i class="icon-arrow-left"></i>
-									</a>
 								{% endif %}
+								<a type="button" data-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg btn-warning " data-original-title="Back" href="/tables-rules.html">
+									<i class="icon-arrow-left"></i>
+								</a>		
 							</div>
 						</div>
 						<div class="card-body">
@@ -206,7 +206,7 @@
 											<td>{{ exception.expiration_at }}</td>
 											<td>{{ exception.created_by }}</td>
 											<td>{{ exception.created_at }}</td>
-											{% if user.is_staff %}
+											{% if user.is_staf or user.is_superuser %}
 											<td>
 												<div class="form-button-action">
 													<a type="button" data-toggle="tooltip" title="Edit" class="btn btn-link btn-primary btn-lg" href="{% url 'admin:home_exceptions_change' exception.id %}">
